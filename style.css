@@ -14,14 +14,14 @@ body {
   height: 100vh;
 }
 
-.login-container {
+.login-container,.cadastro-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
-.login-box {
+.login-box, .cadastro-box {
   background: #fff;
   padding: 40px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
@@ -49,7 +49,7 @@ h2 {
   font-size: 16px;
 }
 
-.btn-login {
+.btn-login, .btn-cadastro {
   width: 100%;
   padding: 12px;
   background: #4CAF50;
@@ -61,6 +61,10 @@ h2 {
 }
 
 .btn-login:hover {
+  background: #45a049;
+}
+
+.btn-cadastro:hover {
   background: #45a049;
 }
 

@@ -36,7 +36,7 @@ h2 {
 }
 
 .textbox {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   position: relative;
 }
 
@@ -68,6 +68,44 @@ h2 {
   background: #45a049;
 }
 
+/* Estilo do botão do Google */
+.google-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px;
+  background-color: white;
+  border: 0.5px solid gainsboro; /* Cor da borda do Google */
+  border-radius: 4px;
+  color: #000000; /* Cor do texto */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  max-width: 350px;
+  box-sizing: border-box;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Estilo do ícone do Google */
+.google-login-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+/* Efeito de hover */
+.google-login-btn:hover {
+  background-color: aliceblue;
+}
+
+/* Efeito de foco */
+.google-login-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(68, 133, 243, 0.6); /* Sombra azul claro para foco */
+}
+
+
 .links {
   margin-top: 10px;
 }
@@ -81,4 +119,8 @@ h2 {
 
 .links a:hover {
   text-decoration: underline;
+}
+
+.altlogin {
+  margin-top: 10px;
 }

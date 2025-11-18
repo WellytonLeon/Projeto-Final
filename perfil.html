@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Meu Perfil</h1>
+    <p>Usuário Logado: <span id="usernamedisplay"></span></p>
+
+    <button id="deletarconta">Excluir Conta</button>
+
+    <div id="confirmardeletemodal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Tem certeza que deseja excluir sua conta?</h3>
+            <p>Esta ação é permanente e não pode ser desfeita.</p>
+
+            <button id="confirmardelete">Excluir Permanentemente</button>
+            <button id="cancelardelete">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="perfil.js"></script>
+</body>
+</html>

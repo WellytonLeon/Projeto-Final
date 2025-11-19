@@ -14,7 +14,7 @@ function getUserSession() {
 
 function logoutUser() {
     localStorage.removeItem("userSession");
-    window.location.href = "LoginUsuario.html";
+    window.location.href = "/Login/LoginUsuario.html";
 }
 
 function removeUser() {
@@ -35,7 +35,7 @@ function removeUser() {
 // --- Fluxo de acesso ---
 const user = getUserSession();
 if (!user) {
-    window.location.href = "LoginUsuario.html";
+    window.location.href = "/Login/LoginUsuario.html";
 } else {
     usernamedisplay.textContent = user;
 }
@@ -56,5 +56,5 @@ cancelardelete.addEventListener("click", () => {
 
 confirmardelete.addEventListener("click", () => {
     removeUser();
-    window.location.href = "LoginUsuario.html";
+    window.location.href = "/Login/LoginUsuario.html";
 });

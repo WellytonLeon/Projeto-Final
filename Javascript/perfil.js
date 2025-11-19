@@ -1,7 +1,6 @@
-// perfil.js (Com exclusão do banco de dados simulado)
-
 // Seleção de elementos
 const usernamedisplay = document.getElementById("usernamedisplay");
+const logoutbtn = document.getElementById("logoutbtn");
 const deletarconta = document.getElementById("deletarconta");
 const modal = document.getElementById("confirmardeletemodal");
 const confirmardelete = document.getElementById("confirmardelete");
@@ -10,42 +9,43 @@ const cancelardelete = document.getElementById("cancelardelete");
 
 // --- Funções Utilitárias ---
 function getUserSession() {
-    // Agora lê a sessão pela nova chave
     return localStorage.getItem("userSession");
 }
 
+function logoutUser() {
+    localStorage.removeItem("userSession");
+    window.location.href = "LoginUsuario.html";
+}
+
 function removeUser() {
-    // 1. Obtém o nome do usuário logado que será usado para exclusão
-    const userToDeleteName = getUserSession();
-    
-    // 2. Limpa a chave de sessão (desloga)
+    const userToDelete = getUserSession();
     localStorage.removeItem("userSession");
 
-    // 3. Remove o usuário do banco de dados simulado ('usersDB')
-    if (userToDeleteName) {
+    if (userToDelete) {
         let users = JSON.parse(localStorage.getItem('usersDB'));
-        
-        // Filtra para manter todos os usuários EXCETO o usuário atual
-        const updatedUsers = users.filter(user => user.nomeExibicao !== userToDeleteName);
 
-        // Salva a nova lista sem o usuário excluído
+        const updatedUsers = users.filter(user => user.nomeExibicao !== userToDelete);
+
         localStorage.setItem('usersDB', JSON.stringify(updatedUsers));
-        alert(`Conta do usuário ${userToDeleteName} excluída permanentemente.`);
+
+        alert(`Conta '${userToDelete}' excluída permanentemente.`);
     }
 }
-// ----------------------------------------------------
 
-
-// FLUXO DE ACESSO
+// --- Fluxo de acesso ---
 const user = getUserSession();
 if (!user) {
-    window.location.href = "LoginUsuario.html"; 
+    window.location.href = "LoginUsuario.html";
 } else {
     usernamedisplay.textContent = user;
 }
 
+// --- Botão de logout ---
+logoutbtn.addEventListener("click", () => {
+    logoutUser();
+});
 
-// FUNCIONALIDADES DO PERFIL
+// --- Excluir conta ---
 deletarconta.addEventListener("click", () => {
     modal.classList.remove("hidden");
 });
@@ -55,10 +55,6 @@ cancelardelete.addEventListener("click", () => {
 });
 
 confirmardelete.addEventListener("click", () => {
-    
-    // Remove o usuário da sessão E do 'banco de dados'
     removeUser();
-    
-    // Redireciona para a tela de login
     window.location.href = "LoginUsuario.html";
 });

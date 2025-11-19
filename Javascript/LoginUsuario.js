@@ -68,7 +68,7 @@ if (loginForm) {
         if (foundUser) {
             // SUCESSO
             setUserSession(foundUser.nomeExibicao);
-            window.location.href = "perfil.html";
+            window.location.href = "/Perfil/perfil.html";
         } else {
             // AGORA NÃO CADASTRA MAIS AQUI!
             alert("Usuário não encontrado ou senha incorreta.");

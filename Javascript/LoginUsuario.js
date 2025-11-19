@@ -18,30 +18,26 @@ function initializeDB() {
 
 // 2. Função para salvar o status de sessão
 function setUserSession(username) {
-    // Salva o nome do usuário logado (chave de sessão)
     localStorage.setItem('userSession', username);
 }
 
-// 3. Função de Cadastro (Adiciona um novo usuário ao 'usersDB')
+// 3. Função de Cadastro (usada APENAS na página NovoUsuario.html)
 function registerUser(username, password) {
     let users = JSON.parse(localStorage.getItem('usersDB'));
-    
-    // Verifica se o usuário já existe
+
     if (users.some(user => user.username === username)) {
         return false; // Usuário já existe
     }
 
-    // Adiciona o novo usuário
-    const newUser = { 
-        username: username, 
-        password: password, 
-        nomeExibicao: username // Usa o próprio username como nome de exibição
+    const newUser = {
+        username: username,
+        password: password,
+        nomeExibicao: username
     };
+
     users.push(newUser);
-    
-    // Salva o array atualizado de volta no localStorage
     localStorage.setItem('usersDB', JSON.stringify(users));
-    return true; // Sucesso
+    return true;
 }
 
 // ----------------------------------------------------
@@ -51,9 +47,9 @@ initializeDB();
 
 
 // --- Lógica de Login ---
-const loginForm = document.querySelector('form'); 
-const usernameInput = document.querySelector('[name="username"]'); 
-const passwordInput = document.querySelector('[name="password"]'); 
+const loginForm = document.querySelector('form');
+const usernameInput = document.querySelector('[name="username"]');
+const passwordInput = document.querySelector('[name="password"]');
 
 if (loginForm) {
     loginForm.addEventListener('submit', (event) => {
@@ -63,28 +59,19 @@ if (loginForm) {
         const inputPassword = passwordInput.value;
 
         let users = JSON.parse(localStorage.getItem('usersDB'));
-        
-        // Procura o usuário no banco de dados simulado
-        const foundUser = users.find(user => 
+
+        // Procura o usuário no banco de dados
+        const foundUser = users.find(user =>
             user.username === inputUsername && user.password === inputPassword
         );
 
         if (foundUser) {
-            // SUCESSO: Salva o NOME DE EXIBIÇÃO e redireciona
+            // SUCESSO
             setUserSession(foundUser.nomeExibicao);
-            window.location.href = "perfil.html"; 
+            window.location.href = "perfil.html";
         } else {
-            // Se o login falhar, tenta cadastrar (simulação de "NovoUsuario.html")
-            const isRegistered = registerUser(inputUsername, inputPassword);
-            
-            if (isRegistered) {
-                // Se for um novo usuário, loga ele automaticamente
-                setUserSession(inputUsername);
-                alert(`Usuário '${inputUsername}' cadastrado com sucesso e logado!`);
-                window.location.href = "perfil.html";
-            } else {
-                 alert("Login falhou. Credenciais inválidas ou usuário já existe.");
-            }
+            // AGORA NÃO CADASTRA MAIS AQUI!
+            alert("Usuário não encontrado ou senha incorreta.");
         }
     });
 }

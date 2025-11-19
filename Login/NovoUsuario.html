@@ -1,34 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <title>Projeto Final</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/styles/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta</title>
 
-  <title>Login</title>
+    <!-- SE você tiver um CSS próprio, deixe aqui -->
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-  <div class="cadastro-container">
-    <div class="cadastro-box">
-      <h2>Cadastrar</h2>
-      <form id="CadUser" action="#" method="POST">
-        <div class="textbox">
-          <input type="text" placeholder="Nome de Usuário" name="username" required>
+
+    <div class="cadastro-container">
+        <div class="cadastro-box">
+            <h2>Criar Conta</h2>
+
+            <form id="formCadastro">
+
+                <div class="textbox">
+                    <input type="text" id="username" placeholder="Nome de Usuário" required>
+                </div>
+
+                <div class="textbox">
+                    <input type="email" id="email" placeholder="Email" required>
+                </div>
+
+                <div class="textbox">
+                    <input type="password" id="password" placeholder="Senha" required>
+                </div>
+
+                <button type="submit" class="btn-cadastro">Cadastrar</button>
+
+                <div class="links">
+                    <a href="LoginUsuario.html">Já tenho uma conta</a>
+                </div>
+
+            </form>
         </div>
-        <div class="textbox">
-          <input type="text" placeholder="Email" name="email" required>
-        </div>
-        <div class="textbox">
-          <input type="password" placeholder="Senha" name="password" required>
-        </div>
-        <input type="submit" value="Cadastrar" class="btn-cadastro">
-        <div class="links">
-          <a href="LoginUsuario.html">Login</a>
-        </div>
-      </form>
     </div>
-  </div>
-  <script src="/Javascript/Dados.js"></script>
+
+     <script src="/Javascript/NovoUsuario.js"></script>
+
 </body>
 </html>

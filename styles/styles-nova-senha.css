@@ -1,0 +1,49 @@
+/* Estilo geral da página */
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+/* Estilo do formulário */
+form {
+  background: white;
+  padding: 20px 30px;
+  width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+/* Labels e inputs */
+label, input {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Campo de entrada */
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Botão */
+button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background: #1976d2;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Hover no botão */
+button:hover {
+  background: #1565c0;
+}

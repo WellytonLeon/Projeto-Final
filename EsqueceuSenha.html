@@ -1,30 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <title>Projeto Final</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<style>
-body { font-family: Arial; background: #f5f5f5; display: flex; height: 100vh; justify-content: center; align-items: center; }
-form { background: white; padding: 20px 30px; width: 320px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-label, input { width: 100%; margin-top: 10px; }
-input { padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-button { margin-top: 20px; width: 100%; padding: 10px; background: #1976d2; border: none; border-radius: 6px; color: white; cursor: pointer; }
-</style>
+  <title>Projeto Final</title>
+  <!-- Referência ao arquivo de estilo CSS -->
+  <link rel="stylesheet" href="stylesenha.css">
 </head>
 <body>
 
-<form action="DigitarCodigo.html" method="get">
-  <h2>Esqueci minha senha</h2>
-  <label for="email">Digite seu e-mail:</label>
-  <input type="email" id="email" name="email" required placeholder="exemplo@email.com">
-  <button type="submit">Enviar código</button>
-</form>
+  <!-- Formulário de recuperação de senha -->
+  <form action="DigitarCodigo.html" method="get">
+    <h2>Esqueci minha senha</h2>
+    <label for="email">Digite seu e-mail:</label>
+    <input type="email" id="email" name="email" required placeholder="exemplo@email.com">
+    <button type="submit">Enviar código</button>
+  </form>
 
-</body>
-</html>
+  <!-- Referência ao arquivo de script JS (caso necessário no futuro) -->
+  <script src="scripts.js"></script>
 
 </body>
 </html>

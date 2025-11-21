@@ -22,9 +22,11 @@ function removeUser() {
     localStorage.removeItem("userSession");
 
     if (userToDelete) {
-        let users = JSON.parse(localStorage.getItem('usersDB'));
+        let users = JSON.parse(localStorage.getItem('usersDB')) || [];
 
-        const updatedUsers = users.filter(user => user.nomeExibicao !== userToDelete);
+        const updatedUsers = users.filter(
+            user => user.nomeExibicao !== userToDelete
+        );
 
         localStorage.setItem('usersDB', JSON.stringify(updatedUsers));
 
@@ -32,28 +34,34 @@ function removeUser() {
     }
 }
 
+
 // --- Fluxo de acesso ---
 const user = getUserSession();
+
 if (!user) {
     window.location.href = "/Login/LoginUsuario.html";
 } else {
     usernamedisplay.textContent = user;
 }
 
-// --- Botão de logout ---
-logoutbtn.addEventListener("click", () => {
-    logoutUser();
-});
 
-// --- Excluir conta ---
+// --- Botão de logout ---
+logoutbtn.addEventListener("click", logoutUser);
+
+
+// --- Abrir modal de excluir conta ---
 deletarconta.addEventListener("click", () => {
     modal.classList.remove("hidden");
 });
 
+
+// --- Cancelar exclusão ---
 cancelardelete.addEventListener("click", () => {
     modal.classList.add("hidden");
 });
 
+
+// --- Confirmar exclusão ---
 confirmardelete.addEventListener("click", () => {
     removeUser();
     window.location.href = "/Login/LoginUsuario.html";

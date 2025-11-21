@@ -7,13 +7,19 @@
 </head>
 <body>
 
-    <h1>Meu Perfil</h1>
-    <p>Usuário Logado: <span id="usernamedisplay"></span></p>
+    <div class="container">
+        <h1>Meu Perfil</h1>
 
-    <button id="logoutbtn">Sair</button>
-    <button id="deletarconta">Excluir Conta</button>
+        <p>Usuário Logado: <span id="usernamedisplay"></span></p>
 
-    <!-- Modal de confirmação -->
+        <!-- Botão de Logout -->
+        <button id="logoutbtn" class="btn">Sair</button>
+
+        <!-- Botão de Excluir Conta -->
+        <button id="deletarconta" class="btn btn-danger">Excluir Conta</button>
+    </div>
+
+    <!-- Modal de Confirmação -->
     <div id="confirmardeletemodal" class="modal hidden">
         <div class="modal-content">
             <h3>Tem certeza que deseja excluir sua conta?</h3>

@@ -70,8 +70,12 @@ if (loginForm) {
             setUserSession(foundUser.nomeExibicao);
             window.location.href = "/Perfil/perfil.html";
         } else {
-            // AGORA NÃO CADASTRA MAIS AQUI!
             alert("Usuário não encontrado ou senha incorreta.");
         }
     });
+}
+
+// --- Chamada do Backup Automático ---
+if (typeof fazerBackupAutomatico === "function") {
+    fazerBackupAutomatico();
 }

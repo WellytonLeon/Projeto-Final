@@ -18,3 +18,4 @@ document.getElementById("formLivro").addEventListener("submit", function (event)
     alert("Livro adicionado com sucesso!");
     window.location.href = "biblioteca.html";
 });
+console.log("NovoLivro.js foi carregado!");

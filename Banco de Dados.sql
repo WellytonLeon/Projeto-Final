@@ -53,7 +53,7 @@ AFTER INSERT ON Livro
 FOR EACH ROW
 BEGIN
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
-    VALUES ('Livro', 'INSERT', NEW.id_livro, CONCAT('Título: ', NEW.nome_livro, ', Autor: ', NEW.autor_livro, 'Genero: ', NEW.genero, 'Descrição: ', NEW.descricao), NULL);
+    VALUES ('Livro', 'INSERT', NEW.id_livro, CONCAT('Título: ', NEW.nome_livro, ', Autor: ', NEW.autor_livro, ', Genero: ', NEW.genero, ', Descrição: ', NEW.descricao), NULL);
 END $$
 
 DELIMITER ;
@@ -65,8 +65,8 @@ FOR EACH ROW
 BEGIN
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
     VALUES ('Livro', 'UPDATE', OLD.id_livro, 
-            CONCAT('Título: ', OLD.nome_livro, ', Autor: ', OLD.autor_livro, 'Genero: ', OLD.genero, 'Descrição: ', OLD.descricao), 
-            CONCAT('Título: ', NEW.nome_livro, ', Autor: ', NEW.autor_livro, 'Genero: ', NEW.genero, 'Descrição: ', NEW.descricao), 
+            CONCAT('Título: ', OLD.nome_livro, ', Autor: ', OLD.autor_livro, ', Genero: ', OLD.genero, ', Descrição: ', OLD.descricao), 
+            CONCAT('Título: ', NEW.nome_livro, ', Autor: ', NEW.autor_livro, ', Genero: ', NEW.genero, ', Descrição: ', NEW.descricao), 
             NULL);  -- Supondo que você não tenha o usuário que fez a alteração, ou pode adicionar logicamente
 END $$
 
@@ -79,7 +79,7 @@ FOR EACH ROW
 BEGIN
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
     VALUES ('Livro', 'DELETE', OLD.id_livro, 
-            CONCAT('Título: ', OLD.nome_livro, ', Autor: ', OLD.autor_livro, 'Genero: ', OLD.genero, 'Descrição: ', OLD.descricao), 
+            CONCAT('Título: ', OLD.nome_livro, ', Autor: ', OLD.autor_livro, ', Genero: ', OLD.genero, ', Descrição: ', OLD.descricao), 
             NULL, NULL);
 END $$
 

@@ -94,5 +94,40 @@ BEGIN
     VALUES ('Usuario', 'INSERT', NEW.id_user, CONCAT('Nome: ', NEW.nome_user, ', Email: ', NEW.email_user), NULL);
 END $$
 
-DELIMITER ;
+DELIMITER ; 
+
+
+create table sessao (
+    id_sessao int primary key auto_increment,
+    id_user int not null,
+    token varchar(255) not null unique,
+    inicio datetime not null DEFAULT CURRENT_TIMESTAMP,
+    fim datetime null,
+    ativo boolean default true,
+
+    foreign key (id_user) references usuario(id_user)
+);
+
+inset into sessao (id_user, token)
+values (1, 'token_exemplo_123');
+
+update sessao
+set ativo = false,
+    fim = current_timestamp
+where token = 'token_exemplo_123';
+    and ativo = true;
+
+-- encerrar todas as sessões do usuário (opcional)
+
+update sessao
+set ativo = false,
+    fim = current_timestamp
+where id_user = 1
+    and ativo = true;
+
+-- verificar se a sessão está ativa (se precisar)
+
+select * from sessao
+where token = 'token_exemplo_123'
+    and ativo = true;
 

@@ -1,19 +1,43 @@
+drop DATABASE projeto_final;
 create database projeto_final;
 use projeto_final;
 create table User(
     id_user int primary key not null auto_increment,
-    nome_user varchar(100) not null,
-    email_user varchar(30) not null unique,
-    senha_user varchar(50) not null
+    nome varchar(100) not null,
+    email varchar(100) not null unique,
+    senha char(50) not null
+);
+create table Categoria(
+    id_categoria INT PRIMARY KEY NOT NULL auto_increment,
+    nome VARCHAR(50) UNIQUE NOT NULL
+);
+CREATE TABLE Genero(
+    id_genero INT PRIMARY KEY NOT NULL auto_increment,
+    nome VARCHAR(70) UNIQUE NOT NULL
+);
+CREATE TABLE Autor(
+    id_autor INT PRIMARY KEY NOT NULL auto_increment,
+    nome VARCHAR(150) NOT NULL
 );
 create table livro(
     id_livro int primary key not null auto_increment,
-    nome_livro varchar(150) not null,
-    categoria_livro varchar(50),
-    autor_livro varchar(100),
-    genero varchar(100),
-    descricao text
+    nome varchar(150) not null,
+    id_categoria INT,
+    id_autor INT,
+    id_genero INT,
+    descricao text,
+    Foreign Key (id_categoria) REFERENCES Categoria(id_categoria),
+    Foreign Key (id_autor) REFERENCES Autor(id_autor),
+    Foreign Key (id_genero) REFERENCES Genero(id_genero)
 );
+INSERT INTO Categoria (nome) VALUES
+('Romance'), ('Ficção Científica'), ('Fantasia'), ('Suspense / Thriller'),
+('Mistério / Policial'), ('Terror / Horror'), ('Drama'), ('Ação e Aventura'),
+('Histórico'), ('Biografia / Autobiografia'), ('Memórias'), ('Autoajuda'),
+('Desenvolvimento Pessoal'), ('Negócios / Empreendedorismo'), ('Filosofia'),
+('Psicologia'), ('Religião / Espiritualidade'), ('Ciência e Tecnologia'),
+('Educação / Pedagogia'), ('Literatura Infantil');
+
 CREATE TABLE Avaliacoes (
     avaliacao_id INT AUTO_INCREMENT PRIMARY KEY,
     id_livro INT,
@@ -24,10 +48,9 @@ CREATE TABLE Avaliacoes (
     FOREIGN KEY (id_livro) REFERENCES Livro(id_livro),
     FOREIGN KEY (id_user) REFERENCES User(id_user)
 );
-
-INSERT INTO Livro (nome_livro, autor_livro, genero, descricao) VALUES
-('O Senhor dos Anéis', 'J.R.R. Tolkien', 'Fantasia', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.'),
-('1984', 'George Orwell', 'Distopia', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.');
+INSERT INTO Livro (nome, descricao, id_autor, id_genero, id_categoria) VALUES
+('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2,2),
+('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,3,4);
 INSERT INTO User (nome_user, email_user, senha_user) VALUES
 ('João Silva', 'joao@exemplo.com', 'senha123'),
 ('Maria Oliveira', 'maria@exemplo.com', 'senha456');
@@ -91,7 +114,7 @@ AFTER INSERT ON User
 FOR EACH ROW
 BEGIN
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
-    VALUES ('Usuario', 'INSERT', NEW.id_user, CONCAT('Nome: ', NEW.nome_user, ', Email: ', NEW.email_user), NULL);
+    VALUES ('User', 'INSERT', NEW.id_user, CONCAT('Nome: ', NEW.nome_user, ', Email: ', NEW.email_user), NULL);
 END $$
 
 DELIMITER ; 
@@ -105,16 +128,16 @@ create table sessao (
     fim datetime null,
     ativo boolean default true,
 
-    foreign key (id_user) references usuario(id_user)
+    foreign key (id_user) references User(id_user)
 );
 
-inset into sessao (id_user, token)
+insert into sessao (id_user, token)
 values (1, 'token_exemplo_123');
 
 update sessao
 set ativo = false,
     fim = current_timestamp
-where token = 'token_exemplo_123';
+where token = 'token_exemplo_123'
     and ativo = true;
 
 -- encerrar todas as sessões do usuário (opcional)

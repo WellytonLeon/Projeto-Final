@@ -7,9 +7,16 @@ document.getElementById("formLivro").addEventListener("submit", function (event)
     const categoria = document.getElementById("categoria").value;
     const descricao = document.getElementById("descricao").value;
 
-    const novoLivro = { titulo, autor, ano, categoria, descricao };
-
     const livros = JSON.parse(localStorage.getItem("livros")) || [];
+
+    const novoLivro = { 
+        id: Date.now(),   // ID único
+        titulo, 
+        autor, 
+        ano, 
+        categoria, 
+        descricao 
+    };
 
     livros.push(novoLivro);
 
@@ -18,4 +25,3 @@ document.getElementById("formLivro").addEventListener("submit", function (event)
     alert("Livro adicionado com sucesso!");
     window.location.href = "biblioteca.html";
 });
-console.log("NovoLivro.js foi carregado!");

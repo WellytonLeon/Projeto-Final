@@ -10,16 +10,13 @@ function carregarLivros(filtro = "") {
         return;
     }
 
-    // Deixar o filtro minúsculo pra evitar erro
     filtro = filtro.toLowerCase();
 
-    // Filtro inteligente
     const livrosFiltrados = livros.filter(livro => {
         return (
             livro.titulo.toLowerCase().includes(filtro) ||
             livro.autor.toLowerCase().includes(filtro) ||
             (livro.categoria && livro.categoria.toLowerCase().includes(filtro)) ||
-            (livro.volume && livro.volume.toString().includes(filtro)) ||
             livro.ano.toString().includes(filtro)
         );
     });
@@ -29,7 +26,7 @@ function carregarLivros(filtro = "") {
         return;
     }
 
-    livrosFiltrados.forEach((livro, index) => {
+    livrosFiltrados.forEach(livro => {
         const card = document.createElement("div");
         card.classList.add("livro-card");
 
@@ -37,7 +34,11 @@ function carregarLivros(filtro = "") {
             <h3>${livro.titulo}</h3>
             <p><strong>Autor:</strong> ${livro.autor}</p>
             <p><strong>Ano:</strong> ${livro.ano}</p>
-            <button class="detalhes" onclick="abrirLivro(${index})">Ver detalhes</button>
+            <p><strong>Categoria:</strong> ${livro.categoria}</p>
+
+            <button class="detalhes" onclick="abrirLivro(${livro.id})">
+                Ver detalhes
+            </button>
         `;
 
         lista.appendChild(card);
@@ -45,15 +46,15 @@ function carregarLivros(filtro = "") {
 }
 
 // Abrir página de detalhes
-function abrirLivro(index) {
-    localStorage.setItem("livroSelecionado", index);
+function abrirLivro(id) {
+    localStorage.setItem("livroSelecionado", id);
     window.location.href = "livro.html";
 }
 
-// Ativar a pesquisa em tempo real
+// Ativar pesquisa em tempo real
 document.getElementById("campoPesquisa").addEventListener("input", function () {
     carregarLivros(this.value);
 });
 
-// Iniciar carregando tudo
+// Iniciar carregamento
 carregarLivros();

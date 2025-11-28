@@ -81,39 +81,69 @@ CREATE TRIGGER LogInsertLivros
 AFTER INSERT ON Livro
 FOR EACH ROW
 BEGIN
-    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
-    VALUES ('Livro', 'INSERT', NEW.id_livro, CONCAT('Título: ', NEW.nome.Livro, ', Autor: ', NEW.nome.Autor, ', Categoria: ', NEW.nome.Categoria, ', Descrição: ', NEW.descricao), NULL);
-END $$
+    DECLARE nomeAutor VARCHAR(150);
+    DECLARE nomeCategoria VARCHAR(50);
 
-DELIMITER ;
-DELIMITER $$
+    SELECT nome INTO nomeAutor FROM Autor WHERE id_autor = NEW.id_autor;
+    SELECT nome INTO nomeCategoria FROM Categoria WHERE id_categoria = NEW.id_categoria;
+
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
+    VALUES (
+        'Livro', 
+        'INSERT', 
+        NEW.id_livro, 
+        CONCAT('Título: ', NEW.nome, ', Autor: ', nomeAutor, ', Categoria: ', nomeCategoria, ', Descrição: ', NEW.descricao),
+        NULL
+    );
+END $$
 
 CREATE TRIGGER LogUpdateLivros
 AFTER UPDATE ON Livro
 FOR EACH ROW
 BEGIN
-    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
-    VALUES ('Livro', 'UPDATE', OLD.id_livro, 
-            CONCAT('Título: ', OLD.nome.Livro, ', Autor: ', OLD.nome.Autor, ', Categoria: ', OLD.nome.Categoria, ', Descrição: ', OLD.descricao), 
-            CONCAT('Título: ', NEW.nome.Livro, ', Autor: ', NEW.nome.Autor, ', Categoria: ', NEW.nome.Categoria, ', Descrição: ', NEW.descricao), 
-            NULL);  -- Supondo que você não tenha o usuário que fez a alteração, ou pode adicionar logicamente
-END $$
+    DECLARE oldAutor VARCHAR(150);
+    DECLARE oldCategoria VARCHAR(50);
+    DECLARE newAutor VARCHAR(150);
+    DECLARE newCategoria VARCHAR(50);
 
-DELIMITER ;
-DELIMITER $$
+    SELECT nome INTO oldAutor FROM Autor WHERE id_autor = OLD.id_autor;
+    SELECT nome INTO oldCategoria FROM Categoria WHERE id_categoria = OLD.id_categoria;
+
+    SELECT nome INTO newAutor FROM Autor WHERE id_autor = NEW.id_autor;
+    SELECT nome INTO newCategoria FROM Categoria WHERE id_categoria = NEW.id_categoria;
+
+    INSERT INTO LogAlteracoes 
+        (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
+    VALUES (
+        'Livro', 
+        'UPDATE', 
+        OLD.id_livro,
+        CONCAT('Título: ', OLD.nome, ', Autor: ', oldAutor, ', Categoria: ', oldCategoria, ', Descrição: ', OLD.descricao),
+        CONCAT('Título: ', NEW.nome, ', Autor: ', newAutor, ', Categoria: ', newCategoria, ', Descrição: ', NEW.descricao),
+        NULL
+    );
+END $$
 
 CREATE TRIGGER LogDeleteLivros
 AFTER DELETE ON Livro
 FOR EACH ROW
 BEGIN
-    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
-    VALUES ('Livro', 'DELETE', OLD.id_livro, 
-            CONCAT('Título: ', OLD.nome.Livro, ', Autor: ', OLD.nome.Autor, ', Categoria: ', OLD.nome.Categoria, ', Descrição: ', OLD.descricao), 
-            NULL, NULL);
-END $$
+    DECLARE nomeAutor VARCHAR(150);
+    DECLARE nomeCategoria VARCHAR(50);
 
-DELIMITER ;
-DELIMITER $$
+    SELECT nome INTO nomeAutor FROM Autor WHERE id_autor = OLD.id_autor;
+    SELECT nome INTO nomeCategoria FROM Categoria WHERE id_categoria = OLD.id_categoria;
+
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
+    VALUES (
+        'Livro', 
+        'DELETE', 
+        OLD.id_livro,
+        CONCAT('Título: ', OLD.nome, ', Autor: ', nomeAutor, ', Categoria: ', nomeCategoria, ', Descrição: ', OLD.descricao),
+        NULL,
+        NULL
+    );
+END $$
 
 CREATE TRIGGER LogInsertUsuarios
 AFTER INSERT ON User

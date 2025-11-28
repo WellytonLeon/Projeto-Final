@@ -145,6 +145,9 @@ BEGIN
     );
 END $$
 
+DELIMITER ; 
+
+DELIMITER $$
 CREATE TRIGGER LogInsertUsuarios
 AFTER INSERT ON User
 FOR EACH ROW
@@ -153,7 +156,162 @@ BEGIN
     VALUES ('User', 'INSERT', NEW.id_user, CONCAT('Nome: ', NEW.nome, ', Email: ', NEW.email), NULL);
 END $$
 
-DELIMITER ; 
+CREATE TRIGGER LogUpdateUsuarios
+AFTER UPDATE ON User
+FOR EACH ROW
+BEGIN
+    INSERT INTO LogAlteracoes
+        (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
+    VALUES
+        (
+            'User',
+            'UPDATE',
+            OLD.id_user,
+            CONCAT('Nome: ', OLD.nome, ', Email: ', OLD.email),
+            CONCAT('Nome: ', NEW.nome, ', Email: ', NEW.email),
+            NULL
+        );
+END $$
+
+CREATE TRIGGER LogDeleteUsuarios
+AFTER DELETE ON User
+FOR EACH ROW
+BEGIN
+    INSERT INTO LogAlteracoes
+        (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
+    VALUES
+        (
+            'User',
+            'DELETE',
+            OLD.id_user,
+            CONCAT('Nome: ', OLD.nome, ', Email: ', OLD.email),
+            NULL,
+            NULL
+        );
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER LogInsertCategoria
+AFTER INSERT ON Categoria
+FOR EACH ROW
+BEGIN
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos)
+    VALUES ('Categoria', 'INSERT', NEW.id_categoria, CONCAT('Nome: ', NEW.nome));
+END $$
+
+CREATE TRIGGER LogUpdateCategoria
+AFTER UPDATE ON Categoria
+FOR EACH ROW
+BEGIN
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos)
+    VALUES ('Categoria', 'UPDATE', OLD.id_categoria, CONCAT('Nome: ', OLD.nome), CONCAT('Nome: ', NEW.nome));
+END $$
+
+CREATE TRIGGER LogDeleteCategoria
+AFTER DELETE ON Categoria
+FOR EACH ROW
+BEGIN
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos)
+    VALUES ('Categoria', 'DELETE', OLD.id_categoria, CONCAT('Nome: ', OLD.nome));
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER LogInsertAutor
+AFTER INSERT ON Autor
+FOR EACH ROW
+BEGIN
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos)
+    VALUES ('Autor', 'INSERT', NEW.id_autor, CONCAT('Nome: ', NEW.nome));
+END $$
+
+CREATE TRIGGER LogUpdateAutor
+AFTER UPDATE ON Autor
+FOR EACH ROW
+BEGIN
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos)
+    VALUES ('Autor', 'UPDATE', OLD.id_autor, CONCAT('Nome: ', OLD.nome), CONCAT('Nome: ', NEW.nome));
+END $$
+
+CREATE TRIGGER LogDeleteAutor
+AFTER DELETE ON Autor
+FOR EACH ROW
+BEGIN
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos)
+    VALUES ('Autor', 'DELETE', OLD.id_autor, CONCAT('Nome: ', OLD.nome));
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER LogInsertAvaliacoes
+AFTER INSERT ON Avaliacoes
+FOR EACH ROW
+BEGIN
+    DECLARE tituloLivro VARCHAR(200);
+    DECLARE nomeUsuario VARCHAR(100);
+
+    SELECT nome INTO tituloLivro FROM Livro WHERE id_livro = NEW.id_livro;
+    SELECT nome INTO nomeUsuario FROM User WHERE id_user = NEW.id_user;
+
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
+    VALUES (
+        'Avaliacoes', 'INSERT', NEW.avaliacao_id, CONCAT('Livro: ', IFNULL(tituloLivro,'(desconhecido)'), 
+        ', Usuario: ', IFNULL(nomeUsuario,'(desconhecido)'), ', Nota: ', NEW.nota, ', Comentario: ', IFNULL(NEW.comentario,'')), NEW.id_user
+    );
+END $$
+
+CREATE TRIGGER LogUpdateAvaliacoes
+AFTER UPDATE ON Avaliacoes
+FOR EACH ROW
+BEGIN
+    DECLARE tituloLivro VARCHAR(200);
+    DECLARE nomeUsuario VARCHAR(100);
+
+    SELECT nome INTO tituloLivro FROM Livro WHERE id_livro = NEW.id_livro;
+    SELECT nome INTO nomeUsuario FROM User WHERE id_user = NEW.id_user;
+
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
+    VALUES (
+        'Avaliacoes',
+        'UPDATE',
+        OLD.avaliacao_id,
+        CONCAT('Livro: ', IFNULL(tituloLivro,'(desconhecido)'), ', Usuario: ', IFNULL(nomeUsuario,'(desconhecido)'), 
+        ', Nota: ', OLD.nota, ', Comentario: ', IFNULL(OLD.comentario,'')),
+        CONCAT('Livro: ', IFNULL(tituloLivro,'(desconhecido)'), ', Usuario: ', IFNULL(nomeUsuario,'(desconhecido)'), 
+        ', Nota: ', NEW.nota, ', Comentario: ', IFNULL(NEW.comentario,'')),
+        NEW.id_user
+    );
+END $$
+
+CREATE TRIGGER LogDeleteAvaliacoes
+AFTER DELETE ON Avaliacoes
+FOR EACH ROW
+BEGIN
+    DECLARE tituloLivro VARCHAR(200);
+    DECLARE nomeUsuario VARCHAR(100);
+
+    SELECT nome INTO tituloLivro FROM Livro WHERE id_livro = OLD.id_livro;
+    SELECT nome INTO nomeUsuario FROM User WHERE id_user = OLD.id_user;
+
+    INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, id_user)
+    VALUES (
+        'Avaliacoes',
+        'DELETE',
+        OLD.avaliacao_id,
+        CONCAT('Livro: ', IFNULL(tituloLivro,'(desconhecido)'), ', Usuario: ', IFNULL(nomeUsuario,'(desconhecido)'), 
+        ', Nota: ', OLD.nota, ', Comentario: ', IFNULL(OLD.comentario,'')),
+        OLD.id_user
+    );
+END $$
+
+DELIMITER ;
 
 
 create table sessao (

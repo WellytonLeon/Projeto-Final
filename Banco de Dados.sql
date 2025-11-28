@@ -11,10 +11,6 @@ create table Categoria(
     id_categoria INT PRIMARY KEY NOT NULL auto_increment,
     nome VARCHAR(50) UNIQUE NOT NULL
 );
-CREATE TABLE Genero(
-    id_genero INT PRIMARY KEY NOT NULL auto_increment,
-    nome VARCHAR(70) UNIQUE NOT NULL
-);
 CREATE TABLE Autor(
     id_autor INT PRIMARY KEY NOT NULL auto_increment,
     nome VARCHAR(150) NOT NULL
@@ -24,20 +20,10 @@ create table livro(
     nome varchar(150) not null,
     id_categoria INT,
     id_autor INT,
-    id_genero INT,
     descricao text,
     Foreign Key (id_categoria) REFERENCES Categoria(id_categoria),
-    Foreign Key (id_autor) REFERENCES Autor(id_autor),
-    Foreign Key (id_genero) REFERENCES Genero(id_genero)
+    Foreign Key (id_autor) REFERENCES Autor(id_autor)
 );
-INSERT INTO Categoria (nome) VALUES
-('Romance'), ('Ficção Científica'), ('Fantasia'), ('Suspense / Thriller'),
-('Mistério / Policial'), ('Terror / Horror'), ('Drama'), ('Ação e Aventura'),
-('Histórico'), ('Biografia / Autobiografia'), ('Memórias'), ('Autoajuda'),
-('Desenvolvimento Pessoal'), ('Negócios / Empreendedorismo'), ('Filosofia'),
-('Psicologia'), ('Religião / Espiritualidade'), ('Ciência e Tecnologia'),
-('Educação / Pedagogia'), ('Literatura Infantil');
-
 CREATE TABLE Avaliacoes (
     avaliacao_id INT AUTO_INCREMENT PRIMARY KEY,
     id_livro INT,
@@ -48,12 +34,32 @@ CREATE TABLE Avaliacoes (
     FOREIGN KEY (id_livro) REFERENCES Livro(id_livro),
     FOREIGN KEY (id_user) REFERENCES User(id_user)
 );
-INSERT INTO Livro (nome, descricao, id_autor, id_genero, id_categoria) VALUES
-('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2,2),
-('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,3,4);
-INSERT INTO User (nome_user, email_user, senha_user) VALUES
+
+INSERT INTO Categoria (nome) VALUES
+('Romance'), ('Ficção Científica'), ('Fantasia'), ('Suspense / Thriller'),
+('Mistério / Policial'), ('Terror / Horror'), ('Drama'), ('Ação e Aventura'),
+('Histórico'), ('Biografia / Autobiografia'), ('Memórias'), ('Autoajuda'),
+('Desenvolvimento Pessoal'), ('Negócios / Empreendedorismo'), ('Filosofia'),
+('Psicologia'), ('Religião / Espiritualidade'), ('Ciência e Tecnologia'),
+('Educação / Pedagogia'), ('Literatura Infantil');
+
+INSERT INTO Autor (nome) VALUES
+('Stephen King'), ('Agatha Christie'), ('J. K. Rowling'),
+('George R. R. Martin'), ('J. R. R. Tolkien'), ('Isaac Asimov'),
+('Arthur Conan Doyle'), ('Neil Gaiman'), ('Jane Austen'),
+('Machado de Assis'), ('Clarice Lispector'), ('Gabriel García Márquez'),
+('Ernest Hemingway'), ('Haruki Murakami'), ('Edgar Allan Poe'),
+('Franz Kafka'), ('Margaret Atwood'), ('H. P. Lovecraft'),
+('Dan Brown'), ('Victor Hugo');
+
+INSERT INTO Livro (nome, descricao, id_autor, id_categoria) VALUES
+('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2),
+('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,4);
+
+INSERT INTO User (nome, email, senha) VALUES
 ('João Silva', 'joao@exemplo.com', 'senha123'),
 ('Maria Oliveira', 'maria@exemplo.com', 'senha456');
+
 INSERT INTO Avaliacoes (id_livro, id_user, nota, comentario) VALUES
 (1, 1, 5, 'Excelente livro, com uma narrativa envolvente e personagens cativantes!'),
 (2, 2, 4, 'Uma crítica interessante ao totalitarismo, mas achei o ritmo um pouco lento em algumas partes.');
@@ -76,7 +82,7 @@ AFTER INSERT ON Livro
 FOR EACH ROW
 BEGIN
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
-    VALUES ('Livro', 'INSERT', NEW.id_livro, CONCAT('Título: ', NEW.nome_livro, ', Autor: ', NEW.autor_livro, ', Genero: ', NEW.genero, ', Descrição: ', NEW.descricao), NULL);
+    VALUES ('Livro', 'INSERT', NEW.id_livro, CONCAT('Título: ', NEW.nome.Livro, ', Autor: ', NEW.nome.Autor, ', Categoria: ', NEW.nome.Categoria, ', Descrição: ', NEW.descricao), NULL);
 END $$
 
 DELIMITER ;
@@ -88,8 +94,8 @@ FOR EACH ROW
 BEGIN
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
     VALUES ('Livro', 'UPDATE', OLD.id_livro, 
-            CONCAT('Título: ', OLD.nome_livro, ', Autor: ', OLD.autor_livro, ', Genero: ', OLD.genero, ', Descrição: ', OLD.descricao), 
-            CONCAT('Título: ', NEW.nome_livro, ', Autor: ', NEW.autor_livro, ', Genero: ', NEW.genero, ', Descrição: ', NEW.descricao), 
+            CONCAT('Título: ', OLD.nome.Livro, ', Autor: ', OLD.nome.Autor, ', Categoria: ', OLD.nome.Categoria, ', Descrição: ', OLD.descricao), 
+            CONCAT('Título: ', NEW.nome.Livro, ', Autor: ', NEW.nome.Autor, ', Categoria: ', NEW.nome.Categoria, ', Descrição: ', NEW.descricao), 
             NULL);  -- Supondo que você não tenha o usuário que fez a alteração, ou pode adicionar logicamente
 END $$
 
@@ -102,7 +108,7 @@ FOR EACH ROW
 BEGIN
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
     VALUES ('Livro', 'DELETE', OLD.id_livro, 
-            CONCAT('Título: ', OLD.nome_livro, ', Autor: ', OLD.autor_livro, ', Genero: ', OLD.genero, ', Descrição: ', OLD.descricao), 
+            CONCAT('Título: ', OLD.nome.Livro, ', Autor: ', OLD.nome.Autor, ', Categoria: ', OLD.nome.Categoria, ', Descrição: ', OLD.descricao), 
             NULL, NULL);
 END $$
 
@@ -114,7 +120,7 @@ AFTER INSERT ON User
 FOR EACH ROW
 BEGIN
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
-    VALUES ('User', 'INSERT', NEW.id_user, CONCAT('Nome: ', NEW.nome_user, ', Email: ', NEW.email_user), NULL);
+    VALUES ('User', 'INSERT', NEW.id_user, CONCAT('Nome: ', NEW.nome, ', Email: ', NEW.email), NULL);
 END $$
 
 DELIMITER ; 

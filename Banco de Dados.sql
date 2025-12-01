@@ -20,9 +20,9 @@ create table livro(
     nome varchar(150) not null,
     id_categoria INT,
     id_autor INT,
-    descricao text,
-    Foreign Key (id_categoria) REFERENCES Categoria(id_categoria),
-    Foreign Key (id_autor) REFERENCES Autor(id_autor)
+    descricao fulltext,
+    Foreign Key (id_categoria) REFERENCES Categoria(id_categoria) ON DELETE SET NULL,
+    Foreign Key (id_autor) REFERENCES Autor(id_autor) ON DELETE CASCADE
 );
 CREATE TABLE Avaliacoes (
     avaliacao_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -94,7 +94,7 @@ BEGIN
         'INSERT', 
         NEW.id_livro, 
         CONCAT('Título: ', NEW.nome, ', Autor: ', nomeAutor, ', Categoria: ', nomeCategoria, ', Descrição: ', NEW.descricao),
-        NULL
+        NEW.id_user
     );
 END $$
 
@@ -123,7 +123,7 @@ BEGIN
         OLD.id_livro,
         CONCAT('Título: ', OLD.nome, ', Autor: ', oldAutor, ', Categoria: ', oldCategoria, ', Descrição: ', OLD.descricao),
         CONCAT('Título: ', NEW.nome, ', Autor: ', newAutor, ', Categoria: ', newCategoria, ', Descrição: ', NEW.descricao),
-        NULL
+        NEW.id_user
     );
 END $$
 
@@ -144,8 +144,7 @@ BEGIN
         'DELETE', 
         OLD.id_livro,
         CONCAT('Título: ', OLD.nome, ', Autor: ', nomeAutor, ', Categoria: ', nomeCategoria, ', Descrição: ', OLD.descricao),
-        NULL,
-        NULL
+        OLD.id_user
     );
 END $$
 

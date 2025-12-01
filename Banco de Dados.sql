@@ -84,8 +84,9 @@ BEGIN
     DECLARE nomeAutor VARCHAR(150);
     DECLARE nomeCategoria VARCHAR(50);
 
-    SELECT nome INTO nomeAutor FROM Autor WHERE id_autor = NEW.id_autor;
-    SELECT nome INTO nomeCategoria FROM Categoria WHERE id_categoria = NEW.id_categoria;
+    SELECT COALESCE((SELECT nome FROM Autor WHERE id_autor = NEW.id_autor LIMIT 1), '(desconhecido)') INTO nomeAutor;
+
+    SELECT COALESCE((SELECT nome FROM Categoria WHERE id_categoria = NEW.id_categoria LIMIT 1), '(desconhecido)') INTO nomeCategoria;
 
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
     VALUES (
@@ -106,11 +107,13 @@ BEGIN
     DECLARE newAutor VARCHAR(150);
     DECLARE newCategoria VARCHAR(50);
 
-    SELECT nome INTO oldAutor FROM Autor WHERE id_autor = OLD.id_autor;
-    SELECT nome INTO oldCategoria FROM Categoria WHERE id_categoria = OLD.id_categoria;
+    SELECT COALESCE((SELECT nome FROM Autor WHERE id_autor = OLD.id_autor LIMIT 1), '(desconhecido)') INTO oldAutor;
 
-    SELECT nome INTO newAutor FROM Autor WHERE id_autor = NEW.id_autor;
-    SELECT nome INTO newCategoria FROM Categoria WHERE id_categoria = NEW.id_categoria;
+    SELECT COALESCE((SELECT nome FROM Categoria WHERE id_categoria = OLD.id_categoria LIMIT 1), '(desconhecido)') INTO oldCategoria;
+
+    SELECT COALESCE((SELECT nome FROM Autor WHERE id_autor = NEW.id_autor LIMIT 1), '(desconhecido)') INTO newAutor;
+
+    SELECT COALESCE((SELECT nome FROM Categoria WHERE id_categoria = NEW.id_categoria LIMIT 1), '(desconhecido)') INTO newCategoria;
 
     INSERT INTO LogAlteracoes 
         (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
@@ -131,8 +134,9 @@ BEGIN
     DECLARE nomeAutor VARCHAR(150);
     DECLARE nomeCategoria VARCHAR(50);
 
-    SELECT nome INTO nomeAutor FROM Autor WHERE id_autor = OLD.id_autor;
-    SELECT nome INTO nomeCategoria FROM Categoria WHERE id_categoria = OLD.id_categoria;
+    SELECT COALESCE((SELECT nome FROM Autor WHERE id_autor = OLD.id_autor LIMIT 1), '(desconhecido)') INTO nomeAutor;
+
+    SELECT COALESCE((SELECT nome FROM Categoria WHERE id_categoria = OLD.id_categoria LIMIT 1), '(desconhecido)') INTO nomeCategoria;
 
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
     VALUES (
@@ -257,8 +261,9 @@ BEGIN
     DECLARE tituloLivro VARCHAR(200);
     DECLARE nomeUsuario VARCHAR(100);
 
-    SELECT nome INTO tituloLivro FROM Livro WHERE id_livro = NEW.id_livro;
-    SELECT nome INTO nomeUsuario FROM User WHERE id_user = NEW.id_user;
+    SELECT COALESCE((SELECT nome FROM Livro WHERE id_livro = NEW.id_livro LIMIT 1), '(desconhecido)') INTO tituloLivro;
+
+    SELECT COALESCE((SELECT nome FROM User WHERE id_user = NEW.id_user LIMIT 1), '(desconhecido)') INTO nomeUsuario;
 
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
     VALUES (
@@ -274,8 +279,9 @@ BEGIN
     DECLARE tituloLivro VARCHAR(200);
     DECLARE nomeUsuario VARCHAR(100);
 
-    SELECT nome INTO tituloLivro FROM Livro WHERE id_livro = NEW.id_livro;
-    SELECT nome INTO nomeUsuario FROM User WHERE id_user = NEW.id_user;
+    SELECT COALESCE((SELECT nome FROM Livro WHERE id_livro = NEW.id_livro LIMIT 1), '(desconhecido)') INTO tituloLivro;
+
+    SELECT COALESCE((SELECT nome FROM User WHERE id_user = NEW.id_user LIMIT 1), '(desconhecido)') INTO nomeUsuario;
 
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos, id_user)
     VALUES (
@@ -297,8 +303,9 @@ BEGIN
     DECLARE tituloLivro VARCHAR(200);
     DECLARE nomeUsuario VARCHAR(100);
 
-    SELECT nome INTO tituloLivro FROM Livro WHERE id_livro = OLD.id_livro;
-    SELECT nome INTO nomeUsuario FROM User WHERE id_user = OLD.id_user;
+    SELECT COALESCE((SELECT nome FROM Livro WHERE id_livro = OLD.id_livro LIMIT 1), '(desconhecido)') INTO tituloLivro;
+
+    SELECT COALESCE((SELECT nome FROM User WHERE id_user = OLD.id_user LIMIT 1), '(desconhecido)') INTO nomeUsuario;
 
     INSERT INTO LogAlteracoes (tabela_afetada, operacao, registro_id, dados_antigos, id_user)
     VALUES (
@@ -348,3 +355,38 @@ select * from sessao
 where token = 'token_exemplo_123'
     and ativo = true;
 
+create table if not exists senha_reset (
+    id_reset int primary key auto_increment,
+    id_user int not null,
+    token_hash varchar(64) not null,
+    criado_em datetime not null default current_timestamp,
+    expiracao datetime not null,
+    consumido boolean not null defaultfalse,
+    ip_solicitante varchar(45) defalt null,
+    usuario_agente varchar(255) defalt null,
+
+foreign key (id_user) references usuario(id_user),
+unique key ux_token_hash (token_hash),
+index idx_user_active (id_user, consumido, expiracao)
+);
+
+demiliter $$ 
+
+create procedure request_reset_token(
+    in p-email varchar(150),
+    in p_ip varchar(45),
+    in p_ua varchar(255),
+    in p_validade_min int,
+    out p_token_raw varchar(128)
+    out p_msg varchar(255)
+)
+begin 
+    declare v_id int;
+    declare v_token_raw varchar(128);
+    declare v_token_hash varchar(64);
+    declare v_expiracao datetime;
+
+    set p_token_raw = null;
+    set p_msg = null;
+
+    select id_user into v_id from usuario where email_user = p_email limit 1; 

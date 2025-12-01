@@ -5,11 +5,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// rota teste
+const userRoutes = require("./routes/userRoutes");
+app.use("/user", userRoutes);
+
 app.get("/", (req, res) => {
     res.send("Backend funcionando!");
 });
 
-app.listen(3000, () => {
-    console.log("Servidor rodando em http://localhost:3000");
+app.listen(3001, () => {
+    console.log("Servidor rodando em http://localhost:3001");
 });

@@ -1,4 +1,3 @@
-drop DATABASE projeto_final;
 create database projeto_final;
 use projeto_final;
 create table User(
@@ -20,7 +19,7 @@ create table livro(
     nome varchar(150) not null,
     id_categoria INT,
     id_autor INT,
-    descricao fulltext,
+    descricao text,
     Foreign Key (id_categoria) REFERENCES Categoria(id_categoria) ON DELETE SET NULL,
     Foreign Key (id_autor) REFERENCES Autor(id_autor) ON DELETE CASCADE
 );
@@ -94,7 +93,7 @@ BEGIN
         'INSERT', 
         NEW.id_livro, 
         CONCAT('Título: ', NEW.nome, ', Autor: ', nomeAutor, ', Categoria: ', nomeCategoria, ', Descrição: ', NEW.descricao),
-        NEW.id_user
+        NULL
     );
 END $$
 
@@ -123,7 +122,7 @@ BEGIN
         OLD.id_livro,
         CONCAT('Título: ', OLD.nome, ', Autor: ', oldAutor, ', Categoria: ', oldCategoria, ', Descrição: ', OLD.descricao),
         CONCAT('Título: ', NEW.nome, ', Autor: ', newAutor, ', Categoria: ', newCategoria, ', Descrição: ', NEW.descricao),
-        NEW.id_user
+        NULL
     );
 END $$
 
@@ -144,7 +143,7 @@ BEGIN
         'DELETE', 
         OLD.id_livro,
         CONCAT('Título: ', OLD.nome, ', Autor: ', nomeAutor, ', Categoria: ', nomeCategoria, ', Descrição: ', OLD.descricao),
-        OLD.id_user
+        NULL
     );
 END $$
 
@@ -291,7 +290,7 @@ BEGIN
         ', Nota: ', OLD.nota, ', Comentario: ', IFNULL(OLD.comentario,'')),
         CONCAT('Livro: ', IFNULL(tituloLivro,'(desconhecido)'), ', Usuario: ', IFNULL(nomeUsuario,'(desconhecido)'), 
         ', Nota: ', NEW.nota, ', Comentario: ', IFNULL(NEW.comentario,'')),
-        NEW.id_user
+        NULL
     );
 END $$
 
@@ -313,7 +312,8 @@ BEGIN
         OLD.avaliacao_id,
         CONCAT('Livro: ', IFNULL(tituloLivro,'(desconhecido)'), ', Usuario: ', IFNULL(nomeUsuario,'(desconhecido)'), 
         ', Nota: ', OLD.nota, ', Comentario: ', IFNULL(OLD.comentario,'')),
-        OLD.id_user
+        NULL,
+        NULL
     );
 END $$
 
@@ -360,32 +360,52 @@ create table if not exists senha_reset (
     token_hash varchar(64) not null,
     criado_em datetime not null default current_timestamp,
     expiracao datetime not null,
-    consumido boolean not null defaultfalse,
-    ip_solicitante varchar(45) defalt null,
-    usuario_agente varchar(255) defalt null,
+    consumido boolean not null default false,
+    ip_solicitante varchar(45) default null,
+    usuario_agente varchar(255) default null,
 
-foreign key (id_user) references usuario(id_user),
+foreign key (id_user) references user(id_user),
 unique key ux_token_hash (token_hash),
 index idx_user_active (id_user, consumido, expiracao)
 );
 
-demiliter $$ 
+delimiter $$ 
 
-create procedure request_reset_token(
-    in p-email varchar(150),
-    in p_ip varchar(45),
-    in p_ua varchar(255),
-    in p_validade_min int,
-    out p_token_raw varchar(128)
-    out p_msg varchar(255)
+CREATE PROCEDURE request_reset_token(
+    IN p_email VARCHAR(150),
+    IN p_ip VARCHAR(45),
+    IN p_ua VARCHAR(255),
+    IN p_validade_min INT,
+    OUT p_token_raw VARCHAR(128),
+    OUT p_msg VARCHAR(255)
 )
-begin 
-    declare v_id int;
-    declare v_token_raw varchar(128);
-    declare v_token_hash varchar(64);
-    declare v_expiracao datetime;
+BEGIN
+    DECLARE v_id INT;
+    DECLARE v_token_raw VARCHAR(128);
+    DECLARE v_token_hash VARCHAR(64);
+    DECLARE v_expiracao DATETIME;
 
-    set p_token_raw = null;
-    set p_msg = null;
+    SET p_token_raw = NULL;
+    SET p_msg = NULL;
 
-    select id_user into v_id from usuario where email_user = p_email limit 1; 
+    SELECT id_user INTO v_id
+    FROM usuario
+    WHERE email_user = p_email
+    LIMIT 1;
+
+    IF v_id IS NULL THEN
+        SET p_msg = 'Usuário não encontrado.';
+        RETURN;
+    END IF;
+
+    SET v_token_raw = UUID();
+
+    SET v_token_hash = SHA2(v_token_raw, 256);
+
+    SET v_expiracao = DATE_ADD(NOW(), INTERVAL p_validade_min MINUTE);
+
+    SET p_token_raw = v_token_raw;
+    SET p_msg = 'Token gerado com sucesso.';
+
+END;
+DELIMITER ;

@@ -1,3 +1,4 @@
+drop database projeto_final;
 create database projeto_final;
 use projeto_final;
 create table User(
@@ -14,15 +15,19 @@ CREATE TABLE Autor(
     id_autor INT PRIMARY KEY NOT NULL auto_increment,
     nome VARCHAR(150) NOT NULL
 );
-create table livro(
-    id_livro int primary key not null auto_increment,
-    nome varchar(150) not null,
+CREATE TABLE Livro (
+    id_livro INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(150) NOT NULL,
     id_categoria INT,
     id_autor INT,
-    descricao text,
-    Foreign Key (id_categoria) REFERENCES Categoria(id_categoria) ON DELETE SET NULL,
-    Foreign Key (id_autor) REFERENCES Autor(id_autor) ON DELETE CASCADE
+    id_user INT NOT NULL,  -- Dono do livro
+    descricao TEXT,
+    FOREIGN KEY (id_categoria) REFERENCES Categoria(id_categoria) ON DELETE SET NULL,
+    FOREIGN KEY (id_autor) REFERENCES Autor(id_autor) ON DELETE SET NULL,
+    FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE
 );
+
+
 CREATE TABLE Avaliacoes (
     avaliacao_id INT AUTO_INCREMENT PRIMARY KEY,
     id_livro INT,
@@ -51,9 +56,9 @@ INSERT INTO Autor (nome) VALUES
 ('Franz Kafka'), ('Margaret Atwood'), ('H. P. Lovecraft'),
 ('Dan Brown'), ('Victor Hugo');
 
-INSERT INTO Livro (nome, descricao, id_autor, id_categoria) VALUES
-('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2),
-('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,4);
+INSERT INTO Livro (nome, descricao, id_autor, id_categoria,id_user) VALUES
+('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2,1),
+('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,4,1);
 
 INSERT INTO User (nome, email, senha) VALUES
 ('João Silva', 'joao@exemplo.com', 'senha123'),
@@ -408,4 +413,4 @@ BEGIN
     SET p_msg = 'Token gerado com sucesso.';
 
 END;
-DELIMITER ;
+DELIMITER ;INSERT INTO Livro (nome, descricao, id_autor, id_categoria) VALUES ('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2), ('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,4)

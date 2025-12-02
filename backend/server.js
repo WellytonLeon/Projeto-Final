@@ -8,6 +8,10 @@ app.use(express.json());
 const userRoutes = require("./routes/userRoutes");
 app.use("/user", userRoutes);
 
+const bookRoutes = require("./routes/bookRoutes");
+app.use("/book", bookRoutes);
+
+
 app.get("/", (req, res) => {
     res.send("Backend funcionando!");
 });

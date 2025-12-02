@@ -148,7 +148,7 @@ BEGIN
         'DELETE', 
         OLD.id_livro,
         CONCAT('Título: ', OLD.nome, ', Autor: ', nomeAutor, ', Categoria: ', nomeCategoria, ', Descrição: ', OLD.descricao),
-        NULL
+        NULL,NULL
     );
 END $$
 

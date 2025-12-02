@@ -53,7 +53,7 @@ form.addEventListener("submit", function (e) {
 
     if (result.success) {
         alert("Conta criada com sucesso!");
-        window.location.href = "/Login/LoginUsuario.html";
+        window.location.href = "../Login/LoginUsuario.html";
     } else {
         alert(result.message);
     }

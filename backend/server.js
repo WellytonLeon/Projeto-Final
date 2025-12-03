@@ -2,20 +2,21 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-const userRoutes = require("./routes/userRoutes");
-app.use("/user", userRoutes);
+// Rotas (PADRONIZADAS)
+app.use("/users", require("./routes/userRoutes"));
+app.use("/books", require("./routes/bookRoutes"));
 
-const bookRoutes = require("./routes/bookRoutes");
-app.use("/book", bookRoutes);
-
-
+// Rota base
 app.get("/", (req, res) => {
     res.send("Backend funcionando!");
 });
 
-app.listen(3001, () => {
-    console.log("Servidor rodando em http://localhost:3001");
+// Servidor
+const PORT = 3001;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

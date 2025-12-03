@@ -1,60 +1,38 @@
-// --- Banco de dados local ---
-function initializeDB() {
-    const db = localStorage.getItem('usersDB');
-    if (!db) {
-        const initialUsers = [
-            { username: "usuario1", password: "senha123", nomeExibicao: "Usuário Um", email: "teste@teste.com" },
-            { username: "admin", password: "mestra", nomeExibicao: "Administrador", email: "admin@site.com" }
-        ];
-        localStorage.setItem('usersDB', JSON.stringify(initialUsers));
-    }
-}
+/* ============================================================
+   CADASTRO DE NOVO USUÁRIO
+   ============================================================ */
 
-function registerUser(username, email, password) {
-    let users = JSON.parse(localStorage.getItem('usersDB'));
+const formCadastro = document.getElementById("formCadastro");
 
-    // Verificar se usuário já existe
-    if (users.some(user => user.username === username)) {
-        return { success: false, message: "Nome de usuário já existe!" };
-    }
-
-    const newUser = {
-        username: username,
-        email: email,
-        password: password,
-        nomeExibicao: username
-    };
-
-    users.push(newUser);
-    localStorage.setItem('usersDB', JSON.stringify(users));
-
-    return { success: true };
-}
-
-// -----------------------------
-// Lógica da página de cadastro
-// -----------------------------
-
-initializeDB();
-
-const form = document.getElementById("formCadastro");
-const inputUser = document.getElementById("username");
-const inputEmail = document.getElementById("email");
-const inputPass = document.getElementById("password");
-
-form.addEventListener("submit", function (e) {
+formCadastro.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const username = inputUser.value.trim();
-    const email = inputEmail.value.trim();
-    const password = inputPass.value.trim();
+    const username = document.getElementById("cadastro-username").value.trim();
+    const email = document.getElementById("cadastro-email").value.trim();
+    const password = document.getElementById("cadastro-password").value.trim();
 
-    const result = registerUser(username, email, password);
+    let users = getUsersDB();
 
-    if (result.success) {
-        alert("Conta criada com sucesso!");
-        window.location.href = "../Login/LoginUsuario.html";
-    } else {
-        alert(result.message);
+    if (users.some(u => u.username === username)) {
+        alert("Esse nome de usuário já existe!");
+        return;
     }
+
+    if (users.some(u => u.email === email)) {
+        alert("Este email já está cadastrado!");
+        return;
+    }
+
+    users.push({
+        username,
+        email,
+        password,
+        nomeExibicao: username,
+        profilePic: ""
+    });
+
+    saveUsersDB(users);
+
+    alert("Conta criada com sucesso!");
+    window.location.href = "../Login/LoginUsuario.html";
 });

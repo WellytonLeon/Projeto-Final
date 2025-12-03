@@ -1,183 +1,214 @@
-// ===== INICIALIZAR DADOS =====
+/* ============================================================
+   PERFIL DO USUÁRIO + CONFIGURAÇÕES
+   ============================================================ */
+
 window.onload = () => {
-    // Modo escuro
-    if(localStorage.getItem("darkmode") === "on") document.body.classList.add("dark");
+    const user = getLoggedUser();
 
-    // Tema
-    const themeColor = localStorage.getItem("themeColor") || "default";
-    applyTheme(themeColor);
+    if (!user) {
+        return window.location.href = "../Login/LoginUsuario.html";
+    }
 
-    // Dados do login
-    if(localStorage.getItem("username")){
-        const usernameFields = document.querySelectorAll("#username");
-        usernameFields.forEach(f => f.value = localStorage.getItem("username"));
-    }
-    if(localStorage.getItem("email")){
-        const emailFields = document.querySelectorAll("#email");
-        emailFields.forEach(f => f.value = localStorage.getItem("email"));
-    }
+    // Preenche perfil
+    document.getElementById("perfil-username").value = user.username;
+    document.getElementById("perfil-email").value = user.email;
+
+    // Preenche tela de Configurações
+    document.getElementById("config-username").value = user.username;
+    document.getElementById("config-email").value = user.email;
 
     // Foto de perfil
-    const profilePic = document.getElementById("profilePic");
-    if(profilePic && localStorage.getItem("profilePic")) profilePic.src = localStorage.getItem("profilePic");
+    const pic = document.getElementById("profilePic");
+    pic.src = user.profilePic || "../images/avatar.png";
+
+    // MODO ESCURO
+    if (user.darkmode === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkmodeSwitch").checked = true;
+    }
+
+    // TEMA DE CORES
+    const theme = user.themeColor || "default";
+    document.getElementById("themeColor").value = theme;
+    applyTheme(theme);
 };
 
-// ===== MODO ESCURO =====
+/* -------------------------------
+   MODO ESCURO
+--------------------------------*/
 const darkSwitch = document.getElementById("darkmodeSwitch");
-if(darkSwitch){
-    darkSwitch.checked = (localStorage.getItem("darkmode") === "on");
+
+if (darkSwitch) {
     darkSwitch.addEventListener("change", () => {
-        if(darkSwitch.checked){
+        updateLoggedUser({
+            darkmode: darkSwitch.checked ? "on" : "off"
+        });
+
+        if (darkSwitch.checked) {
             document.body.classList.add("dark");
-            localStorage.setItem("darkmode","on");
         } else {
             document.body.classList.remove("dark");
-            localStorage.setItem("darkmode","off");
         }
     });
 }
 
-// ===== TEMA DE CORES =====
-const themeSelect = document.getElementById("themeColor");
-if(themeSelect){
-    themeSelect.value = localStorage.getItem("themeColor") || "default";
-    themeSelect.addEventListener("change", () => {
-        const color = themeSelect.value;
-        localStorage.setItem("themeColor", color);
-        applyTheme(color);
-    });
-}
-
-function applyTheme(color){
+/* -------------------------------
+   TEMA
+--------------------------------*/
+function applyTheme(color) {
     const sidebar = document.getElementById("sidebar");
-    switch(color){
-        case "roxo": sidebar.style.background = "#6f42c1"; break;
-        case "verde": sidebar.style.background = "#198754"; break;
-        default: sidebar.style.background = "#0d6efd"; break;
-    }
+
+    const colors = {
+        default: "#0d6efd",
+        roxo: "#6f42c1",
+        verde: "#198754"
+    };
+
+    sidebar.style.background = colors[color] || colors.default;
 }
 
-// ===== ALTERAR LOGIN =====
-const loginForm = document.getElementById("loginForm");
-if(loginForm){
-    loginForm.addEventListener("submit", e => {
-        e.preventDefault();
-        const username = document.getElementById("username").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+document.getElementById("themeColor").addEventListener("change", (e) => {
+    const color = e.target.value;
 
-        localStorage.setItem("username", username);
-        localStorage.setItem("email", email);
-        if(password) localStorage.setItem("password", password);
+    // salva no usuário
+    updateLoggedUser({ themeColor: color });
 
-        alert("Dados de login atualizados com sucesso!");
-        if(password) document.getElementById("password").value = "";
+    // aplica imediatamente
+    applyTheme(color);
+});
+
+/* -------------------------------
+   FOTO DE PERFIL
+--------------------------------*/
+document.getElementById("changePicBtn").addEventListener("click", () => {
+    document.getElementById("profilePicInput").click();
+});
+
+document.getElementById("profilePicInput").addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        updateLoggedUser({ profilePic: e.target.result });
+        document.getElementById("profilePic").src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+document.getElementById("removePicBtn").addEventListener("click", () => {
+    updateLoggedUser({ profilePic: "" });
+    document.getElementById("profilePic").src = "../images/avatar.png";
+});
+
+/* -------------------------------
+   SALVAR PERFIL (perfilTab)
+--------------------------------*/
+document.getElementById("profileForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    updateLoggedUser({
+        username: document.getElementById("perfil-username").value,
+        email: document.getElementById("perfil-email").value
     });
-}
 
-// ===== PERFIL =====
-const saveProfileBtn = document.getElementById("saveProfile");
-if(saveProfileBtn){
-    saveProfileBtn.addEventListener("click", () => {
-        const username = document.getElementById("username").value;
-        const email = document.getElementById("email").value;
+    alert("Perfil atualizado com sucesso!");
+    window.location.reload();
+});
 
-        localStorage.setItem("username", username);
-        localStorage.setItem("email", email);
+/* -------------------------------
+   ALTERAR LOGIN (configTab)
+--------------------------------*/
+document.getElementById("loginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
 
-        alert("Perfil atualizado com sucesso!");
+    updateLoggedUser({
+        username: document.getElementById("config-username").value,
+        email: document.getElementById("config-email").value,
+        password: document.getElementById("config-password").value || undefined
     });
-}
 
-// ===== FOTO DE PERFIL =====
-const changePicBtn = document.getElementById("changePicBtn");
-const profilePicInput = document.getElementById("profilePicInput");
-if(changePicBtn && profilePicInput){
-    changePicBtn.addEventListener("click", () => profilePicInput.click());
+    document.getElementById("config-password").value = "";
+    alert("Dados atualizados com sucesso!");
+});
 
-    profilePicInput.addEventListener("change", function(){
-        const file = this.files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = e => {
-            document.getElementById("profilePic").src = e.target.result;
-            localStorage.setItem("profilePic", e.target.result);
-        };
-        reader.readAsDataURL(file);
-    });
-}
+/* -------------------------------
+   BACKUP
+--------------------------------*/
+document.getElementById("exportBackup").addEventListener("click", () => {
+    const data = JSON.stringify(localStorage, null, 4);
+    const blob = new Blob([data], { type: "application/json" });
+    const a = document.createElement("a");
 
-// ===== REMOVER FOTO DE PERFIL =====
-const removePicBtn = document.getElementById("removePicBtn");
-if(removePicBtn){
-    removePicBtn.addEventListener("click", () => {
-        localStorage.removeItem("profilePic");
-        document.getElementById("profilePic").src = "../images/avatar.png";
-    });
-}
+    a.href = URL.createObjectURL(blob);
+    a.download = "backup.json";
+    a.click();
+});
 
-// ===== BACKUP =====
-const exportBackupBtn = document.getElementById("exportBackup");
-if(exportBackupBtn){
-    exportBackupBtn.addEventListener("click", () => {
-        const data = JSON.stringify(localStorage, null, 4);
-        const blob = new Blob([data], {type:"application/json"});
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "backup.json";
-        a.click();
-    });
-}
+document.getElementById("importBackup").addEventListener("click", () => {
+    document.getElementById("backupFileInput").click();
+});
 
-const importBackupBtn = document.getElementById("importBackup");
-const backupFileInput = document.getElementById("backupFileInput");
-if(importBackupBtn && backupFileInput){
-    importBackupBtn.addEventListener("click", () => backupFileInput.click());
+document.getElementById("backupFileInput").addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
 
-    backupFileInput.addEventListener("change", function(){
-        const file = this.files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = e => {
-            const data = JSON.parse(e.target.result);
-            for(let key in data) localStorage.setItem(key,data[key]);
-            alert("Backup restaurado com sucesso!");
-            location.reload();
-        };
-        reader.readAsText(file);
-    });
-}
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const data = JSON.parse(e.target.result);
 
-// ===== RESET TOTAL =====
-const resetBtn = document.getElementById("resetSystem");
-if(resetBtn){
-    resetBtn.addEventListener("click", () => {
-        if(confirm("Tem certeza que deseja apagar todos os dados?")){
-            localStorage.clear();
-            alert("Todos os dados foram apagados!");
-            location.reload();
+        for (let key in data) {
+            localStorage.setItem(key, data[key]);
         }
-    });
-}
 
-// ===== EXCLUIR CONTA =====
-const deleteBtn = document.getElementById("confirmardelete");
+        alert("Backup restaurado com sucesso!");
+        location.reload();
+    };
+
+    reader.readAsText(file);
+});
+
+/* -------------------------------
+   RESET TOTAL
+--------------------------------*/
+document.getElementById("resetSystem").addEventListener("click", () => {
+    if (confirm("Tem certeza que deseja apagar todos os dados?")) {
+        localStorage.clear();
+        alert("Todos os dados foram apagados!");
+        location.reload();
+    }
+});
+
+/* -------------------------------
+   EXCLUIR CONTA
+--------------------------------*/
 const deleteModal = new bootstrap.Modal(document.getElementById("confirmardeletemodal"));
 
-document.getElementById("deletarconta").addEventListener("click", () => deleteModal.show());
-if(deleteBtn){
-    deleteBtn.addEventListener("click", () => {
-        localStorage.clear();
-        alert("Conta excluída!");
-        window.location.href = "../Login/LoginUsuario.html";
-    });
-}
+document.getElementById("deletarconta").addEventListener("click", () => {
+    deleteModal.show();
+});
 
-// ===== LOGOUT =====
-const logoutBtn = document.getElementById("logoutbtn");
-if(logoutBtn){
-    logoutBtn.addEventListener("click", () => {
-        alert("Logout realizado!");
-        window.location.href = "LoginUsuario.html";
-    });
-}
+document.getElementById("confirmardelete").addEventListener("click", () => {
+    const user = getLoggedUser();
+
+    if (!user) return;
+
+    let users = getUsersDB();
+    users = users.filter(u => u.username !== user.username);
+
+    saveUsersDB(users);
+    logoutUser();
+
+    alert("Conta excluída com sucesso!");
+    window.location.href = "../Login/LoginUsuario.html";
+});
+
+/* -------------------------------
+   LOGOUT
+--------------------------------*/
+document.getElementById("logoutbtn").addEventListener("click", () => {
+    logoutUser();
+    alert("Logout realizado!");
+    window.location.href = "../Login/LoginUsuario.html";
+});

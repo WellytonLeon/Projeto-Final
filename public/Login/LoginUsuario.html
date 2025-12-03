@@ -1,40 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <title>Projeto Final</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../styles/style.css">
-  <title>Cadastro</title>
+    <meta charset="UTF-8">
+    <title>Entrar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS Moderno -->
+    <link rel="stylesheet" href="../styles/auth.css">
 </head>
 <body>
-  <div class="login-container">
-    <div class="login-box">
-      <h2>Entrar</h2>
-      <form action="#" method="POST">
-        <div class="textbox">
-          <input type="text" placeholder="Usuário ou Email" name="username" required>
-        </div>
-        <div class="textbox">
-          <input type="password" placeholder="Senha" name="password" required>
-        </div>
-        <input type="submit" value="Entrar" class="btn-login">
 
-        <div class="links">
-          <a href="EsqueceuSenha.html">Esqueceu a senha?</a><br>
-          <a href="NovoUsuario.html">Criar conta</a>
+    <div class="login-container">
+        <div class="login-box">
+
+            <h2>Entrar</h2>
+
+            <form id="loginForm">
+                
+                <div class="textbox">
+                    <input type="text" id="login-username" name="username"
+                        placeholder="Usuário ou Email" required>
+                </div>
+
+                <div class="textbox">
+                    <input type="password" id="login-password" name="password"
+                        placeholder="Senha" required>
+                </div>
+
+                <button type="submit" class="btn-login">Entrar</button>
+
+                <div class="links">
+                    <a href="EsqueceuSenha.html">Esqueceu a senha?</a><br>
+                    <a href="NovoUsuario.html">Criar conta</a>
+                </div>
+
+            </form>
+
+            <button class="google-login-btn">
+                <img src="../images/Logo-google-icon-PNG.png" alt="Google logo">
+                Continuar com Google
+            </button>
+
         </div>
-      </form>
-      <div class="altlogin">
-      <button class="google-login-btn">
-      <img src="/images/Logo-google-icon-PNG.png" alt="Google logo">
-      Continuar com Google
-      </button>
-      </div>
     </div>
-  </div>
-  <script src="../Javascript/LoginUsuario.js"></script>
-  <script src="../Javascript/backup.js"></script>
+
+    <script src="../../pasta de testes/database.js"></script>
+    <script src="../Javascript/LoginUsuario.js"></script>
 
 </body>
 </html>

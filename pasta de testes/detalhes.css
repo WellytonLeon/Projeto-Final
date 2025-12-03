@@ -1,0 +1,24 @@
+body {
+    background: #f5f6fa;
+    font-family: Arial, sans-serif;
+}
+
+.livro-wrapper {
+    display: flex;
+    gap: 40px;
+}
+
+.livro-capa {
+    width: 260px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.livro-info h2 {
+    font-weight: bold;
+}
+
+.generos span,
+.categoria span {
+    margin-right: 6px;
+}

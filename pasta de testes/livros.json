@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "titulo": "O Abismo",
+        "autor": "Autor Desconhecido",
+        "categoria": "Suspense",
+        "generos": ["Mistério", "Psicológico"],
+        "capa": "../../images/abismo.jpg",
+        "descricao": "Uma história profunda e sombria explorando os limites da mente humana.",
+        "nota": 4.5
+    },
+    {
+        "id": 2,
+        "titulo": "É Assim Que Começa",
+        "autor": "Colleen Hoover",
+        "categoria": "Romance",
+        "generos": ["Drama", "Romance Contemporâneo"],
+        "capa": "../../images/É assim que começa.jpg",
+        "descricao": "Continuação emocionante e intensa sobre amor, trauma e superação.",
+        "nota": 4.8
+    },
+    {
+        "id": 3,
+        "titulo": "O Hobbit",
+        "autor": "J. R. R. Tolkien",
+        "categoria": "Fantasia",
+        "generos": ["Aventura", "Clássico"],
+        "capa": "../../images/hobbit.jpg",
+        "descricao": "A jornada inesperada de Bilbo Bolseiro em um mundo mágico e épico.",
+        "nota": 5
+    }
+]

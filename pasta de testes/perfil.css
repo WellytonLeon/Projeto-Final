@@ -65,3 +65,36 @@ body.dark .nav-link {
 .modal-content {
     padding: 20px;
 }
+/* ===== MODAL EM MODO ESCURO ===== */
+body.dark .modal-content {
+    background: #2a2a2a !important;
+    color: #fff !important;
+    border: 1px solid #444;
+}
+
+body.dark .modal-header,
+body.dark .modal-footer {
+    border-color: #444 !important;
+}
+
+body.dark .modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+body.dark .btn-secondary {
+    background-color: #555;
+    border-color: #666;
+    color: white;
+}
+
+body.dark .btn-secondary:hover {
+    background-color: #666;
+}
+body.dark .btn-danger {
+    background-color: #b52a2a;
+    border-color: #cc3a3a;
+}
+
+body.dark .btn-danger:hover {
+    background-color: #cc3a3a;
+}

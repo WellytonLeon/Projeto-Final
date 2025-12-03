@@ -53,7 +53,6 @@ function applyTheme(color){
     switch(color){
         case "roxo": sidebar.style.background = "#6f42c1"; break;
         case "verde": sidebar.style.background = "#198754"; break;
-        case "vermelho": sidebar.style.background = "#dc3545"; break;
         default: sidebar.style.background = "#0d6efd"; break;
     }
 }
@@ -163,11 +162,14 @@ if(resetBtn){
 
 // ===== EXCLUIR CONTA =====
 const deleteBtn = document.getElementById("confirmardelete");
+const deleteModal = new bootstrap.Modal(document.getElementById("confirmardeletemodal"));
+
+document.getElementById("deletarconta").addEventListener("click", () => deleteModal.show());
 if(deleteBtn){
     deleteBtn.addEventListener("click", () => {
         localStorage.clear();
         alert("Conta excluída!");
-        window.location.href = "LoginUsuario.html";
+        window.location.href = "../Login/LoginUsuario.html";
     });
 }
 

@@ -9,6 +9,9 @@ app.use(express.json());
 // Rotas (PADRONIZADAS)
 app.use("/users", require("./routes/userRoutes"));
 app.use("/books", require("./routes/bookRoutes"));
+app.use("/categorias", require("./routes/categoriasRoutes"));
+app.use("/autores", require("./routes/autoresRoutes"));
+
 
 // Rota base
 app.get("/", (req, res) => {

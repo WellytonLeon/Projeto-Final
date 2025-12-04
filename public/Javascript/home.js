@@ -39,6 +39,30 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 });
 
 /* ================================================
+   RENDERIZAÇÃO DOS CARDS
+================================================ */
+function exibirLivros(lista) {
+    bookList.innerHTML = "";
+
+    lista.forEach(livro => {
+        const card = `
+            <div class="col-md-4 mb-4">
+                <div class="card book-card shadow-sm" onclick="abrirDetalhes(${livro.id})">
+                    <img src="${livro.thumb || livro.capa}" class="card-img-top" alt="${livro.titulo}"onerror="this.onerror=null; this.src='/public/images/default_cover.jpg';">
+                    <div class="card-body">
+                        <h5 class="card-title">${livro.titulo}</h5>
+                        <p class="card-text">${livro.autor}</p>
+                        <span class="badge bg-primary">${livro.categoria}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        bookList.innerHTML += card;
+    });
+}
+
+
+/* ================================================
    CARREGAMENTO DO JSON DE LIVROS
 ================================================ */
 let livros = [];
@@ -46,7 +70,7 @@ let categorias = new Set();
 let generos = new Set();
 
 async function carregarLivros() {
-    const response = await fetch("../pasta de testes/livros.json");
+    const response = await fetch("/public/livros.json");
     livros = await response.json();
 
     livros.forEach(l => {
@@ -103,32 +127,10 @@ filtroCategoria.addEventListener("change", aplicarFiltros);
 filtroGenero.addEventListener("change", aplicarFiltros);
 filtroBusca.addEventListener("input", aplicarFiltros);
 
-/* ================================================
-   RENDERIZAÇÃO DOS CARDS
-================================================ */
-function exibirLivros(lista) {
-    bookList.innerHTML = "";
-
-    lista.forEach(livro => {
-        const card = `
-            <div class="col-md-4 mb-4">
-                <div class="card book-card shadow-sm" onclick="abrirDetalhes(${livro.id})">
-                    <img src="${livro.capa}" class="card-img-top" alt="${livro.titulo}">
-                    <div class="card-body">
-                        <h5 class="card-title">${livro.titulo}</h5>
-                        <p class="card-text">${livro.autor}</p>
-                        <span class="badge bg-primary">${livro.categoria}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-        bookList.innerHTML += card;
-    });
-}
 
 /* ================================================
    ABRIR PÁGINA DE DETALHES
 ================================================ */
 function abrirDetalhes(id) {
-    window.location.href = `../pasta de testes/detalhes.html?id=${id}`;
+    window.location.href = `/public/detalhes.html?id=${id}`;
 }

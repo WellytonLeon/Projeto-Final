@@ -45,10 +45,35 @@ body {
 
 /* Imagem */
 .card-img-top {
-    height: 240px;
-    object-fit: cover;
+    height: 240px;        /* você pode ajustar esse valor */
+    object-fit: contain;  /* mostra a imagem inteira */
+    background-color: #f3f3f3; /* opcional para tapar bordas */
+    padding: 10px; /* opcional */
 }
-
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    min-height: 48px; /* 2 linhas */
+    max-height: 48px; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.card-text {
+    font-size: 15px;
+    min-height: 22px;
+    max-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #555;
+}
+.card-body .btn {
+    margin-top: auto; /* empurra o botão pro final */
+}
 /* Rodapé */
 #mainFooter {
     background: #ffffff;
@@ -78,4 +103,24 @@ body.dark .book-card {
 body.dark #mainFooter {
     background: #1a1a1a;
     color: #bbb;
+}
+.book-card {
+    border-radius: 12px;
+    height: 100%; /* garante cards com mesma altura */
+    display: flex;
+    flex-direction: column;
+}
+
+
+.book-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.18);
+}
+
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.book-card:hover .card-img-top {
+    transform: scale(1.05);
 }

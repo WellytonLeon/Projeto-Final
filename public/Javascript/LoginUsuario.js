@@ -1,7 +1,3 @@
-/* ============================================================
-   LOGIN DO USUÁRIO - COM BACKEND
-============================================================ */
-
 const loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener("submit", async (e) => {
@@ -19,21 +15,21 @@ loginForm.addEventListener("submit", async (e) => {
         const response = await fetch("http://localhost:3001/users/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: emailOuUsuario, senha }) // envia para backend
+            body: JSON.stringify({ emailOuUsuario, senha })
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
-            alert(data.error || "Usuário ou senha incorretos.");
+            const errorData = await response.json();
+            alert(errorData.error || "Usuário ou senha incorretos.");
             return;
         }
 
-        // Salva dados do usuário no localStorage (opcional)
+        const data = await response.json();
+
+        // Salva usuário logado localmente (para manter sessão)
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        alert("Login bem-sucedido!");
-        window.location.href = "../Perfil/index.html"; // ou página inicial
+        window.location.href = "../Home/index.html";
 
     } catch (err) {
         console.error(err);

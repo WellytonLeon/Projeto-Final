@@ -23,5 +23,5 @@ loginForm.addEventListener("submit", (e) => {
 
     loginUser(found.username);
 
-    window.location.href = "../index.html";
+    window.location.href = "../Perfil/index.html";
 });

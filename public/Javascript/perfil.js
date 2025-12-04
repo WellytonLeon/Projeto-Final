@@ -3,6 +3,8 @@
    ============================================================ */
 
 window.onload = () => {
+    
+
     const user = getLoggedUser();
 
     if (!user) {
@@ -32,6 +34,23 @@ window.onload = () => {
     document.getElementById("themeColor").value = theme;
     applyTheme(theme);
 };
+/* ============================================================
+   ABRIR ABA AUTOMÁTICA VIA URL (?tab=...)
+============================================================ */
+function openTabFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
+
+    if (!tab) return;
+
+    const tabButton = document.querySelector(`a[href="#${tab}"], button[data-bs-target="#${tab}"]`);
+
+    if (tabButton) {
+        const tabObj = new bootstrap.Tab(tabButton);
+        tabObj.show();
+    }
+}
+    openTabFromURL();
 
 /* -------------------------------
    MODO ESCURO

@@ -1,38 +1,40 @@
 /* ============================================================
-   CADASTRO DE NOVO USUÁRIO
-   ============================================================ */
+   CADASTRO DE NOVO USUÁRIO - COM BACKEND
+============================================================ */
 
 const formCadastro = document.getElementById("formCadastro");
 
-formCadastro.addEventListener("submit", (e) => {
+formCadastro.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const username = document.getElementById("cadastro-username").value.trim();
+    const nome = document.getElementById("cadastro-username").value.trim();
     const email = document.getElementById("cadastro-email").value.trim();
-    const password = document.getElementById("cadastro-password").value.trim();
+    const senha = document.getElementById("cadastro-password").value.trim();
 
-    let users = getUsersDB();
-
-    if (users.some(u => u.username === username)) {
-        alert("Esse nome de usuário já existe!");
+    if (!nome || !email || !senha) {
+        alert("Preencha todos os campos.");
         return;
     }
 
-    if (users.some(u => u.email === email)) {
-        alert("Este email já está cadastrado!");
-        return;
+    try {
+        const response = await fetch("http://localhost:3001/users/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nome, email, senha })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Erro ao criar conta.");
+            return;
+        }
+
+        alert("Conta criada com sucesso!");
+        window.location.href = "../Login/LoginUsuario.html";
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao conectar ao servidor.");
     }
-
-    users.push({
-        username,
-        email,
-        password,
-        nomeExibicao: username,
-        profilePic: ""
-    });
-
-    saveUsersDB(users);
-
-    alert("Conta criada com sucesso!");
-    window.location.href = "../Login/LoginUsuario.html";
 });

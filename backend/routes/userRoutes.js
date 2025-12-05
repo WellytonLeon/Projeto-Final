@@ -54,43 +54,79 @@ router.post("/register", async (req, res) => {
 });
 
 
-// ============================================================
+/// ============================
 // ATUALIZAR USUÁRIO
 // PUT /users/:id
-// ============================================================
+// ============================
 router.put("/:id", async (req, res) => {
     const { nome, email, senha, darkmode, themeColor, profilePic } = req.body;
     const { id } = req.params;
 
-    const validDark = darkmode === "on" || darkmode === "off" ? darkmode : null;
-    const validTheme = ["default", "roxo", "verde"].includes(themeColor) ? themeColor : null;
+    try {
+        // Cria arrays dinâmicos de campos e valores
+        const fields = [];
+        const values = [];
 
-    let hashedPassword = null;
-    if (senha) hashedPassword = await bcrypt.hash(senha, 10);
+        if (nome) {
+            fields.push("nome = ?");
+            values.push(nome);
+        }
 
-    const sql = `
-        UPDATE user
-        SET 
-            nome = COALESCE(?, nome),
-            email = COALESCE(?, email),
-            senha = COALESCE(?, senha),
-            darkmode = COALESCE(?, darkmode),
-            themeColor = COALESCE(?, themeColor),
-            profilePic = COALESCE(?, profilePic)
-        WHERE id_user = ?
-    `;
+        if (email) {
+            fields.push("email = ?");
+            values.push(email);
+        }
 
-    db.query(sql, [nome, email, hashedPassword, validDark, validTheme, profilePic, id], (err, result) => {
-        if (err) return res.status(500).json({ message: "Erro ao atualizar usuário." });
-        if (result.affectedRows === 0) return res.status(404).json({ message: "Usuário não encontrado." });
+        if (senha) {
+            const hashed = await bcrypt.hash(senha, 10);
+            fields.push("senha = ?");
+            values.push(hashed);
+        }
 
-        const getUser = "SELECT * FROM user WHERE id_user = ?";
-        db.query(getUser, [id], (err2, results) => {
-            if (err2) return res.status(500).json({ message: "Erro ao buscar usuário atualizado." });
-            res.json({ message: "Usuário atualizado!", user: results[0] });
+        if (darkmode === "on" || darkmode === "off") {
+            fields.push("darkmode = ?");
+            values.push(darkmode);
+        }
+
+        if (["default", "roxo", "verde"].includes(themeColor)) {
+            fields.push("themeColor = ?");
+            values.push(themeColor);
+        }
+
+        if (profilePic !== undefined) {
+            fields.push("profilePic = ?");
+            values.push(profilePic);
+        }
+
+        // Se não houver nada para atualizar
+        if (fields.length === 0) {
+            return res.status(400).json({ message: "Nenhum campo válido para atualizar." });
+        }
+
+        // Query dinâmica
+        const sql = `UPDATE user SET ${fields.join(", ")} WHERE id_user = ?`;
+        values.push(id);
+
+        db.query(sql, values, (err, result) => {
+            if (err) return res.status(500).json({ message: "Erro ao atualizar usuário." });
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: "Usuário não encontrado." });
+            }
+
+            // Retorna dados atualizados
+            const getUser = "SELECT * FROM user WHERE id_user = ?";
+            db.query(getUser, [id], (err2, results) => {
+                if (err2) return res.status(500).json({ message: "Erro ao buscar usuário atualizado." });
+                res.json({ message: "Usuário atualizado!", user: results[0] });
+            });
         });
-    });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Erro interno." });
+    }
 });
+
 
 // ============================================================
 // DELETAR USUÁRIO

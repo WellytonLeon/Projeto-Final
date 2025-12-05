@@ -1,38 +1,46 @@
+// Seleciona o formulário de login
 const loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // evita o reload da página
 
-    const emailOuUsuario = document.getElementById("login-username").value.trim();
+    // Pega os valores dos inputs
+    const email = document.getElementById("login-username").value.trim();
     const senha = document.getElementById("login-password").value.trim();
 
-    if (!emailOuUsuario || !senha) {
-        alert("Preencha todos os campos.");
+    // Validação básica
+    if (!email || !senha) {
+        alert("Por favor, preencha todos os campos.");
         return;
     }
 
     try {
+        // Envia POST para a rota de login do back-end na porta 3001
         const response = await fetch("http://localhost:3001/users/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ emailOuUsuario, senha })
+            body: JSON.stringify({ email, senha })
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            alert(errorData.error || "Usuário ou senha incorretos.");
-            return;
-        }
-
+        // Converte resposta em JSON
         const data = await response.json();
 
-        // Salva usuário logado localmente (para manter sessão)
-        localStorage.setItem("user", JSON.stringify(data.user));
+        if (response.ok) {
+            // Login bem-sucedido
+            alert(data.message);
 
-        window.location.href = "../Home/index.html";
+            // Salva os dados do usuário no localStorage
+            localStorage.setItem("user", JSON.stringify(data.user));
 
+            // Redireciona para a página home (index.html)
+           window.location.href = "/public/Perfil/index.html";
+           
+        } else {
+            // Mostra erro do back-end
+            alert(data.error || data.message);
+        }
     } catch (err) {
-        console.error(err);
-        alert("Erro ao conectar ao servidor.");
+        console.error("Erro ao tentar logar:", err);
+        alert("Erro ao tentar logar. Verifique se o servidor está rodando na porta 3001.");
     }
 });

@@ -414,3 +414,8 @@ BEGIN
 
 END;
 DELIMITER ;INSERT INTO Livro (nome, descricao, id_autor, id_categoria) VALUES ('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2), ('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,4)
+
+ALTER TABLE User
+ADD COLUMN profilePic LONGTEXT NULL AFTER senha,
+ADD COLUMN darkmode VARCHAR(5) NOT NULL DEFAULT 'off' AFTER profilePic,
+ADD COLUMN themeColor VARCHAR(20) NOT NULL DEFAULT 'default' AFTER darkmode;

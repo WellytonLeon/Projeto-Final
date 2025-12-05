@@ -419,3 +419,9 @@ ALTER TABLE User
 ADD COLUMN profilePic LONGTEXT NULL AFTER senha,
 ADD COLUMN darkmode VARCHAR(5) NOT NULL DEFAULT 'off' AFTER profilePic,
 ADD COLUMN themeColor VARCHAR(20) NOT NULL DEFAULT 'default' AFTER darkmode;
+ALTER TABLE User 
+MODIFY COLUMN profilePic VARCHAR(255) AFTER themeColor;
+
+INSERT INTO user (nome, email, senha) 
+VALUES ('Teste', 'teste@email.com', '123456');
+ALTER TABLE user MODIFY senha VARCHAR(255);

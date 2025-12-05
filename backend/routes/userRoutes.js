@@ -47,8 +47,8 @@ router.post("/register", async (req, res) => {
         `;
 
         db.query(insertuser, [nome, email, hashedPassword, null, "off", "default"], (err2) => {
-            if (err2) return res.status(500).json({ message: "Erro ao cadastrar." });
-            res.status(201).json({ message: "Usuário cadastrado!" });
+            if (err2) return res.status(500).json({ message: "Erro ao cadastrar.", err2 });
+            res.status(201).json({ message: "Usuário cadastrado!"});
         });
     });
 });

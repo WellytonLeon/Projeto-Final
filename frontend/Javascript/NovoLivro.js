@@ -1,27 +1,39 @@
-document.getElementById("formLivro").addEventListener("submit", function (event) {
+const idUser = 1; // Substitua pelo ID do usuário logado dinamicamente
+
+document.getElementById("formLivro").addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const titulo = document.getElementById("titulo").value;
+    const nome = document.getElementById("titulo").value;
     const autor = document.getElementById("autor").value;
-    const ano = document.getElementById("ano").value;
     const categoria = document.getElementById("categoria").value;
     const descricao = document.getElementById("descricao").value;
 
-    const livros = JSON.parse(localStorage.getItem("livros")) || [];
-
-    const novoLivro = { 
-        id: Date.now(),   // ID único
-        titulo, 
-        autor, 
-        ano, 
-        categoria, 
-        descricao 
+    const body = {
+        nome,
+        descricao,
+        id_user: idUser,
+        autor,
+        categoria
     };
 
-    livros.push(novoLivro);
+    try {
+        const response = await fetch("http://localhost:3001/books", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
 
-    localStorage.setItem("livros", JSON.stringify(livros));
+        const result = await response.json();
 
-    alert("Livro adicionado com sucesso!");
-    window.location.href = "biblioteca.html";
+        if (response.ok) {
+            alert(result.message || "Livro adicionado com sucesso!");
+            window.location.href = "biblioteca.html";
+        } else {
+            alert(result.message || "Erro ao cadastrar livro.");
+        }
+
+    } catch (err) {
+        console.error("Erro ao cadastrar livro:", err);
+        alert("Erro ao cadastrar livro.");
+    }
 });

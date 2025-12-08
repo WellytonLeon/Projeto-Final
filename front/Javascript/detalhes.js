@@ -16,7 +16,7 @@ async function carregarLivro() {
     const html = `
         <div class="livro-wrapper">
 
-            <img class="livro-capa" src="${livro.capa}" alt="${livro.titulo}" onerror="this.onerror=null; this.src='/public/images/default_cover.jpg';">
+            <img class="livro-capa" src="${livro.capa}" alt="${livro.titulo}" onerror="this.onerror=null; this.src='/front/images/default_cover.jpg';">
 
             <div class="livro-info">
                 <h2>${livro.titulo}</h2>

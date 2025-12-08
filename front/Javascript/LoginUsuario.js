@@ -33,7 +33,7 @@ loginForm.addEventListener("submit", async (e) => {
             localStorage.setItem("user", JSON.stringify(data.user));
 
             // Redireciona para a página home (index.html)
-           window.location.href = "/public/Perfil/index.html";
+           window.location.href = "/front/Perfil/index.html";
            
         } else {
             // Mostra erro do back-end

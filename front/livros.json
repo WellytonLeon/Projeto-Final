@@ -5,7 +5,7 @@
     "autor": "Autor Desconhecido",
     "categoria": "Suspense",
     "generos": ["Mistério", "Psicológico"],
-    "capa": "/public/images/abismo.jpg",
+    "capa": "/front/images/abismo.jpg",
     "descricao": "Uma história profunda e sombria...",
     "nota": 4.5
     },
@@ -15,7 +15,7 @@
         "autor": "Colleen Hoover",
         "categoria": "Romance",
         "generos": ["Drama", "Romance Contemporâneo"],
-        "capa": "/public/images/É assim que começa.jpg",
+        "capa": "/front/images/É assim que começa.jpg",
         "descricao": "Continuação emocionante e intensa sobre amor, trauma e superação.",
         "nota": 4.8
     },
@@ -25,7 +25,7 @@
         "autor": "J. R. R. Tolkien",
         "categoria": "Fantasia",
         "generos": ["Aventura", "Clássico"],
-        "capa": "/public/images/hobbit.jpg",
+        "capa": "/front/images/hobbit.jpg",
         "descricao": "A jornada inesperada de Bilbo Bolseiro em um mundo mágico e épico.",
         "nota": 5
     }

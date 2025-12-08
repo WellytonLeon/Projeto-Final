@@ -1,0 +1,134 @@
+/* ================================
+   PÁGINA NOVO LIVRO - ESTILO LIMPO E MODERNO
+================================ */
+
+/* GERAL */
+body {
+    font-family: "Inter", Arial, sans-serif;
+    background: #f5f6fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* TÍTULO PRINCIPAL */
+h2 {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* FORMULÁRIO */
+#formLivro {
+    background: #fff;
+    padding: 30px;
+    margin: 40px auto;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* LABELS */
+#formLivro label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+/* ENTRADA DE DADOS */
+#formLivro input, #formLivro textarea {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+    color: #555;
+    transition: 0.3s ease;
+}
+
+#formLivro input:focus, #formLivro textarea:focus {
+    border-color: #007bff;
+    background: #fff;
+    box-shadow: 0px 0px 8px rgba(0,123,255,0.2);
+    outline: none;
+}
+
+/* TEXTO ÁREA (textarea) */
+#formLivro textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* BOTÃO SALVAR */
+.btn-save {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.btn-save:hover {
+    background: #005fcc;
+}
+
+/* ================================
+   MODO ESCURO
+================================ */
+
+body.dark {
+    background: #0f0f0f;
+    color: #ddd;
+}
+
+body.dark h2 {
+    color: #fff;
+}
+
+body.dark #formLivro {
+    background: #1d1d1d;
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.2);
+}
+
+body.dark #formLivro label {
+    color: #bbb;
+}
+
+body.dark #formLivro input, body.dark #formLivro textarea {
+    background: #333;
+    color: #eee;
+    border: 1px solid #555;
+}
+
+body.dark #formLivro input:focus, body.dark #formLivro textarea:focus {
+    border-color: #007bff;
+    background: #444;
+    box-shadow: 0px 0px 8px rgba(0,123,255,0.3);
+}
+
+/* ================================
+   RESPONSIVIDADE
+================================ */
+
+@media (max-width: 760px) {
+    #formLivro {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+}

@@ -6,7 +6,7 @@
 const usuarioLogado = JSON.parse(localStorage.getItem("user"));
 
 if (!usuarioLogado || !usuarioLogado.id_user) {
-    window.location.href = "/front/Login/LoginUsuario.html";
+    window.location.href = "/frontend/Login/LoginUsuario.html";
 }
 
 // Pegamos o ID real do usuário
@@ -31,7 +31,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
         localStorage.removeItem("user");
-        window.location.href = "/front/Login/LoginUsuario.html";
+        window.location.href = "/frontend/Login/LoginUsuario.html";
     });
 }
 
@@ -59,7 +59,7 @@ async function carregarLivros() {
                             <p class="card-text">
                                 <small class="text-muted">${livro.categoria_nome || "Sem categoria"}</small>
                             </p>
-                            <a href="/front/Biblioteca/livro.html?id=${livro.id_livro}" 
+                            <a href="/frontend/Biblioteca/livro.html?id=${livro.id_livro}" 
                                class="btn btn-primary btn-sm">Ver mais</a>
                         </div>
                     </div>

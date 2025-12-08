@@ -8,18 +8,13 @@ const db = require("../db");
 ============================================================ */
 router.post("/", (req, res) => {
     const { nome } = req.body;
+    if (!nome) return res.status(400).json({ message: "O nome da categoria é obrigatório." });
 
-    if (!nome) {
-        return res.status(400).json({ message: "O nome da categoria é obrigatório." });
-    }
-
-    const sqlCheck = "SELECT * FROM Categoria WHERE nome = ?";
-    db.query(sqlCheck, [nome], (err, results) => {
+    db.query("SELECT * FROM Categoria WHERE nome = ?", [nome], (err, results) => {
         if (err) return res.status(500).json({ message: "Erro ao verificar categoria." });
         if (results.length > 0) return res.status(400).json({ message: "Categoria já existe." });
 
-        const sqlInsert = "INSERT INTO Categoria (nome) VALUES (?)";
-        db.query(sqlInsert, [nome], (err2) => {
+        db.query("INSERT INTO Categoria (nome) VALUES (?)", [nome], (err2) => {
             if (err2) return res.status(500).json({ message: "Erro ao criar categoria." });
             res.status(201).json({ message: "Categoria criada com sucesso!" });
         });
@@ -31,8 +26,7 @@ router.post("/", (req, res) => {
    GET /categorias
 ============================================================ */
 router.get("/", (req, res) => {
-    const sql = "SELECT * FROM Categoria";
-    db.query(sql, (err, results) => {
+    db.query("SELECT * FROM Categoria", (err, results) => {
         if (err) return res.status(500).json({ message: "Erro ao buscar categorias." });
         res.json(results);
     });
@@ -45,14 +39,11 @@ router.get("/", (req, res) => {
 router.put("/:id", (req, res) => {
     const { id } = req.params;
     const { nome } = req.body;
-
     if (!nome) return res.status(400).json({ message: "Informe o novo nome da categoria." });
 
-    const sql = "UPDATE Categoria SET nome = ? WHERE id_categoria = ?";
-    db.query(sql, [nome, id], (err, result) => {
+    db.query("UPDATE Categoria SET nome = ? WHERE id_categoria = ?", [nome, id], (err, result) => {
         if (err) return res.status(500).json({ message: "Erro ao atualizar categoria." });
         if (result.affectedRows === 0) return res.status(404).json({ message: "Categoria não encontrada." });
-
         res.json({ message: "Categoria atualizada com sucesso!" });
     });
 });
@@ -63,11 +54,9 @@ router.put("/:id", (req, res) => {
 ============================================================ */
 router.delete("/:id", (req, res) => {
     const { id } = req.params;
-    const sql = "DELETE FROM Categoria WHERE id_categoria = ?";
-    db.query(sql, [id], (err, result) => {
+    db.query("DELETE FROM Categoria WHERE id_categoria = ?", [id], (err, result) => {
         if (err) return res.status(500).json({ message: "Erro ao deletar categoria." });
         if (result.affectedRows === 0) return res.status(404).json({ message: "Categoria não encontrada." });
-
         res.json({ message: "Categoria deletada com sucesso!" });
     });
 });

@@ -5,8 +5,17 @@ create table User(
     id_user int primary key not null auto_increment,
     nome varchar(100) not null,
     email varchar(100) not null unique,
-    senha char(50) not null
+    senha VARCHAR(255) not null
+    
 );
+ALTER TABLE User
+ADD COLUMN profilePic LONGTEXT NULL AFTER senha,
+ADD COLUMN darkmode VARCHAR(5) NOT NULL DEFAULT 'off' AFTER profilePic,
+ADD COLUMN themeColor VARCHAR(20) NOT NULL DEFAULT 'default' AFTER darkmode;
+ALTER TABLE User 
+MODIFY COLUMN profilePic VARCHAR(255) AFTER themeColor;
+
+
 create table Categoria(
     id_categoria INT PRIMARY KEY NOT NULL auto_increment,
     nome VARCHAR(50) UNIQUE NOT NULL
@@ -40,33 +49,49 @@ CREATE TABLE Avaliacoes (
 );
 
 INSERT INTO Categoria (nome) VALUES
-('Romance'), ('Ficção Científica'), ('Fantasia'), ('Suspense / Thriller'),
-('Mistério / Policial'), ('Terror / Horror'), ('Drama'), ('Ação e Aventura'),
-('Histórico'), ('Biografia / Autobiografia'), ('Memórias'), ('Autoajuda'),
-('Desenvolvimento Pessoal'), ('Negócios / Empreendedorismo'), ('Filosofia'),
-('Psicologia'), ('Religião / Espiritualidade'), ('Ciência e Tecnologia'),
-('Educação / Pedagogia'), ('Literatura Infantil');
+('Fantasia'),
+('Ficção Científica'),
+('Terror'),
+('Romance'),
+('Suspense'),
+('Mistério'),
+('Ação e Aventura'),
+('História'),
+('Biografia'),
+('Autoajuda'),
+('Filosofia'),
+('Religião'),
+('Psicologia'),
+('Negócios'),
+('Tecnologia'),
+('Educação'),
+('Poesia'),
+('Drama'),
+('Clássicos'),
+('Contos');
+
 
 INSERT INTO Autor (nome) VALUES
-('Stephen King'), ('Agatha Christie'), ('J. K. Rowling'),
-('George R. R. Martin'), ('J. R. R. Tolkien'), ('Isaac Asimov'),
-('Arthur Conan Doyle'), ('Neil Gaiman'), ('Jane Austen'),
-('Machado de Assis'), ('Clarice Lispector'), ('Gabriel García Márquez'),
-('Ernest Hemingway'), ('Haruki Murakami'), ('Edgar Allan Poe'),
-('Franz Kafka'), ('Margaret Atwood'), ('H. P. Lovecraft'),
-('Dan Brown'), ('Victor Hugo');
-
-INSERT INTO Livro (nome, descricao, id_autor, id_categoria,id_user) VALUES
-('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2,1),
-('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,4,1);
-
-INSERT INTO User (nome, email, senha) VALUES
-('João Silva', 'joao@exemplo.com', 'senha123'),
-('Maria Oliveira', 'maria@exemplo.com', 'senha456');
-
-INSERT INTO Avaliacoes (id_livro, id_user, nota, comentario) VALUES
-(1, 1, 5, 'Excelente livro, com uma narrativa envolvente e personagens cativantes!'),
-(2, 2, 4, 'Uma crítica interessante ao totalitarismo, mas achei o ritmo um pouco lento em algumas partes.');
+('Gabriel García Márquez'),
+('Jane Austen'),
+('Franz Kafka'),
+('Antoine de Saint-Exupéry'),
+('José Saramago'),
+('Mary Shelley'),
+('Edgar Rice Burroughs'),
+('Alexandre Dumas'),
+('H. G. Wells'),
+('Liev Tolstói'),
+('Margaret Atwood'),
+('Phillip K. Dick'),
+('James Patterson'),
+('Suzanne Collins'),
+('Rick Riordan'),
+('Colleen Hoover'),
+('Stephen Hawking'),
+('C. S. Lewis'),
+('Erin Morgenstern'),
+('Khaled Hosseini');
 
 CREATE TABLE LogAlteracoes (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -413,15 +438,4 @@ BEGIN
     SET p_msg = 'Token gerado com sucesso.';
 
 END;
-DELIMITER ;INSERT INTO Livro (nome, descricao, id_autor, id_categoria) VALUES ('O Senhor dos Anéis', 'Uma obra épica de fantasia, ambientada na Terra-média, onde a luta entre o bem e o mal atinge seu ápice.',1,2), ('1984', 'Um romance distópico que descreve uma sociedade totalitária onde o governo controla todos os aspectos da vida humana.',2,4)
-
-ALTER TABLE User
-ADD COLUMN profilePic LONGTEXT NULL AFTER senha,
-ADD COLUMN darkmode VARCHAR(5) NOT NULL DEFAULT 'off' AFTER profilePic,
-ADD COLUMN themeColor VARCHAR(20) NOT NULL DEFAULT 'default' AFTER darkmode;
-ALTER TABLE User 
-MODIFY COLUMN profilePic VARCHAR(255) AFTER themeColor;
-
-INSERT INTO user (nome, email, senha) 
-VALUES ('Teste', 'teste@email.com', '123456');
-ALTER TABLE user MODIFY senha VARCHAR(255);
+DELIMITER ;

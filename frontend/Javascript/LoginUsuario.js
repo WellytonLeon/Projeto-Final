@@ -25,17 +25,17 @@ loginForm.addEventListener("submit", async (e) => {
         // Converte resposta em JSON
         const data = await response.json();
 
-        if (response.ok) {
-            // Login bem-sucedido
+        if (response.ok) if (response.ok) {
             alert(data.message);
 
-            // Salva os dados do usuário no localStorage
+            // Salva o user completo (opcional)
             localStorage.setItem("user", JSON.stringify(data.user));
 
-            // Redireciona para a página home (index.html)
-           window.location.href = "/frontend/Perfil/index.html";
-           
-        } else {
+            // Salva apenas o ID para o restante do sistema usar
+            localStorage.setItem("id_user_logado", data.user.id_user);
+
+            window.location.href = "/frontend/Perfil/index.html";
+        }else {
             // Mostra erro do back-end
             alert(data.error || data.message);
         }

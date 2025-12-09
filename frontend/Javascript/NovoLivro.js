@@ -1,4 +1,5 @@
-const idUser = 1; // Substitua pelo ID do usuário logado dinamicamente
+// Pegando ID do usuário logado
+const idUser = Number(localStorage.getItem("id_user_logado")); 
 
 document.getElementById("formLivro").addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -7,13 +8,20 @@ document.getElementById("formLivro").addEventListener("submit", async function (
     const autor = document.getElementById("autor").value;
     const categoria = document.getElementById("categoria").value;
     const descricao = document.getElementById("descricao").value;
+    const ano_publicacao = Number(document.getElementById("ano").value);
+
+    if (!idUser) {
+        alert("Erro: nenhum usuário logado.");
+        return;
+    }
 
     const body = {
         nome,
-        descricao,
-        id_user: idUser,
         autor,
-        categoria
+        categoria,
+        descricao,
+        ano_publicacao,
+        id_user: idUser
     };
 
     try {
@@ -26,7 +34,7 @@ document.getElementById("formLivro").addEventListener("submit", async function (
         const result = await response.json();
 
         if (response.ok) {
-            alert(result.message || "Livro adicionado com sucesso!");
+            alert("Livro adicionado com sucesso!");
             window.location.href = "biblioteca.html";
         } else {
             alert(result.message || "Erro ao cadastrar livro.");

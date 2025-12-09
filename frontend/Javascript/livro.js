@@ -1,8 +1,13 @@
-const idUser = 1; // Substitua pelo ID do usuário logado dinamicamente
+const idUser = Number(localStorage.getItem("id_user_logado")); // ID real do usuário logado
 
 window.addEventListener("DOMContentLoaded", async () => {
     const area = document.getElementById("detalhes-livro");
     const idSelecionado = Number(localStorage.getItem("livroSelecionado"));
+
+    if (!idUser) {
+        area.innerHTML = "<p>Erro: Nenhum usuário logado.</p>";
+        return;
+    }
 
     try {
         const response = await fetch(`http://localhost:3001/books/user/${idUser}`);
@@ -23,6 +28,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             <div class="info">
                 <p><strong>Autor:</strong> ${livro.autor_nome || "Não informado"}</p>
                 <p><strong>Categoria:</strong> ${livro.categoria_nome || "Não informada"}</p>
+                <p><strong>Ano:</strong> ${livro.ano_publicacao || "Não informado"}</p>
             </div>
             <h3>Descrição:</h3>
             <p>${livro.descricao || "Sem descrição."}</p>
@@ -41,7 +47,7 @@ async function excluirLivro(id) {
     if (!confirm("Deseja realmente excluir este livro?")) return;
 
     try {
-        const response = await fetch(`http://localhost:3001/books/${id}`, {
+        const response = await fetch(`http://localhost:3001/books/${id}?user=${idUser}`, {
             method: "DELETE"
         });
 

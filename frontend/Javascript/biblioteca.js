@@ -1,57 +1,71 @@
-const idUser = 1; // Substitua dinamicamente pelo ID do usuário logado
-const baseUrl = "http://localhost:3001"; // URL do seu backend
-
-// Carregar livros filtrando (se tiver pesquisa)
 async function carregarLivros(filtro = "") {
     const lista = document.getElementById("lista-livros");
-    lista.innerHTML = "";
+    lista.innerHTML = "<p>Carregando...</p>";
+
+    const idUser = Number(localStorage.getItem("id_user_logado"));
+
+    if (!idUser) {
+        lista.innerHTML = "<p>Erro: Nenhum usuário logado.</p>";
+        return;
+    }
 
     try {
-        let url = `${baseUrl}/books/user/${idUser}`;
-        if (filtro) {
-            url = `${baseUrl}/books/search?id_user=${idUser}&nome=${filtro}&autor=${filtro}&categoria=${filtro}`;
-        }
-
-        const response = await fetch(url);
+        const response = await fetch(`http://localhost:3001/books/user/${idUser}`);
         const livros = await response.json();
 
-        if (!livros || livros.length === 0) {
-            lista.innerHTML = "<p>Nenhum livro cadastrado ainda.</p>";
+        if (!response.ok || livros.length === 0) {
+            lista.innerHTML = "<p>Nenhum livro encontrado.</p>";
             return;
         }
 
-        livros.forEach(livro => {
+        filtro = filtro.toLowerCase();
+
+        const filtrados = livros.filter(livro =>
+            livro.nome.toLowerCase().includes(filtro) ||
+            (livro.autor_nome && livro.autor_nome.toLowerCase().includes(filtro)) ||
+            (livro.categoria_nome && livro.categoria_nome.toLowerCase().includes(filtro)) ||
+            (livro.ano_publicacao && livro.ano_publicacao.toString().includes(filtro))
+        );
+
+        lista.innerHTML = "";
+
+        if (filtrados.length === 0) {
+            lista.innerHTML = "<p>Nenhum resultado encontrado.</p>";
+            return;
+        }
+
+        filtrados.forEach(livro => {
             const card = document.createElement("div");
             card.classList.add("livro-card");
 
             card.innerHTML = `
                 <h3>${livro.nome}</h3>
-                <p><strong>Autor:</strong> ${livro.autor_nome || "Não informado"}</p>
-                <p><strong>Ano:</strong> ${livro.ano || "Não informado"}</p>
-                <p><strong>Categoria:</strong> ${livro.categoria_nome || "Não informada"}</p>
+
+                <p><strong>Autor:</strong> ${livro.autor_nome || "-"}</p>
+                <p><strong>Ano:</strong> ${livro.ano_publicacao || "-"}</p>
+                <p><strong>Categoria:</strong> ${livro.categoria_nome || "-"}</p>
+
                 <button class="detalhes" onclick="abrirLivro(${livro.id_livro})">
                     Ver detalhes
                 </button>
             `;
+
             lista.appendChild(card);
         });
 
     } catch (err) {
-        console.error("Erro ao carregar livros:", err);
+        console.error(err);
         lista.innerHTML = "<p>Erro ao carregar livros.</p>";
     }
 }
 
-// Abrir página de detalhes
 function abrirLivro(id) {
     localStorage.setItem("livroSelecionado", id);
     window.location.href = "livro.html";
 }
 
-// Ativar pesquisa em tempo real
-document.getElementById("campoPesquisa").addEventListener("input", function () {
-    carregarLivros(this.value);
-});
+document.getElementById("campoPesquisa").addEventListener("input", e =>
+    carregarLivros(e.target.value)
+);
 
-// Iniciar carregamento
 carregarLivros();

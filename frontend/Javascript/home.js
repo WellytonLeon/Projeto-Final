@@ -1,6 +1,7 @@
 // =========================
 //  VERIFICAR LOGIN
 // =========================
+window.API_KEY = 'https://10.21.1.22'
 
 // Aqui pegamos o user salvo no login
 const usuarioLogado = JSON.parse(localStorage.getItem("user"));
@@ -43,7 +44,7 @@ if (logoutBtn) {
 // =========================
 async function carregarLivros() {
     try {
-        const resposta = await fetch(`http://localhost:3001/books/search?id_user=${userId}`);
+        const resposta = await fetch(`${window.API_KEY}/books/search?id_user=${userId}`);
         const livros = await resposta.json();
 
         const bookList = document.getElementById("bookList");

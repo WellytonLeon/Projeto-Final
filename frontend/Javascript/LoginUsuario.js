@@ -1,4 +1,6 @@
 // Seleciona o formulário de login
+window.API_KEY = 'https://10.21.1.22' // Rota compartilhada -> IP do meu computador que esta sendo usado como "servidor"
+//window.API_KEY = 'http://localhost:3001/users/login' // rede local, testes realizados de maneira individual
 const loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener("submit", async (e) => {
@@ -16,7 +18,7 @@ loginForm.addEventListener("submit", async (e) => {
 
     try {
         // Envia POST para a rota de login do back-end na porta 3001
-        const response = await fetch("http://localhost:3001/users/login", {
+        const response = await fetch(`${window.API_KEY}/users/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, senha })

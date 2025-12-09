@@ -1,3 +1,4 @@
+window.API_KEY = 'https://10.21.1.22'
 const idUser = Number(localStorage.getItem("id_user_logado")); // ID real do usuário logado
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -10,7 +11,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch(`http://localhost:3001/books/user/${idUser}`);
+        const response = await fetch(`${window.API_KEY}/books/user/${idUser}`);
         const livros = await response.json();
 
         const livro = livros.find(l => l.id_livro === idSelecionado);
@@ -47,7 +48,7 @@ async function excluirLivro(id) {
     if (!confirm("Deseja realmente excluir este livro?")) return;
 
     try {
-        const response = await fetch(`http://localhost:3001/books/${id}?user=${idUser}`, {
+        const response = await fetch(`${window.API_KEY}/books/${id}?user=${idUser}`, {
             method: "DELETE"
         });
 

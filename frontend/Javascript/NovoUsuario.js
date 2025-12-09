@@ -1,4 +1,5 @@
 // Seleciona o formulário e cria div de mensagem
+window.API_KEY = 'https://10.21.1.22'
 const registerForm = document.getElementById("formCadastro");
 
 // Criar div para mensagem de feedback
@@ -27,7 +28,7 @@ registerForm.addEventListener("submit", async (e) => {
     }
 
     try {
-        const response = await fetch("http://localhost:3001/users/register", {
+        const response = await fetch(`${window.API_KEY}/users/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ nome, email, senha }) // nomes compatíveis com back-end

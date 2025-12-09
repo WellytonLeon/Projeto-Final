@@ -1,3 +1,4 @@
+window.API_KEY = 'https://10.21.1.22'
 let user = JSON.parse(localStorage.getItem("user"));
 if (!user) window.location.href = "/frontend/Login/LoginUsuario.html";
 
@@ -157,7 +158,7 @@ document.getElementById("deletarconta").addEventListener("click", () => {
 });
 
 document.getElementById("confirmardelete").addEventListener("click", async () => {
-    await fetch(`http://localhost:3001/users/${user.id_user}`, { method: "DELETE" });
+    await fetch(`${window.API_KEY}/users/${user.id_user}`, { method: "DELETE" });
     localStorage.removeItem("user");
     window.location.href = "/frontend/Login/LoginUsuario.html";
 });

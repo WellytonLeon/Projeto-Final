@@ -1,4 +1,5 @@
 // Pegando ID do usuário logado
+window.API_KEY = 'https://10.21.1.22'
 const idUser = Number(localStorage.getItem("id_user_logado")); 
 
 document.getElementById("formLivro").addEventListener("submit", async function (event) {
@@ -25,7 +26,7 @@ document.getElementById("formLivro").addEventListener("submit", async function (
     };
 
     try {
-        const response = await fetch("http://localhost:3001/books", {
+        const response = await fetch(`${window.API_KEY}/books`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)

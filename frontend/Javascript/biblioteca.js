@@ -1,3 +1,4 @@
+window.API_KEY = 'https://10.21.1.22' // Rota compartilhada -> IP do meu computador que esta sendo usado como "servidor"
 async function carregarLivros(filtro = "") {
     const lista = document.getElementById("lista-livros");
     lista.innerHTML = "<p>Carregando...</p>";
@@ -10,7 +11,7 @@ async function carregarLivros(filtro = "") {
     }
 
     try {
-        const response = await fetch(`http://localhost:3001/books/user/${idUser}`);
+        const response = await fetch(`${window.API_KEY}/books/user/${idUser}`);
         const livros = await response.json();
 
         if (!response.ok || livros.length === 0) {

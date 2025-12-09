@@ -36,6 +36,7 @@ CREATE TABLE Livro (
     FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE
 );
 
+ALTER TABLE Livro ADD COLUMN ano_publicacao INT;
 
 CREATE TABLE Avaliacoes (
     avaliacao_id INT AUTO_INCREMENT PRIMARY KEY,

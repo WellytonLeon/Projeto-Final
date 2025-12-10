@@ -1,4 +1,4 @@
-window.API_KEY = 'http://10.21.1.22:3001'
+window.API_KEY = 'http://localhost:3001';
 let user = JSON.parse(localStorage.getItem("user"));
 if (!user) window.location.href = "/frontend/Login/LoginUsuario.html";
 
@@ -13,7 +13,7 @@ window.onload = () => {
     document.getElementById("config-email").value = user.email || "";
 
     // Foto de perfil
-    document.getElementById("profilePic").src = user.profilePic || "/frontend/images/avatar.png";
+    document.getElementById("profilePic").src = user.profilePic || "/frontend/images/default_cover.jpg";
 
     // Personalização
     document.body.classList.toggle("dark", user.darkmode === "on");
@@ -64,13 +64,22 @@ document.getElementById("profilePicInput").addEventListener("change", async func
     const file = this.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async function (e) {
-        const base64 = e.target.result;
-        document.getElementById("profilePic").src = base64;
-        await updateUserBackend({ profilePic: base64 });
-    };
-    reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append("profilePic", file);
+
+    const res = await fetch(`${window.API_KEY}/users/updateProfilePic`, { 
+        method: "POST", 
+        body: formData 
+    });
+
+    if (!res.ok) {
+        alert("Erro ao enviar foto.");
+        return;
+    }
+
+    const data = await res.json();
+    document.getElementById("profilePic").src = data.profilePicUrl;
+    await updateUserBackend({ profilePic: data.profilePicUrl });
 });
 
 document.getElementById("removePicBtn").addEventListener("click", async () => {
@@ -189,7 +198,7 @@ async function updateUserBackend(frontData) {
     Object.keys(backendData).forEach(key => backendData[key] === undefined && delete backendData[key]);
 
     try {
-        const res = await fetch(`http://localhost:3001/users/${user.id_user}`, {
+        const res = await fetch(`${window.API_KEY}/users/${user.id_user}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(backendData)

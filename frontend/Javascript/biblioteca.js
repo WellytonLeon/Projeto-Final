@@ -1,4 +1,4 @@
-window.API_KEY = 'http://10.21.1.22:3001' // Rota compartilhada -> IP do meu computador que esta sendo usado como "servidor"
+window.API_KEY = 'http://localhost:3001' // Rota compartilhada -> IP do meu computador que esta sendo usado como "servidor"
 async function carregarLivros(filtro = "") {
     const lista = document.getElementById("lista-livros");
     lista.innerHTML = "<p>Carregando...</p>";

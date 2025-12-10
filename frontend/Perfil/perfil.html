@@ -60,23 +60,29 @@
                     </h3>
 
                     <div class="text-center mb-3">
-                        <img id="profilePic" src="/frontend/images/avatar.png" width="120" height="120">
+                        <!-- Profile Picture -->
+                        <img id="profilePic" src="/frontend/images/default_cover.jpg" class="rounded-circle" width="120" height="120">
+                        
+                        <!-- File Input Hidden -->
                         <input type="file" id="profilePicInput" hidden>
+                        
                         <div class="mt-2">
+                            <!-- Buttons to change/remove picture -->
                             <button class="btn btn-outline-primary btn-sm" id="changePicBtn">Alterar Foto</button>
                             <button class="btn btn-outline-danger btn-sm" id="removePicBtn">Remover</button>
                         </div>
                     </div>
 
+                    <!-- Profile Update Form -->
                     <form id="profileForm">
                         <div class="mb-3">
                             <label class="form-label">Nome de Usuário</label>
-                            <input type="text" class="form-control" id="perfil-username">
+                            <input type="text" class="form-control" id="perfil-username" placeholder="Seu nome">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="perfil-email">
+                            <input type="email" class="form-control" id="perfil-email" placeholder="Seu email">
                         </div>
 
                         <button type="submit" class="btn btn-success w-100 mb-2">
@@ -93,9 +99,7 @@
 
             <!-- CONFIGURAÇÕES -->
             <div class="tab-pane fade" id="configTab">
-
                 <div class="card p-4 mx-auto" style="max-width: 750px;">
-
                     <h3 class="fw-bold mb-4">
                         <i class="fa-solid fa-gear me-2"></i> Configurações
                     </h3>

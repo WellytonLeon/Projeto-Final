@@ -1,5 +1,5 @@
 // Seleciona o formulário e cria div de mensagem
-window.API_KEY = 'https://10.21.1.22:3001'
+window.API_KEY = 'http://10.21.1.22:3001'
 const registerForm = document.getElementById("formCadastro");
 
 // Criar div para mensagem de feedback

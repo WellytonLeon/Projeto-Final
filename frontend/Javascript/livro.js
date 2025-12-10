@@ -1,4 +1,4 @@
-window.API_KEY = 'http://10.21.1.22:3001'
+window.API_KEY = 'http://localhost:3001'
 const idUser = Number(localStorage.getItem("id_user_logado")); // ID real do usuário logado
 
 window.addEventListener("DOMContentLoaded", async () => {

@@ -1,6 +1,6 @@
 // Seleciona o formulário de login
-window.API_KEY = 'https://10.21.1.22' // Rota compartilhada -> IP do meu computador que esta sendo usado como "servidor"
-//window.API_KEY = 'http://localhost:3001/users/login' // rede local, testes realizados de maneira individual
+//window.API_KEY = 'https://10.21.1.22:3001' // Rota compartilhada -> IP do meu computador que esta sendo usado como "servidor"
+window.API_KEY = 'http://localhost:3001' // rede local, testes realizados de maneira individual
 const loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener("submit", async (e) => {

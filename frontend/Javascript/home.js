@@ -1,7 +1,7 @@
 // =========================
 //  VERIFICAR LOGIN
 // =========================
-window.API_KEY = 'https://10.21.1.22'
+window.API_KEY = 'https://10.21.1.22:3001'
 
 // Aqui pegamos o user salvo no login
 const usuarioLogado = JSON.parse(localStorage.getItem("user"));

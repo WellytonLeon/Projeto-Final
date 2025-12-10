@@ -1,4 +1,4 @@
-window.API_KEY = 'https://10.21.1.22'
+window.API_KEY = 'https://10.21.1.22:3001'
 let user = JSON.parse(localStorage.getItem("user"));
 if (!user) window.location.href = "/frontend/Login/LoginUsuario.html";
 

@@ -1,34 +1,29 @@
-// =========================
-//  CONFIGURAÇÃO
-// =========================
 window.API_KEY = 'http://localhost:3001';
 
-// Pegamos o usuário logado
+// =========================
+//  USER LOGGED IN CHECK
+// =========================
 const usuarioLogado = JSON.parse(localStorage.getItem("user"));
 if (!usuarioLogado || !usuarioLogado.id_user) {
     window.location.href = "/frontend/Login/LoginUsuario.html";
 }
-
 const userId = usuarioLogado.id_user;
 
-
 // =========================
-//  ELEMENTOS DA TELA
+//  ELEMENTS
 // =========================
 const bookList = document.getElementById("bookList");
 const filtroBusca = document.getElementById("filtroBusca");
 const filtroCategoria = document.getElementById("filtroCategoria");
 
+// =========================
+//  CACHE
+// =========================
+let livrosCache = [];
+let categoriasCache = [];
 
 // =========================
-//  LISTA EM MEMÓRIA
-// =========================
-let livrosCache = [];      // Todos os livros carregados
-let categoriasCache = [];  // Categorias únicas
-
-
-// =========================
-//  CARREGAR LIVROS DO BACKEND
+//  FETCH BOOKS
 // =========================
 async function carregarLivros() {
     try {
@@ -42,12 +37,14 @@ async function carregarLivros() {
 
     } catch (erro) {
         console.error("Erro ao carregar livros: ", erro);
+        bookList.innerHTML = `<div class="col-12 text-center text-danger mt-3">
+            Erro ao carregar livros.
+        </div>`;
     }
 }
 
-
 // =========================
-//  EXTRAI CATEGORIAS ÚNICAS
+//  EXTRACT UNIQUE CATEGORIES
 // =========================
 function extrairCategorias(lista) {
     const setCategorias = new Set();
@@ -57,13 +54,11 @@ function extrairCategorias(lista) {
     categoriasCache = ["todos", ...Array.from(setCategorias)];
 }
 
-
 // =========================
-//  POPULAR <SELECT> DE CATEGORIAS
+//  POPULATE CATEGORY SELECT
 // =========================
 function popularCategoriasSelect() {
     filtroCategoria.innerHTML = "";
-
     categoriasCache.forEach(cat => {
         const opt = document.createElement("option");
         opt.value = cat;
@@ -72,9 +67,8 @@ function popularCategoriasSelect() {
     });
 }
 
-
 // =========================
-//  RENDERIZAR LIVROS NA TELA
+//  RENDER BOOK CARDS
 // =========================
 function renderizarLivros(lista) {
     bookList.innerHTML = "";
@@ -89,17 +83,22 @@ function renderizarLivros(lista) {
     }
 
     lista.forEach(livro => {
+        const imagemCompleta = livro.imagem
+            ? `${window.API_KEY}${livro.imagem}`
+            : "../images/default_book.png";
+
         const card = `
             <div class="col-md-4 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
+                <div class="card book-card shadow-sm h-100">
+                    <img src="${imagemCompleta}" class="card-img-top" alt="${livro.nome || livro.titulo}">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title">${livro.nome || livro.titulo}</h5>
                         <p class="card-text">Autor: ${livro.autor_nome || "Desconhecido"}</p>
                         <p class="card-text">
                             <small class="text-muted">${livro.categoria_nome || "Sem categoria"}</small>
                         </p>
                         <a href="/frontend/Biblioteca/livro.html?id=${livro.id_livro}" 
-                           class="btn btn-primary btn-sm">Ver mais</a>
+                           class="btn btn-primary btn-sm mt-auto">Ver mais</a>
                     </div>
                 </div>
             </div>
@@ -108,39 +107,31 @@ function renderizarLivros(lista) {
     });
 }
 
-
 // =========================
-//  BUSCA + FILTRO INTELIGENTE
+//  FILTERS
 // =========================
 function aplicarFiltros() {
-    let textoBusca = filtroBusca.value.toLowerCase().trim();
-    let categoria = filtroCategoria.value;
+    const textoBusca = filtroBusca.value.toLowerCase().trim();
+    const categoria = filtroCategoria.value;
 
-    let filtrados = livrosCache.filter(l => {
-
-        // Filtro por texto (título ou autor)
-        let nome = (l.nome || l.titulo || "").toLowerCase();
-        let autor = (l.autor_nome || "").toLowerCase();
-        let passaTexto = nome.includes(textoBusca) || autor.includes(textoBusca);
-
-        // Filtro por categoria
-        let passaCategoria = categoria === "todos" || l.categoria_nome === categoria;
-
+    const filtrados = livrosCache.filter(l => {
+        const nome = (l.nome || l.titulo || "").toLowerCase();
+        const autor = (l.autor_nome || "").toLowerCase();
+        const passaTexto = nome.includes(textoBusca) || autor.includes(textoBusca);
+        const passaCategoria = categoria === "todos" || l.categoria_nome === categoria;
         return passaTexto && passaCategoria;
     });
 
     renderizarLivros(filtrados);
 }
 
-
 // =========================
-//  EVENTOS DE BUSCA / FILTRO
+//  EVENT LISTENERS
 // =========================
 filtroBusca.addEventListener("input", aplicarFiltros);
 filtroCategoria.addEventListener("change", aplicarFiltros);
 
-
 // =========================
-//  INICIALIZAÇÃO
+//  INIT
 // =========================
 carregarLivros();

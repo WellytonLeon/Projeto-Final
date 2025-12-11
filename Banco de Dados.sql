@@ -2,8 +2,7 @@ CREATE USER 'root'@'%' IDENTIFIED BY '';
 GRANT ALL PRIVILEGES ON projeto_final.* TO 'root'@'%';
 FLUSH PRIVILEGES;
 
-drop database projeto_final;
-create database projeto_final;
+
 use projeto_final;
 create table User(
     id_user int primary key not null auto_increment,

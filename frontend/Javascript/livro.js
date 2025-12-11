@@ -1,19 +1,34 @@
 window.API_KEY = 'http://localhost:3001';
 const idUser = Number(localStorage.getItem("id_user_logado"));
 
+// Helper to get ?id= from URL
+function getLivroIdFromURL() {
+    const idLocal = localStorage.getItem("livroSelecionado")
+    const params = new URLSearchParams(window.location.search);
+    //return Number(params.get("id"));
+    return Number(idLocal);
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
     const area = document.getElementById("detalhes-livro");
-    const idSelecionado = Number(localStorage.getItem("livroSelecionado"));
+    const idSelecionado = getLivroIdFromURL();
 
     if (!idUser) {
         area.innerHTML = "<p>Erro: Nenhum usuário logado.</p>";
         return;
     }
 
+    if (!idSelecionado) {
+        area.innerHTML = "<p>Erro: Nenhum livro selecionado.</p>";
+        return;
+    }
+
     try {
+        // Fetch all user books
         const response = await fetch(`${window.API_KEY}/books/user/${idUser}`);
         const livros = await response.json();
 
+        // Find the selected book
         const livro = livros.find(l => l.id_livro === idSelecionado);
 
         if (!livro) {
@@ -26,6 +41,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             ? `${window.API_KEY}${livro.imagem}` 
             : "../images/default_book.png";
 
+        // Render book details
         area.innerHTML = `
             <div class="card-livro">
                 <img src="${imagemCompleta}" class="imagem-livro">
@@ -45,12 +61,14 @@ window.addEventListener("DOMContentLoaded", async () => {
                 </div>
             </div>
         `;
+
     } catch (err) {
         console.error("Erro ao carregar livro:", err);
         area.innerHTML = "<p>Erro ao carregar livro.</p>";
     }
 });
 
+// Delete book
 async function excluirLivro(id) {
     if (!confirm("Deseja realmente excluir este livro?")) return;
 
@@ -60,7 +78,6 @@ async function excluirLivro(id) {
         });
 
         const result = await response.json();
-
         alert(result.message || "Livro removido.");
         window.location.href = "biblioteca.html";
     } catch (err) {

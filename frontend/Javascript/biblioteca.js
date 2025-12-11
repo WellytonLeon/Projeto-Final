@@ -66,6 +66,7 @@ async function carregarLivros(filtro = "") {
 }
 
 function abrirLivro(id) {
+    console.log(id)
     localStorage.setItem("livroSelecionado", id);
     window.location.href = "livro.html";
 }

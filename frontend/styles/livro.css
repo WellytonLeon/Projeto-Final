@@ -1,6 +1,6 @@
-/* =============================================
+/* ==============================================
    PÁGINA DE DETALHES DO LIVRO - ESTILO PREMIUM
-============================================= */
+============================================== */
 
 body {
     font-family: "Inter", Arial, sans-serif;
@@ -9,7 +9,7 @@ body {
     color: #333;
 }
 
-/* Botão voltar fixo elegante */
+/* Botão voltar fixo */
 .btn-voltar {
     position: fixed;
     top: 20px;
@@ -17,36 +17,36 @@ body {
     padding: 12px 18px;
     background: #ffffff;
     color: #007bff;
-    border-radius: 10px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
-    transition: 0.25s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     z-index: 10;
+    transition: 0.25s;
 }
 
 .btn-voltar:hover {
     background: #007bff;
-    color: white;
+    color: #fff;
 }
 
-/* Container geral */
+/* Container principal */
 .pagina-livro {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 100px auto 40px auto; /* afastamento superior por causa do botão fixo */
     padding: 20px;
 }
 
-/* Card principal */
-.detalhes-container {
-    background: #fff;
-    border-radius: 16px;
-    padding: 35px;
-    box-shadow: 0px 8px 25px rgba(0,0,0,0.10);
+/* Card do livro */
+.card-livro {
     display: flex;
     gap: 40px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     align-items: flex-start;
-    animation: fade 0.3s ease;
+    animation: fade 0.4s ease;
 }
 
 /* Animação suave */
@@ -55,106 +55,87 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Imagem grande destacada */
-.detalhes-container img {
+/* Imagem do livro */
+.imagem-livro {
     width: 300px;
-    height: 420px;
-    object-fit: contain;
-    background: #f3f3f3;
-    padding: 15px;
+    aspect-ratio: 3/4;
+    object-fit: cover;
     border-radius: 14px;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-/* Informações organizadas */
+/* Informações */
 .info-livro {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
 }
 
 .info-livro h2 {
-    font-size: 30px;
+    font-size: 28px;
     margin: 0;
     font-weight: 700;
     color: #2c3e50;
 }
 
-.info-livro p {
-    font-size: 17px;
+.info-livro .info p {
+    font-size: 16px;
+    margin: 6px 0;
     color: #555;
 }
 
-.info-livro span {
-    font-weight: 600;
+/* Bold labels */
+.info-livro .info strong {
     color: #222;
 }
 
+/* Icon spacing */
+.info-livro .info p i {
+    margin-right: 8px;
+    color: #007bff;
+}
+
+/* Descrição */
 .descricao-livro {
-    margin-top: 14px;
-    line-height: 1.6;
-    font-size: 16px;
-    color: #444;
     background: #f9f9f9;
     padding: 16px;
-    border-radius: 10px;
+    border-radius: 12px;
+    line-height: 1.6;
+    color: #444;
 }
 
-/* =============================================
-   BARRA DE BOTÕES
-============================================= */
-
-.buttons-group {
-    margin-top: 30px;
-    display: flex;
-    gap: 14px;
-}
-
-.btn {
-    padding: 12px 20px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 600;
-    color: #fff;
-    transition: 0.25s ease;
-}
-
-/* Botões específicos */
-.btn-edit {
-    background: #ffc107;
-}
-.btn-edit:hover {
-    background: #e0a800;
-}
-
+/* Botão de exclusão dentro do card */
 .btn-delete {
+    margin-top: 20px;
     background: #dc3545;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
+
 .btn-delete:hover {
     background: #b92c3a;
 }
 
-.btn-fav {
-    background: #17a2b8;
-}
-.btn-fav:hover {
-    background: #138496;
-}
-
-/* =============================================
+/* ==============================================
    MODO DARK
-============================================= */
+============================================== */
 
 body.dark {
     background: #0f0f0f;
     color: #ddd;
 }
 
-body.dark .detalhes-container {
+body.dark .card-livro {
     background: #1d1d1d;
-    border: 1px solid #333;
 }
 
 body.dark .descricao-livro {
@@ -162,7 +143,7 @@ body.dark .descricao-livro {
     color: #ccc;
 }
 
-body.dark .detalhes-container img {
+body.dark .imagem-livro {
     background: #111;
 }
 
@@ -176,12 +157,12 @@ body.dark .btn-voltar:hover {
     color: white;
 }
 
-/* =============================================
+/* ==============================================
    RESPONSIVIDADE
-============================================= */
+============================================== */
 
 @media (max-width: 900px) {
-    .detalhes-container {
+    .card-livro {
         flex-direction: column;
         align-items: center;
         text-align: center;
@@ -191,8 +172,8 @@ body.dark .btn-voltar:hover {
         text-align: center;
     }
 
-    .buttons-group {
+    .btn-delete {
         justify-content: center;
-        flex-wrap: wrap;
+        width: 100%;
     }
 }

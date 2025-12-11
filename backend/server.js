@@ -7,6 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/images/books", express.static(path.join(__dirname, "../frontend/images/books")));
+
+
+
 // Serve static files from the 'frontend/images' folder
 app.use("/images", express.static(path.join(__dirname, "frontend", "images")));
 

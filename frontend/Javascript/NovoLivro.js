@@ -5,44 +5,39 @@ const idUser = Number(localStorage.getItem("id_user_logado"));
 document.getElementById("formLivro").addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const nome = document.getElementById("titulo").value;
-    const autor = document.getElementById("autor").value;
-    const categoria = document.getElementById("categoria").value;
-    const descricao = document.getElementById("descricao").value;
-    const ano_publicacao = Number(document.getElementById("ano").value);
+    const formData = new FormData();
+    formData.append("nome", document.getElementById("titulo").value);
+    formData.append("autor", document.getElementById("autor").value);
+    formData.append("categoria", document.getElementById("categoria").value);
+    formData.append("descricao", document.getElementById("descricao").value);
+    formData.append("ano_publicacao", document.getElementById("ano").value);
+    formData.append("id_user", idUser);
 
-    if (!idUser) {
-        alert("Erro: nenhum usuário logado.");
-        return;
-    }
-
-    const body = {
-        nome,
-        autor,
-        categoria,
-        descricao,
-        ano_publicacao,
-        id_user: idUser
-    };
+    const imagemFile = document.getElementById("imagem").files[0];
+    if (imagemFile) formData.append("imagem", imagemFile);
 
     try {
         const response = await fetch(`${window.API_KEY}/books`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body)
+            body: formData
         });
 
-        const result = await response.json();
-
+        let result;
+        try {
+            result = await response.json();
+        } catch {
+            alert("O servidor retornou uma resposta inválida.");
+            return;
+        }
         if (response.ok) {
             alert("Livro adicionado com sucesso!");
             window.location.href = "biblioteca.html";
         } else {
-            alert(result.message || "Erro ao cadastrar livro.");
+            alert(result.error || "Erro ao cadastrar livro.");
         }
 
     } catch (err) {
-        console.error("Erro ao cadastrar livro:", err);
+        console.error("Erro:", err);
         alert("Erro ao cadastrar livro.");
     }
 });

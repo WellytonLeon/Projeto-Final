@@ -40,19 +40,24 @@ async function carregarLivros(filtro = "") {
             card.classList.add("livro-card");
 
             card.innerHTML = `
-                <h3>${livro.nome}</h3>
+                <div class="livro-img-wrapper">
+                    <img src="${window.API_KEY}${livro.imagem}" class="livro-img">
+                </div>
+
+                <h3 class="livro-titulo">${livro.nome}</h3>
 
                 <p><strong>Autor:</strong> ${livro.autor_nome || "-"}</p>
                 <p><strong>Ano:</strong> ${livro.ano_publicacao || "-"}</p>
                 <p><strong>Categoria:</strong> ${livro.categoria_nome || "-"}</p>
 
-                <button class="detalhes" onclick="abrirLivro(${livro.id_livro})">
+                <button class="btn-detalhes" onclick="abrirLivro(${livro.id_livro})">
                     Ver detalhes
                 </button>
             `;
 
             lista.appendChild(card);
         });
+
 
     } catch (err) {
         console.error(err);

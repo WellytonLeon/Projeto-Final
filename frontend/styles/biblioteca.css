@@ -1,5 +1,5 @@
 /* ================================
-   ESTILO GERAL
+   GLOBAL STYLE
 ================================ */
 
 body {
@@ -32,8 +32,7 @@ header h1 {
     color: #2c3e50;
 }
 
-/* Botão adicionar */
-.btn-add {
+.btn-add, .btn-voltar {
     background: #007bff;
     color: white;
     padding: 10px 18px;
@@ -44,12 +43,13 @@ header h1 {
     transition: 0.2s ease;
 }
 
-.btn-add:hover {
+.btn-add:hover,
+.btn-voltar:hover {
     background: #005fcc;
 }
 
 /* ================================
-   BARRA DE PESQUISA
+   SEARCH BAR
 ================================ */
 
 .pesquisa-container {
@@ -74,165 +74,95 @@ header h1 {
 }
 
 /* ================================
-   LISTA DE LIVROS (GRID)
+   BOOK GRID
 ================================ */
 
 .lista-livros {
     padding: 40px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 32px;
 }
 
 /* ================================
-   CARD DO LIVRO
+   CLEAN MINIMALIST CARD REDESIGN
 ================================ */
 
-.book-card {
+.livro-card {
+    width: 220px;
     background: white;
-    border-radius: 14px;
-    transition: 0.25s ease;
-    box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
-    overflow: hidden;
+    border-radius: 12px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-}
-
-.book-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0px 8px 24px rgba(0,0,0,0.18);
-}
-
-/* Imagem do livro */
-.book-card img {
-    width: 100%;
-    height: 240px;
-    object-fit: contain;
-    background: #f3f3f3;
-    padding: 12px;
-    transition: transform 0.3s ease;
-}
-
-.book-card:hover img {
-    transform: scale(1.05);
-}
-
-/* Conteúdo */
-.book-info {
-    padding: 16px 20px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.book-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0 0 6px;
-    min-height: 48px;
-    max-height: 48px;
-    overflow: hidden;
-}
-
-.book-author,
-.book-year,
-.book-category {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 4px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.card-buttons {
-    margin-top: auto;
-    display: flex;
     justify-content: space-between;
-    padding-top: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
-/* Botões do card */
-.btn {
-    padding: 8px 14px;
-    font-size: 14px;
-    border-radius: 8px;
-    text-decoration: none;
+.livro-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+.livro-img-wrapper {
+    width: 100%;
+    height: 260px; 
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.livro-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* ensures no cropping */
+    background-color: #f0f0f0;
+}
+
+.livro-titulo {
+    font-size: 1.1rem;
+    text-align: center;
+    margin: 10px 0;
+    min-height: 40px;
+}
+
+.btn-detalhes {
+    margin-top: 12px;
+    background: #1e88e5;
     color: white;
-    transition: 0.2s ease;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    transition: 0.2s;
 }
 
-.btn-edit {
-    background: #ffc107;
+.btn-detalhes:hover {
+    background: #1565c0;
 }
 
-.btn-edit:hover {
-    background: #e0a800;
-}
-
-.btn-delete {
-    background: #dc3545;
-}
-
-.btn-delete:hover {
-    background: #b92c3a;
-}
 
 /* ================================
    DARK MODE
 ================================ */
 
-body.dark {
-    background: #0f0f0f;
-    color: #ddd;
-}
-
-body.dark header {
-    background: #1a1a1a;
-    border-bottom-color: #333;
-}
-
-body.dark h1 {
-    color: #fff;
-}
-
-body.dark #campoPesquisa {
-    background: #1a1a1a;
-    color: #eee;
+body.dark .livro-card {
+    background: #1b1b1b;
     border-color: #333;
 }
 
-body.dark #campoPesquisa:focus {
-    border-color: #007bff;
-}
-
-body.dark .book-card {
-    background: #1d1d1d;
-    border: 1px solid #333;
-    color: #ddd;
-}
-
-body.dark .book-card img {
+body.dark .livro-card img {
     background: #111;
 }
 
-body.dark .btn-edit {
-    background: #e0a800;
+body.dark .livro-title {
+    color: #eee;
 }
 
-body.dark .btn-delete {
-    background: #c82333;
-}
-.btn-voltar {
-    background: #007bff;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 600;
-    transition: 0.2s ease;
-}
-
-.btn-voltar:hover {
-    background: #005fcc;
+body.dark .livro-author,
+body.dark .livro-year,
+body.dark .livro-category {
+    color: #d0d0d0;
 }

@@ -1,10 +1,27 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-// ======================
-// Função de normalização
-// ======================
+// ==========================================================================
+// MULTER — Keeps original filename so duplicates can be detected
+// ==========================================================================
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, "../../frontend/images/books"));
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname); // keep the original name
+    }
+});
+
+const upload = multer({ storage });
+
+// ==========================================================================
+// NORMALIZATION FUNCTION
+// ==========================================================================
 function normalizar(str) {
     return str
         .trim()
@@ -14,9 +31,9 @@ function normalizar(str) {
         .replace(/\s+/g, " ");
 }
 
-// ============================================================
-// FUNÇÕES AUXILIARES – criar ou retornar autor/categoria
-// ============================================================
+// ==========================================================================
+// AUTHOR / CATEGORY HELPERS
+// ==========================================================================
 function getOrCreateAutor(nome, callback) {
     if (!nome?.trim()) return callback(null);
     const nomeOriginal = nome.trim();
@@ -61,54 +78,95 @@ function getOrCreateCategoria(nome, callback) {
     });
 }
 
-// ============================================================
-// POST – Criar livro com normalização de título/autor/categoria
-// ============================================================
-router.post("/", (req, res) => {
-    const { nome, descricao, ano_publicacao, id_user, autor, categoria } = req.body;
+// ==========================================================================
+// POST — CREATE BOOK + DUPLICATE IMAGE CHECK
+// ==========================================================================
+router.post("/", upload.single("imagem"), (req, res) => {
+    try {
+        const { nome, descricao, ano_publicacao, id_user, autor, categoria } = req.body;
 
-    if (!nome || !id_user) {
-        return res.status(400).json({ error: "Nome do livro e id_user são obrigatórios." });
-    }
-
-    const nomeOriginal = nome.trim();
-    const nomeNormalizado = normalizar(nomeOriginal);
-
-    // Verificar se já existe livro com mesmo nome para o mesmo usuário
-    const sqlCheck = `
-        SELECT id_livro FROM livro
-        WHERE id_user = ? AND LOWER(nome) = ?
-        LIMIT 1
-    `;
-    db.query(sqlCheck, [id_user, nomeNormalizado], (errCheck, resultsCheck) => {
-        if (errCheck) return res.status(500).json({ error: "Erro ao verificar duplicidade." });
-        if (resultsCheck.length > 0) {
-            return res.status(400).json({ error: "Livro já existe para este usuário." });
+        if (!nome || !id_user) {
+            return res.status(400).json({ error: "Nome do livro e id_user são obrigatórios." });
         }
 
-        // Criar autor e categoria se não existirem
-        getOrCreateAutor(autor, (finalIdAutor) => {
-            getOrCreateCategoria(categoria, (finalIdCategoria) => {
-                const sqlInsert = `
-                    INSERT INTO livro (nome, descricao, ano_publicacao, id_autor, id_categoria, id_user)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                `;
-                db.query(
-                    sqlInsert,
-                    [nomeOriginal, descricao || null, ano_publicacao || null, finalIdAutor || null, finalIdCategoria || null, id_user],
-                    (errInsert) => {
-                        if (errInsert) return res.status(500).json({ error: "Erro ao adicionar livro." });
-                        res.status(201).json({ message: "Livro adicionado com sucesso!" });
-                    }
-                );
+        let imagemPath = null;
+
+        // ==========================================================
+        // 🔥 DUPLICATE IMAGE CHECK (BY FILENAME)
+        // ==========================================================
+        if (req.file) {
+            const uploadFolder = path.join(__dirname, "../../frontend/images/books");
+            const originalName = req.file.originalname;
+            const savedPath = path.join(uploadFolder, originalName);
+
+            // If file exists → skip saving (reuse)
+            if (fs.existsSync(savedPath)) {
+                console.log("♻️ Reusing existing image:", originalName);
+            } else {
+                console.log("📁 Saving NEW image:", originalName);
+                // The file is already saved by multer with correct name
+                // so no rename or move needed.
+            }
+
+            imagemPath = `/images/books/${originalName}`;
+        }
+
+        const nomeOriginal = nome.trim();
+        const nomeNormalizado = normalizar(nomeOriginal);
+
+        const sqlCheck = `
+            SELECT id_livro FROM livro
+            WHERE id_user = ? AND LOWER(nome) = LOWER(?)
+            LIMIT 1
+        `;
+
+        db.query(sqlCheck, [id_user, nomeOriginal], (errCheck, resultsCheck) => {
+            if (errCheck) return res.status(500).json({ error: "Erro ao verificar duplicidade." });
+            if (resultsCheck.length > 0) {
+                return res.status(400).json({ error: "Livro já existe para este usuário." });
+            }
+
+            getOrCreateAutor(autor, (finalIdAutor) => {
+                getOrCreateCategoria(categoria, (finalIdCategoria) => {
+
+                    const sqlInsert = `
+                        INSERT INTO livro (nome, descricao, ano_publicacao, id_autor, id_categoria, id_user, imagem)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                    `;
+
+                    db.query(
+                        sqlInsert,
+                        [
+                            nomeOriginal,
+                            descricao || null,
+                            ano_publicacao || null,
+                            finalIdAutor || null,
+                            finalIdCategoria || null,
+                            id_user,
+                            imagemPath
+                        ],
+                        (errInsert) => {
+                            if (errInsert) return res.status(500).json({ error: "Erro ao adicionar livro." });
+
+                            return res.status(201).json({
+                                message: "Livro adicionado com sucesso!",
+                                imagem: imagemPath
+                            });
+                        }
+                    );
+                });
             });
         });
-    });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Erro interno do servidor." });
+    }
 });
 
-// ============================================================
-// GET – Todos os livros de um usuário
-// ============================================================
+// ==========================================================================
+// GET — Books by User
+// ==========================================================================
 router.get("/user/:id_user", (req, res) => {
     const { id_user } = req.params;
     const sql = `
@@ -125,9 +183,9 @@ router.get("/user/:id_user", (req, res) => {
     });
 });
 
-// ============================================================
-// GET – Buscar livro pelo ID + usuário
-// ============================================================
+// ==========================================================================
+// GET — Book by ID + user
+// ==========================================================================
 router.get("/:id_livro/user/:id_user", (req, res) => {
     const { id_livro, id_user } = req.params;
     const sql = `
@@ -144,9 +202,9 @@ router.get("/:id_livro/user/:id_user", (req, res) => {
     });
 });
 
-// ============================================================
-// PUT – Atualizar livro
-// ============================================================
+// ==========================================================================
+// PUT — Update book
+// ==========================================================================
 router.put("/:id_livro/user/:id_user", (req, res) => {
     const { id_livro, id_user } = req.params;
     const { nome, descricao, id_autor, id_categoria, ano_publicacao } = req.body;
@@ -167,9 +225,9 @@ router.put("/:id_livro/user/:id_user", (req, res) => {
     });
 });
 
-// ============================================================
-// DELETE – Excluir livro
-// ============================================================
+// ==========================================================================
+// DELETE — Delete book
+// ==========================================================================
 router.delete("/:id_livro", (req, res) => {
     const { id_livro } = req.params;
     const sql = `DELETE FROM livro WHERE id_livro = ?`;
@@ -180,9 +238,9 @@ router.delete("/:id_livro", (req, res) => {
     });
 });
 
-// ============================================================
-// GET – Busca avançada
-// ============================================================
+// ==========================================================================
+// GET — Advanced Search
+// ==========================================================================
 router.get("/search", (req, res) => {
     const { id_user, nome, categoria, autor } = req.query;
     if (!id_user) return res.status(400).json({ error: "id_user é obrigatório." });

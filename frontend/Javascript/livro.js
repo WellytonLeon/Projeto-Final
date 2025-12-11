@@ -25,6 +25,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
 
         area.innerHTML = `
+            <img src="${livro.imagem}" class="imagem-livro">
             <h2>${livro.nome}</h2>
             <div class="info">
                 <p><strong>Autor:</strong> ${livro.autor_nome || "Não informado"}</p>

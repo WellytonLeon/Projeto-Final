@@ -1,10 +1,10 @@
-window.API_KEY = 'http://localhost:3001' // Rota compartilhada -> IP do meu computador que esta sendo usado como "servidor"
+window.API_KEY = 'http://localhost:3001'; // Rota compartilhada -> IP do seu servidor
+
 async function carregarLivros(filtro = "") {
     const lista = document.getElementById("lista-livros");
     lista.innerHTML = "<p>Carregando...</p>";
 
     const idUser = Number(localStorage.getItem("id_user_logado"));
-
     if (!idUser) {
         lista.innerHTML = "<p>Erro: Nenhum usuário logado.</p>";
         return;
@@ -13,6 +13,7 @@ async function carregarLivros(filtro = "") {
     try {
         const response = await fetch(`${window.API_KEY}/books/user/${idUser}`);
         const livros = await response.json();
+        console.log(livros);
 
         if (!response.ok || livros.length === 0) {
             lista.innerHTML = "<p>Nenhum livro encontrado.</p>";
@@ -39,6 +40,10 @@ async function carregarLivros(filtro = "") {
             const card = document.createElement("div");
             card.classList.add("livro-card");
 
+            // Garantir nota padrão = 3 se for null/undefined
+            const nota = livro.nota !== null && livro.nota !== undefined ? livro.nota : 3;
+            const estrelas = '⭐'.repeat(nota);
+
             card.innerHTML = `
                 <div class="livro-img-wrapper">
                     <img src="${window.API_KEY}${livro.imagem}" class="livro-img">
@@ -49,6 +54,7 @@ async function carregarLivros(filtro = "") {
                 <p><strong>Autor:</strong> ${livro.autor_nome || "-"}</p>
                 <p><strong>Ano:</strong> ${livro.ano_publicacao || "-"}</p>
                 <p><strong>Categoria:</strong> ${livro.categoria_nome || "-"}</p>
+                <p><strong>Avaliação:</strong> ${estrelas} (${nota}/5)</p>
 
                 <button class="btn-detalhes" onclick="abrirLivro(${livro.id_livro})">
                     Ver detalhes
@@ -58,7 +64,6 @@ async function carregarLivros(filtro = "") {
             lista.appendChild(card);
         });
 
-
     } catch (err) {
         console.error(err);
         lista.innerHTML = "<p>Erro ao carregar livros.</p>";
@@ -66,7 +71,7 @@ async function carregarLivros(filtro = "") {
 }
 
 function abrirLivro(id) {
-    console.log(id)
+    console.log(id);
     localStorage.setItem("livroSelecionado", id);
     window.location.href = "livro.html";
 }
@@ -74,6 +79,7 @@ function abrirLivro(id) {
 document.getElementById("campoPesquisa").addEventListener("input", e =>
     carregarLivros(e.target.value)
 );
+
 // Aplicar dark mode baseado no usuário
 const usuario = JSON.parse(localStorage.getItem("user"));
 if (usuario && usuario.darkmode === "on") {
@@ -81,4 +87,5 @@ if (usuario && usuario.darkmode === "on") {
 } else {
     document.body.classList.remove("dark");
 }
+
 carregarLivros();

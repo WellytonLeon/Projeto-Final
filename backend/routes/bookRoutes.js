@@ -83,7 +83,7 @@ function getOrCreateCategoria(nome, callback) {
 // ==========================================================================
 router.post("/", upload.single("imagem"), (req, res) => {
     try {
-        const { nome, descricao, ano_publicacao, id_user, autor, categoria } = req.body;
+        const { nome, descricao, ano_publicacao, id_user, autor, categoria, nota } = req.body;
 
         if (!nome || !id_user) {
             return res.status(400).json({ error: "Nome do livro e id_user são obrigatórios." });
@@ -130,9 +130,19 @@ router.post("/", upload.single("imagem"), (req, res) => {
                 getOrCreateCategoria(categoria, (finalIdCategoria) => {
 
                     const sqlInsert = `
-                        INSERT INTO livro (nome, descricao, ano_publicacao, id_autor, id_categoria, id_user, imagem)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        insert into livro (
+                            nome,
+                            descricao,
+                            ano_publicacao,
+                            id_autor,
+                            id_categoria,
+                            nota,
+                            id_user,
+                            imagem
+                        )
+                        values (?, ?, ?, ?, ?, ?,?,?)
                     `;
+
 
                     db.query(
                         sqlInsert,
@@ -142,6 +152,7 @@ router.post("/", upload.single("imagem"), (req, res) => {
                             ano_publicacao || null,
                             finalIdAutor || null,
                             finalIdCategoria || null,
+                            nota,
                             id_user,
                             imagemPath
                         ],

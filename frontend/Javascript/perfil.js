@@ -3,7 +3,7 @@ let user = JSON.parse(localStorage.getItem("user"));
 if (!user) window.location.href = "/frontend/Login/LoginUsuario.html";
 
 // Inicialização
-window.onload = () => {
+window.onload = async () => {
     // Perfil
     document.getElementById("perfil-username").value = user.nome || "";
     document.getElementById("perfil-email").value = user.email || "";
@@ -21,6 +21,9 @@ window.onload = () => {
 
     document.getElementById("themeColor").value = user.themeColor || "default";
     applyTheme(user.themeColor || "default");
+
+    // Carregar perfil de leitor em tempo real
+    carregarPerfilLeitor();
 };
 
 // Abrir tab via URL
@@ -184,7 +187,6 @@ document.getElementById("logoutbtn").addEventListener("click", () => {
 //    ATUALIZAR BACKEND
 // -------------------------
 async function updateUserBackend(frontData) {
-    // Mapear front-end para backend
     const backendData = {
         nome: frontData.nome || frontData.username,
         email: frontData.email,
@@ -193,8 +195,6 @@ async function updateUserBackend(frontData) {
         themeColor: frontData.themeColor,
         profilePic: frontData.profilePic
     };
-
-    // Remove undefined
     Object.keys(backendData).forEach(key => backendData[key] === undefined && delete backendData[key]);
 
     try {
@@ -203,7 +203,6 @@ async function updateUserBackend(frontData) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(backendData)
         });
-
         if (!res.ok) throw new Error("Erro ao atualizar usuário");
 
         const updatedUser = await res.json();
@@ -213,4 +212,92 @@ async function updateUserBackend(frontData) {
         console.error(err);
         alert("Erro ao atualizar dados.");
     }
+}
+
+// ==============================
+// PERFIL DE LEITOR EM TEMPO REAL
+// ==============================
+async function carregarPerfilLeitor() {
+    const area = document.getElementById("perfil-leitor");
+    area.innerHTML = "<p>Carregando perfil de leitor...</p>";
+
+    try {
+        const res = await fetch(`${window.API_KEY}/books/user/${user.id_user}`);
+        const livros = await res.json();
+
+        if (!res.ok || !livros.length) {
+            area.innerHTML = "<p>Nenhum livro cadastrado ainda.</p>";
+            return;
+        }
+
+        // --- MÉDIA DE NOTAS ---
+        const notas = livros.map(l => l.nota || 3); // nota padrão 3
+        const mediaGeral = (notas.reduce((a,b) => a+b, 0) / notas.length).toFixed(2);
+
+        // --- CATEGORIAS ORDENADAS ---
+        const categorias = {};
+        livros.forEach(l => {
+            const cat = l.categoria_nome || "Sem categoria";
+            categorias[cat] = (categorias[cat] || 0) + 1;
+        });
+        const categoriasOrdenadas = Object.entries(categorias)
+            .sort((a,b) => b[1]-a[1]); // maior quantidade primeiro
+
+        // --- LIVRO COM MELHOR NOTA ---
+        const livroMelhorNota = livros.reduce((prev, curr) => (curr.nota || 3) > (prev.nota || 3) ? curr : prev);
+
+        // --- PERFIL DE LEITOR SIMPLES ---
+        const perfil = gerarPerfilLeitor(categoriasOrdenadas, mediaGeral);
+
+        // --- MONTAR HTML INTERATIVO ---
+        const categoriasHTML = categoriasOrdenadas
+            .map(([cat, qtd]) => `<span class="badge bg-secondary me-1">${cat}: ${qtd}</span>`)
+            .join(" ");
+
+        area.innerHTML = `
+            <h4 class="fw-bold mt-4">Perfil de Leitor</h4>
+            <p><strong>Quantidade de livros:</strong> ${livros.length}</p>
+            <p><strong>Média de notas:</strong> ${mediaGeral} ⭐</p>
+            <p><strong>Categorias mais lidas:</strong> ${categoriasHTML}</p>
+
+            <div class="mt-3 p-3 border rounded bg-light">
+                <h5>Livro com melhor nota:</h5>
+                <p><strong>${livroMelhorNota.nome}</strong> (${livroMelhorNota.categoria_nome || "Sem categoria"}) - Nota: ${livroMelhorNota.nota || 3} ⭐</p>
+            </div>
+
+            <div class="mt-3 p-3 border rounded bg-light">
+                <h5>Perfil sugerido:</h5>
+                <p><strong>${perfil.tipo}</strong> - ${perfil.descricao}</p>
+            </div>
+        `;
+
+    } catch (err) {
+        console.error("Erro ao carregar perfil de leitor:", err);
+        area.innerHTML = "<p>Erro ao carregar perfil de leitor.</p>";
+    }
+}
+
+// --- FUNÇÃO AUXILIAR PARA PERFIL DE LEITOR ---
+function gerarPerfilLeitor(categoriasOrdenadas, mediaNotas) {
+    const topCat = categoriasOrdenadas[0]?.[0] || "Geral";
+
+    // Definição simples de perfil baseado na categoria principal e média
+    let tipo = "Leitor Casual";
+    let descricao = "Gosta de explorar livros variados sem foco específico.";
+
+    if (mediaNotas >= 4.5 && topCat === "Ficção") {
+        tipo = "Analista Criativo";
+        descricao = "Adora histórias imaginativas, desenvolve pensamento crítico e criativo.";
+    } else if (mediaNotas >= 4 && topCat === "História") {
+        tipo = "Estudioso";
+        descricao = "Gosta de aprender com fatos históricos e aprofundar conhecimento.";
+    } else if (mediaNotas >= 4 && topCat === "Tecnologia") {
+        tipo = "Estratégico";
+        descricao = "Interessado em inovação, análise de dados e soluções inteligentes.";
+    } else if (mediaNotas < 3.5) {
+        tipo = "Explorador Casual";
+        descricao = "Lê de forma leve, testando várias categorias sem aprofundamento.";
+    }
+
+    return { tipo, descricao };
 }

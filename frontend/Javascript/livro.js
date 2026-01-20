@@ -1,11 +1,9 @@
 window.API_KEY = 'http://localhost:3001';
 const idUser = Number(localStorage.getItem("id_user_logado"));
 
-// Helper to get ?id= from URL
+// Helper to get livro ID from localStorage
 function getLivroIdFromURL() {
-    const idLocal = localStorage.getItem("livroSelecionado")
-    const params = new URLSearchParams(window.location.search);
-    //return Number(params.get("id"));
+    const idLocal = localStorage.getItem("livroSelecionado");
     return Number(idLocal);
 }
 
@@ -37,6 +35,10 @@ window.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
+        // Nota padrão 3 caso null/undefined
+        const nota = livro.nota !== null && livro.nota !== undefined ? livro.nota : 3;
+        const estrelas = '⭐'.repeat(nota);
+
         const imagemCompleta = livro.imagem 
             ? `${window.API_KEY}${livro.imagem}` 
             : "../images/default_book.png";
@@ -51,6 +53,7 @@ window.addEventListener("DOMContentLoaded", async () => {
                         <p><i class="fa-solid fa-user"></i> <strong>Autor:</strong> ${livro.autor_nome || "Não informado"}</p>
                         <p><i class="fa-solid fa-book"></i> <strong>Categoria:</strong> ${livro.categoria_nome || "Não informada"}</p>
                         <p><i class="fa-solid fa-calendar"></i> <strong>Ano:</strong> ${livro.ano_publicacao || "Não informado"}</p>
+                        <p><i class="fa-solid fa-star"></i> <strong>Avaliação:</strong> ${estrelas} (${nota}/5)</p>
                     </div>
                     <h3>Descrição:</h3>
                     <p class="descricao-livro">${livro.descricao || "Sem descrição."}</p>

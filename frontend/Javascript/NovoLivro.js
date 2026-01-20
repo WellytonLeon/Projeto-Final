@@ -12,6 +12,8 @@ document.getElementById("formLivro").addEventListener("submit", async function (
     formData.append("descricao", document.getElementById("descricao").value);
     formData.append("ano_publicacao", document.getElementById("ano").value);
     formData.append("id_user", idUser);
+    formData.append("nota", document.getElementById("nota").value);
+
 
     const imagemFile = document.getElementById("imagem").files[0];
     if (imagemFile) formData.append("imagem", imagemFile);

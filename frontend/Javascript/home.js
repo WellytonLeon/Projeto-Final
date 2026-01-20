@@ -135,3 +135,20 @@ filtroCategoria.addEventListener("change", aplicarFiltros);
 //  INIT
 // =========================
 carregarLivros();
+
+let user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+        document.getElementById("navUserPic").src = user.profilePic || "../images/avatar.png";
+        document.getElementById("navUserName").textContent = user.nome || "Usuário";
+        if (user && user.darkmode === 'on') {
+    document.body.classList.add('dark');
+    } else {
+    document.body.classList.remove('dark');
+}
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("user");
+        window.location.href = "/frontend/Login/LoginUsuario.html";
+    }
+);

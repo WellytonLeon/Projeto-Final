@@ -8,7 +8,6 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    transition: background 0.3s, color 0.3s;
 }
 
 /* ================================
@@ -29,7 +28,7 @@ header h1 {
     margin: 0;
     font-size: 26px;
     font-weight: 700;
-    color: #2c3e50;
+    color: #007bff;
 }
 
 .btn-add, .btn-voltar {
@@ -89,7 +88,7 @@ header h1 {
 ================================ */
 
 .livro-card {
-    width: 220px;
+    width: 100%;
     background: white;
     border-radius: 12px;
     padding: 14px;
@@ -113,6 +112,7 @@ header h1 {
 }
 
 .livro-img {
+    padding: 10px;
     width: 100%;
     height: 100%;
     object-fit: contain; /* ensures no cropping */
@@ -147,6 +147,21 @@ header h1 {
 /* ================================
    DARK MODE
 ================================ */
+body.dark {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+body.dark header {
+    background: #1e1e1e;
+    border-bottom: 1px solid #333;
+}
+
+body.dark #campoPesquisa {
+    background: #1e1e1e;
+    color: white;
+    border-color: #444;
+}
 
 body.dark .livro-card {
     background: #1b1b1b;
@@ -157,7 +172,7 @@ body.dark .livro-card img {
     background: #111;
 }
 
-body.dark .livro-title {
+body.dark .livro-titulo {
     color: #eee;
 }
 

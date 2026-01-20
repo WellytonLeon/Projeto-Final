@@ -74,5 +74,11 @@ function abrirLivro(id) {
 document.getElementById("campoPesquisa").addEventListener("input", e =>
     carregarLivros(e.target.value)
 );
-
+// Aplicar dark mode baseado no usuário
+const usuario = JSON.parse(localStorage.getItem("user"));
+if (usuario && usuario.darkmode === "on") {
+    document.body.classList.add("dark");
+} else {
+    document.body.classList.remove("dark");
+}
 carregarLivros();

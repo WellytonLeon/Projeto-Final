@@ -104,23 +104,5 @@
 
     <script src="/frontend/Javascript/database.js"></script>
     <script src="/frontend/Javascript/home.js"></script>
-
-    <!-- User data update script -->
-    <script>
-        // Fetch the user data from localStorage
-        let user = JSON.parse(localStorage.getItem("user"));
-        if (user) {
-            // Update the user profile picture and username in the navigation bar
-            document.getElementById("navUserPic").src = user.profilePic || "../images/avatar.png";
-            document.getElementById("navUserName").textContent = user.nome || "Usuário";
-        }
-
-        // Logout functionality
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-            localStorage.removeItem("user");
-            window.location.href = "/frontend/Login/LoginUsuario.html"; // Redirect to login page
-        });
-    </script>
-
 </body>
 </html>

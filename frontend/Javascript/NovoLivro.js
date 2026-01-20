@@ -41,3 +41,10 @@ document.getElementById("formLivro").addEventListener("submit", async function (
         alert("Erro ao cadastrar livro.");
     }
 });
+// Aplicar dark mode baseado no usuário
+const usuario = JSON.parse(localStorage.getItem("user"));
+if (usuario && usuario.darkmode === "on") {
+    document.body.classList.add("dark");
+} else {
+    document.body.classList.remove("dark");
+}

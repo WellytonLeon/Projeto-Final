@@ -38,8 +38,8 @@ create table livro (
     foreign key (id_autor) references autor(id_autor) on delete  set null,
     foreign key (id_user) references user(id_user) on delete  cascade
 );
-ALTER TABLE livro ADD COLUMN imagem VARCHAR(255);
 alter table livro ADD COLUMN ano_publicacao int;
+ALTER TABLE livro ADD COLUMN imagem VARCHAR(255);
 
 create table avaliacoes (
     avaliacao_id int AUTO_inCREMENT primary key,

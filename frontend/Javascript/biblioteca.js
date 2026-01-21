@@ -56,9 +56,9 @@ async function carregarLivros(filtro = "") {
                 <p><strong>Categoria:</strong> ${livro.categoria_nome || "-"}</p>
                 <p><strong>Avaliação:</strong> ${estrelas} (${nota}/5)</p>
 
-                <button class="btn-detalhes" onclick="abrirLivro(${livro.id_livro})">
+                <a href="livro.html?id=${livro.id_livro}" class="btn-detalhes">
                     Ver detalhes
-                </button>
+                </a>
             `;
 
             lista.appendChild(card);
@@ -68,12 +68,6 @@ async function carregarLivros(filtro = "") {
         console.error(err);
         lista.innerHTML = "<p>Erro ao carregar livros.</p>";
     }
-}
-
-function abrirLivro(id) {
-    console.log(id);
-    localStorage.setItem("livroSelecionado", id);
-    window.location.href = "livro.html";
 }
 
 document.getElementById("campoPesquisa").addEventListener("input", e =>

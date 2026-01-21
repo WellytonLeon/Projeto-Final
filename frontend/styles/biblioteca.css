@@ -89,6 +89,7 @@ header h1 {
 
 .livro-card {
     width: 100%;
+    height: 100%;
     background: white;
     border-radius: 12px;
     padding: 14px;
@@ -97,6 +98,7 @@ header h1 {
     justify-content: space-between;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     transition: transform .2s ease, box-shadow .2s ease;
+    box-sizing: border-box;
 }
 
 .livro-card:hover {
@@ -127,7 +129,7 @@ header h1 {
 }
 
 .btn-detalhes {
-    margin-top: 12px;
+    margin-top: auto;
     background: #1e88e5;
     color: white;
     padding: 10px;
@@ -136,6 +138,7 @@ header h1 {
     cursor: pointer;
     font-size: 1rem;
     width: 100%;
+    box-sizing: border-box;
     transition: 0.2s;
 }
 

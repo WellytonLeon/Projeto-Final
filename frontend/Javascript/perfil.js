@@ -119,7 +119,7 @@ document.getElementById("loginFormConfig").addEventListener("submit", async (e) 
     alert("Login atualizado!");
     location.reload();
 });
-
+/*
 // -------------------------
 //           BACKUP
 // -------------------------
@@ -161,7 +161,7 @@ document.getElementById("resetSystem").addEventListener("click", async () => {
     alert("Sistema resetado!");
     location.reload();
 });
-
+*/
 // -------------------------
 //      EXCLUIR CONTA
 // -------------------------

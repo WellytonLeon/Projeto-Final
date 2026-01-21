@@ -1,10 +1,10 @@
 window.API_KEY = 'http://localhost:3001';
 const idUser = Number(localStorage.getItem("id_user_logado"));
 
-// Helper to get livro ID from localStorage
+// Helper to get ?id= from URL
 function getLivroIdFromURL() {
-    const idLocal = localStorage.getItem("livroSelecionado");
-    return Number(idLocal);
+    const params = new URLSearchParams(window.location.search);
+    return Number(params.get("id"));
 }
 
 window.addEventListener("DOMContentLoaded", async () => {

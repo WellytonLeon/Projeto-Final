@@ -52,6 +52,7 @@ async function carregarLivros(filtro = "") {
                 <h3 class="livro-titulo">${livro.nome}</h3>
 
                 <p><strong>Autor:</strong> ${livro.autor_nome || "-"}</p>
+                <p><strong>Editora:</strong> ${livro.editora || "-"}</p>
                 <p><strong>Ano:</strong> ${livro.ano_publicacao || "-"}</p>
                 <p><strong>Categoria:</strong> ${livro.categoria_nome || "-"}</p>
                 <p><strong>Avaliação:</strong> ${estrelas} (${nota}/5)</p>

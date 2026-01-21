@@ -27,7 +27,7 @@ let categoriasCache = [];
 // =========================
 async function carregarLivros() {
     try {
-        const resposta = await fetch(`${window.API_KEY}/books/search?id_user=${userId}`);
+        const resposta = await fetch(`${window.API_KEY}/books/user/${userId}`);
         const livros = await resposta.json();
 
         livrosCache = livros;
@@ -88,21 +88,26 @@ function renderizarLivros(lista) {
             : "../images/default_book.png";
 
         const card = `
-            <div class="col-md-4 mb-4">
-                <div class="card book-card shadow-sm h-100">
-                    <img src="${imagemCompleta}" class="card-img-top" alt="${livro.nome || livro.titulo}">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${livro.nome || livro.titulo}</h5>
-                        <p class="card-text">Autor: ${livro.autor_nome || "Desconhecido"}</p>
-                        <p class="card-text">
-                            <small class="text-muted">${livro.categoria_nome || "Sem categoria"}</small>
-                        </p>
-                        <a href="/frontend/Biblioteca/livro.html?id=${livro.id_livro}" 
-                           class="btn btn-primary btn-sm mt-auto">Ver mais</a>
-                    </div>
+        <div class="col-md-4 mb-4">
+            <div class="card book-card shadow-sm h-100">
+                <img src="${imagemCompleta}" class="card-img-top" alt="${livro.nome || livro.titulo}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">${livro.nome || livro.titulo}</h5>
+
+                    <p class="card-text">Autor: ${livro.autor_nome || "Desconhecido"}</p>
+                    <p class="card-text">Editora: ${livro.editora || "Não informada"}</p>
+                    
+                    <p class="card-text">
+                        <small class="text-muted">${livro.categoria_nome || "Sem categoria"}</small>
+                    </p>
+
+                    <a href="/frontend/Biblioteca/livro.html?id=${livro.id_livro}" 
+                    class="btn btn-primary btn-sm mt-auto">Ver mais</a>
                 </div>
             </div>
-        `;
+        </div>
+    `;
+
         bookList.insertAdjacentHTML("beforeend", card);
     });
 }

@@ -51,9 +51,13 @@ window.addEventListener("DOMContentLoaded", async () => {
                     <h2>${livro.nome}</h2>
                     <div class="info">
                         <p><i class="fa-solid fa-user"></i> <strong>Autor:</strong> ${livro.autor_nome || "Não informado"}</p>
+                        <p><i class="fa-solid fa-building"></i> <strong>Editora:</strong> 
+                            ${livro.editora || "Desconhecida"}
+                        </p>
                         <p><i class="fa-solid fa-book"></i> <strong>Categoria:</strong> ${livro.categoria_nome || "Não informada"}</p>
                         <p><i class="fa-solid fa-calendar"></i> <strong>Ano:</strong> ${livro.ano_publicacao || "Não informado"}</p>
                         <p><i class="fa-solid fa-star"></i> <strong>Avaliação:</strong> ${estrelas} (${nota}/5)</p>
+
                     </div>
                     <h3>Descrição:</h3>
                     <p class="descricao-livro">${livro.descricao || "Sem descrição."}</p>

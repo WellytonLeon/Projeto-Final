@@ -10,40 +10,47 @@
 
     <h2>Adicionar Novo Livro</h2>
 
- <form id="formLivro">
+    <form id="formLivro">
 
-    <label>Título:</label>
-    <input type="text" id="titulo" required>
+        <label>Título:</label>
+        <input type="text" id="titulo" required>
 
-    <label>Autor:</label>
-    <input type="text" id="autor" required>
+        <label>Autor:</label>
+        <input type="text" id="autor" required>
 
-    <label>Ano de Publicação:</label>
-    <input type="number" id="ano" min="1000" max="2100" required placeholder="Ex: 2022">
+        <label>Ano de Publicação:</label>
+        <input type="number" id="ano" min="1000" max="2100" required placeholder="Ex: 2022">
 
-    <label>Categoria:</label>
-    <input type="text" id="categoria" required>
+        <label>Categoria:</label>
+        <input type="text" id="categoria" required>
 
-    <label>Nota do Leitor (0 a 5):</label>
-    <input 
-        type="number" 
-        id="nota" 
-        min="0" 
-        max="5" 
-        step="0.5"
-        placeholder="Ex: 4"
-    >
+        <!-- 🔴 NOVO CAMPO -->
+        <label>Editora:</label>
+        <input 
+            type="text" 
+            id="editora" 
+            placeholder="Ex: Companhia das Letras"
+        >
 
-    <label>Descrição:</label>
-    <textarea id="descricao" rows="5"></textarea>
+        <label>Nota do Leitor (0 a 5):</label>
+        <input 
+            type="number" 
+            id="nota" 
+            min="0" 
+            max="5" 
+            step="0.5"
+            placeholder="Ex: 4"
+        >
 
-    <label>Imagem do Livro:</label>
-    <input type="file" id="imagem" accept="image/*">
+        <label>Descrição:</label>
+        <textarea id="descricao" rows="5"></textarea>
 
-    <button type="submit" class="btn-save">Salvar Livro</button>
-    <a href="biblioteca.html" class="btn-voltar">Cancelar</a>
-</form>
+        <label>Imagem do Livro:</label>
+        <input type="file" id="imagem" accept="image/*">
 
+        <button type="submit" class="btn-save">Salvar Livro</button>
+        <a href="biblioteca.html" class="btn-voltar">Cancelar</a>
+    </form>
 
     <script src="../Javascript/NovoLivro.js"></script>
 </body>

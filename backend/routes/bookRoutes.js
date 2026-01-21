@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
         cb(null, path.join(__dirname, "../../frontend/images/books"));
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname); // keep the original name
+        cb(null, file.originalname);
     }
 });
 
@@ -79,11 +79,21 @@ function getOrCreateCategoria(nome, callback) {
 }
 
 // ==========================================================================
-// POST — CREATE BOOK + DUPLICATE IMAGE CHECK
+// POST — CREATE BOOK
 // ==========================================================================
 router.post("/", upload.single("imagem"), (req, res) => {
     try {
-        const { nome, descricao, ano_publicacao, id_user, autor, categoria, nota } = req.body;
+        // 🔴 ALTERADO: editora adicionada
+        const {
+            nome,
+            descricao,
+            ano_publicacao,
+            id_user,
+            autor,
+            categoria,
+            nota,
+            editora
+        } = req.body;
 
         if (!nome || !id_user) {
             return res.status(400).json({ error: "Nome do livro e id_user são obrigatórios." });
@@ -91,28 +101,12 @@ router.post("/", upload.single("imagem"), (req, res) => {
 
         let imagemPath = null;
 
-        // ==========================================================
-        // 🔥 DUPLICATE IMAGE CHECK (BY FILENAME)
-        // ==========================================================
         if (req.file) {
-            const uploadFolder = path.join(__dirname, "../../frontend/images/books");
             const originalName = req.file.originalname;
-            const savedPath = path.join(uploadFolder, originalName);
-
-            // If file exists → skip saving (reuse)
-            if (fs.existsSync(savedPath)) {
-                console.log("♻️ Reusing existing image:", originalName);
-            } else {
-                console.log("📁 Saving NEW image:", originalName);
-                // The file is already saved by multer with correct name
-                // so no rename or move needed.
-            }
-
             imagemPath = `/images/books/${originalName}`;
         }
 
         const nomeOriginal = nome.trim();
-        const nomeNormalizado = normalizar(nomeOriginal);
 
         const sqlCheck = `
             SELECT id_livro FROM livro
@@ -129,8 +123,9 @@ router.post("/", upload.single("imagem"), (req, res) => {
             getOrCreateAutor(autor, (finalIdAutor) => {
                 getOrCreateCategoria(categoria, (finalIdCategoria) => {
 
+                    // 🔴 ALTERADO: coluna editora adicionada
                     const sqlInsert = `
-                        insert into livro (
+                        INSERT INTO livro (
                             nome,
                             descricao,
                             ano_publicacao,
@@ -139,11 +134,10 @@ router.post("/", upload.single("imagem"), (req, res) => {
                             nota,
                             id_user,
                             imagem,
-                            
+                            editora
                         )
-                        values (?, ?, ?, ?, ?, ?,?,?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     `;
-
 
                     db.query(
                         sqlInsert,
@@ -155,10 +149,14 @@ router.post("/", upload.single("imagem"), (req, res) => {
                             finalIdCategoria || null,
                             nota,
                             id_user,
-                            imagemPath
+                            imagemPath,
+                            editora || null // 🔴 ALTERADO
                         ],
                         (errInsert) => {
-                            if (errInsert) return res.status(500).json({ error: "Erro ao adicionar livro." });
+                            if (errInsert) {
+                                console.error(errInsert);
+                                return res.status(500).json({ error: "Erro ao adicionar livro." });
+                            }
 
                             return res.status(201).json({
                                 message: "Livro adicionado com sucesso!",
@@ -177,7 +175,7 @@ router.post("/", upload.single("imagem"), (req, res) => {
 });
 
 // ==========================================================================
-// GET — Books by User
+// GET — Books by User (já traz editora automaticamente)
 // ==========================================================================
 router.get("/user/:id_user", (req, res) => {
     const { id_user } = req.params;
@@ -196,7 +194,7 @@ router.get("/user/:id_user", (req, res) => {
 });
 
 // ==========================================================================
-// GET — Book by ID + user
+// GET — Book by ID + user (editora já incluída)
 // ==========================================================================
 router.get("/:id_livro/user/:id_user", (req, res) => {
     const { id_livro, id_user } = req.params;
@@ -215,11 +213,20 @@ router.get("/:id_livro/user/:id_user", (req, res) => {
 });
 
 // ==========================================================================
-// PUT — Update book
+// PUT — Update book (editora adicionada)
 // ==========================================================================
 router.put("/:id_livro/user/:id_user", (req, res) => {
     const { id_livro, id_user } = req.params;
-    const { nome, descricao, id_autor, id_categoria, ano_publicacao } = req.body;
+
+    // 🔴 ALTERADO: editora incluída
+    const {
+        nome,
+        descricao,
+        id_autor,
+        id_categoria,
+        ano_publicacao,
+        editora
+    } = req.body;
 
     const sql = `
         UPDATE livro SET
@@ -227,63 +234,45 @@ router.put("/:id_livro/user/:id_user", (req, res) => {
             descricao = COALESCE(?, descricao),
             ano_publicacao = COALESCE(?, ano_publicacao),
             id_autor = COALESCE(?, id_autor),
-            id_categoria = COALESCE(?, id_categoria)
+            id_categoria = COALESCE(?, id_categoria),
+            editora = COALESCE(?, editora)
         WHERE id_livro = ? AND id_user = ?
     `;
-    db.query(sql, [nome, descricao, ano_publicacao, id_autor, id_categoria, id_livro, id_user], (err, result) => {
-        if (err) return res.status(500).json({ error: "Erro ao atualizar livro." });
-        if (result.affectedRows === 0) return res.status(404).json({ message: "Livro não encontrado." });
-        res.json({ message: "Livro atualizado com sucesso!" });
-    });
+
+    db.query(
+        sql,
+        [
+            nome,
+            descricao,
+            ano_publicacao,
+            id_autor,
+            id_categoria,
+            editora, // 🔴 ALTERADO
+            id_livro,
+            id_user
+        ],
+        (err, result) => {
+            if (err) return res.status(500).json({ error: "Erro ao atualizar livro." });
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: "Livro não encontrado." });
+            }
+            res.json({ message: "Livro atualizado com sucesso!" });
+        }
+    );
 });
 
 // ==========================================================================
-// DELETE — Delete book
+// DELETE — Delete book (não muda)
 // ==========================================================================
 router.delete("/:id_livro", (req, res) => {
     const { id_livro } = req.params;
     const sql = `DELETE FROM livro WHERE id_livro = ?`;
     db.query(sql, [id_livro], (err, result) => {
         if (err) return res.status(500).json({ error: "Erro ao deletar livro." });
-        if (result.affectedRows === 0) return res.status(404).json({ message: "Livro não encontrado." });
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Livro não encontrado." });
+        }
         res.json({ message: "Livro deletado com sucesso!" });
-    });
-});
-
-// ==========================================================================
-// GET — Advanced Search
-// ==========================================================================
-router.get("/search", (req, res) => {
-    const { id_user, nome, categoria, autor } = req.query;
-    if (!id_user) return res.status(400).json({ error: "id_user é obrigatório." });
-
-    let sql = `
-        SELECT livro.*, autor.nome AS autor_nome, categoria.nome AS categoria_nome
-        FROM livro
-        LEFT JOIN autor ON livro.id_autor = autor.id_autor
-        LEFT JOIN categoria ON livro.id_categoria = categoria.id_categoria
-        WHERE livro.id_user = ?
-    `;
-    const params = [id_user];
-
-    if (nome) {
-        sql += " AND LOWER(livro.nome) LIKE ?";
-        params.push(`%${normalizar(nome)}%`);
-    }
-    if (categoria) {
-        sql += " AND LOWER(categoria.nome) LIKE ?";
-        params.push(`%${normalizar(categoria)}%`);
-    }
-    if (autor) {
-        sql += " AND LOWER(autor.nome) LIKE ?";
-        params.push(`%${normalizar(autor)}%`);
-    }
-
-    sql += " ORDER BY livro.nome ASC";
-
-    db.query(sql, params, (err, results) => {
-        if (err) return res.status(500).json({ error: "Erro ao buscar livros." });
-        res.json(results);
     });
 });
 

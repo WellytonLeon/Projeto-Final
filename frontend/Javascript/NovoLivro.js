@@ -1,5 +1,5 @@
 // Pegando ID do usuário logado
-window.API_KEY = 'http://localhost:3001'
+window.API_KEY = 'http://localhost:3001';
 const idUser = Number(localStorage.getItem("id_user_logado")); 
 
 document.getElementById("formLivro").addEventListener("submit", async function (event) {
@@ -9,11 +9,12 @@ document.getElementById("formLivro").addEventListener("submit", async function (
     formData.append("nome", document.getElementById("titulo").value);
     formData.append("autor", document.getElementById("autor").value);
     formData.append("categoria", document.getElementById("categoria").value);
+    // 🔴 NOVO
+    formData.append("editora", document.getElementById("editora").value);
     formData.append("descricao", document.getElementById("descricao").value);
     formData.append("ano_publicacao", document.getElementById("ano").value);
     formData.append("id_user", idUser);
     formData.append("nota", document.getElementById("nota").value);
-
 
     const imagemFile = document.getElementById("imagem").files[0];
     if (imagemFile) formData.append("imagem", imagemFile);
@@ -31,6 +32,7 @@ document.getElementById("formLivro").addEventListener("submit", async function (
             alert("O servidor retornou uma resposta inválida.");
             return;
         }
+
         if (response.ok) {
             alert("Livro adicionado com sucesso!");
             window.location.href = "biblioteca.html";
@@ -43,6 +45,7 @@ document.getElementById("formLivro").addEventListener("submit", async function (
         alert("Erro ao cadastrar livro.");
     }
 });
+
 // Aplicar dark mode baseado no usuário
 const usuario = JSON.parse(localStorage.getItem("user"));
 if (usuario && usuario.darkmode === "on") {

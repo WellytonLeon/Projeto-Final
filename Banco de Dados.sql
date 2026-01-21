@@ -41,6 +41,9 @@ create table livro (
 alter table livro ADD COLUMN ano_publicacao int;
 ALTER TABLE livro ADD COLUMN imagem VARCHAR(255);
 
+alter table livro
+add column editora varchar(100) default 'desconhecida';
+
 create table avaliacoes (
     avaliacao_id int AUTO_inCREMENT primary key,
     id_livro int,

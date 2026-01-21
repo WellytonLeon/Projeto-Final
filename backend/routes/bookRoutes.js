@@ -138,7 +138,8 @@ router.post("/", upload.single("imagem"), (req, res) => {
                             id_categoria,
                             nota,
                             id_user,
-                            imagem
+                            imagem,
+                            
                         )
                         values (?, ?, ?, ?, ?, ?,?,?)
                     `;

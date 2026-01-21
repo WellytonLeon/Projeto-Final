@@ -101,6 +101,7 @@ function renderizarLivros(lista) {
                         <small class="text-muted">${livro.categoria_nome || "Sem categoria"}</small>
                     </p>
 
+                    
                     <a href="/frontend/Biblioteca/livro.html?id=${livro.id_livro}" 
                     class="btn btn-primary btn-sm mt-auto">Ver mais</a>
                 </div>

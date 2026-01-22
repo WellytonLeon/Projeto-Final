@@ -103,3 +103,108 @@ body.dark .btn-danger {
 body.dark .btn-danger:hover {
     background-color: #cc3a3a;
 }
+
+/* ===== PERFIL DE LEITOR ===== */
+#perfil-leitor {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-family: "Inter", Arial, sans-serif;
+    opacity: 0; /* Começa invisível para animação */
+    transform: translateY(10px);
+    animation: fadeInPerfil 0.6s forwards; /* Animação de entrada */
+}
+
+.perfil-box {
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.perfil-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.perfil-box h5 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0d6efd;
+    transition: color 0.3s ease;
+}
+
+.perfil-box p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+#perfil-leitor .badge {
+    font-size: 0.85rem;
+    padding: 0.35em 0.65em;
+    background: #e0e0e0;
+    color: #fff; /* Alterado de #333 para branco */
+    margin-right: 0.3rem;
+    margin-bottom: 0.3rem;
+    border-radius: 8px;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    cursor: default;
+}
+
+#perfil-leitor .badge:hover {
+    transform: scale(1.05);
+    background: #cfd8dc;
+}
+#perfil-leitor .badge:hover {
+    transform: scale(1.05);
+    background: #cfd8dc;
+}
+
+/* ===== PERFIL DE LEITOR DARK MODE ===== */
+body.dark #perfil-leitor .perfil-box {
+    background: #1d1d1d;
+    border: 1px solid #333;
+}
+
+body.dark #perfil-leitor .perfil-box h5 {
+    color: #4dabf7;
+}
+
+body.dark #perfil-leitor .perfil-box p {
+    color: #ccc;
+}
+
+body.dark #perfil-leitor .badge {
+    background: #333;
+    color: #ddd;
+}
+
+body.dark #perfil-leitor .badge:hover {
+    background: #444;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes fadeInPerfil {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+    #perfil-leitor {
+        gap: 1rem;
+    }
+    .perfil-box {
+        padding: 0.9rem 1rem;
+    }
+}

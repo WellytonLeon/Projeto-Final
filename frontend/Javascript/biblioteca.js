@@ -57,7 +57,7 @@ async function carregarLivros(filtro = "") {
                 <p><strong>Categoria:</strong> ${livro.categoria_nome || "-"}</p>
                 <p><strong>Avaliação:</strong> ${estrelas} (${nota}/5)</p>
 
-                <a href="livro.html?id=${livro.id_livro}" class="btn-detalhes">
+                <a href="livro.html?id=${livro.id_livro} "class="btn-detalhes">
                     Ver detalhes
                 </a>
             `;

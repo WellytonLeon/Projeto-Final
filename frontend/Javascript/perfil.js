@@ -213,91 +213,145 @@ async function updateUserBackend(frontData) {
         alert("Erro ao atualizar dados.");
     }
 }
-
 // ==============================
 // PERFIL DE LEITOR EM TEMPO REAL
 // ==============================
 async function carregarPerfilLeitor() {
     const area = document.getElementById("perfil-leitor");
-    area.innerHTML = "<p>Carregando perfil de leitor...</p>";
+    area.innerHTML = "<p class='text-muted'>Carregando perfil de leitor...</p>";
 
     try {
         const res = await fetch(`${window.API_KEY}/books/user/${user.id_user}`);
         const livros = await res.json();
 
         if (!res.ok || !livros.length) {
-            area.innerHTML = "<p>Nenhum livro cadastrado ainda.</p>";
+            area.innerHTML = "<p class='text-muted'>Nenhum livro cadastrado ainda.</p>";
             return;
         }
 
-        // --- MÉDIA DE NOTAS ---
-        const notas = livros.map(l => l.nota || 3); // nota padrão 3
-        const mediaGeral = (notas.reduce((a,b) => a+b, 0) / notas.length).toFixed(2);
+        // -------- MÉTRICAS --------
 
-        // --- CATEGORIAS ORDENADAS ---
+        // Notas
+        const notas = livros.map(l => l.nota ?? 3);
+        const mediaGeral = (notas.reduce((a, b) => a + b, 0) / notas.length).toFixed(2);
+
+        // Categorias
         const categorias = {};
         livros.forEach(l => {
             const cat = l.categoria_nome || "Sem categoria";
             categorias[cat] = (categorias[cat] || 0) + 1;
         });
+
         const categoriasOrdenadas = Object.entries(categorias)
-            .sort((a,b) => b[1]-a[1]); // maior quantidade primeiro
+            .sort((a, b) => b[1] - a[1]);
 
-        // --- LIVRO COM MELHOR NOTA ---
-        const livroMelhorNota = livros.reduce((prev, curr) => (curr.nota || 3) > (prev.nota || 3) ? curr : prev);
+        // Diversidade
+        const totalCategorias = categoriasOrdenadas.length;
+        let diversidade = "Alta";
+        if (totalCategorias <= 2) diversidade = "Baixa";
+        else if (totalCategorias <= 4) diversidade = "Média";
 
-        // --- PERFIL DE LEITOR SIMPLES ---
-        const perfil = gerarPerfilLeitor(categoriasOrdenadas, mediaGeral);
+        // Estilo de avaliação
+        let estiloNota = "Equilibrado";
+        if (mediaGeral >= 4.3) estiloNota = "Entusiasta";
+        else if (mediaGeral < 3.5) estiloNota = "Crítico";
 
-        // --- MONTAR HTML INTERATIVO ---
+        // Foco
+        const totalLivros = livros.length;
+        const foco = (categoriasOrdenadas[0][1] / totalLivros) >= 0.6 ? "Alto" : "Moderado";
+
+        // Livro melhor avaliado
+        const livroMelhorNota = livros.reduce((prev, curr) =>
+            (curr.nota ?? 3) > (prev.nota ?? 3) ? curr : prev
+        );
+
+        // Perfil final
+        const perfil = gerarPerfilLeitor(
+            categoriasOrdenadas,
+            mediaGeral,
+            diversidade,
+            estiloNota,
+            foco
+        );
+
+        // -------- HTML --------
+
         const categoriasHTML = categoriasOrdenadas
-            .map(([cat, qtd]) => `<span class="badge bg-secondary me-1">${cat}: ${qtd}</span>`)
-            .join(" ");
+            .map(([cat, qtd]) =>
+                `<span class="badge bg-secondary me-1 mb-1">${cat} (${qtd})</span>`
+            ).join("");
 
         area.innerHTML = `
-            <h4 class="fw-bold mt-4">Perfil de Leitor</h4>
-            <p><strong>Quantidade de livros:</strong> ${livros.length}</p>
-            <p><strong>Média de notas:</strong> ${mediaGeral} ⭐</p>
-            <p><strong>Categorias mais lidas:</strong> ${categoriasHTML}</p>
+            <hr class="my-4">
 
-           <div class="mt-3 p-3 border rounded perfil-box">
-                <h5>Livro com melhor nota:</h5>
-                <p><strong>${livroMelhorNota.nome}</strong> (${livroMelhorNota.categoria_nome || "Sem categoria"}) - Nota: ${livroMelhorNota.nota || 3} ⭐</p>
+            <h4 class="fw-bold mb-3">
+                <i class="fa-solid fa-book-reader me-2"></i> Perfil de Leitor
+            </h4>
+
+            <p><strong>Livros cadastrados:</strong> ${livros.length}</p>
+            <p><strong>Média de avaliação:</strong> ${mediaGeral} ⭐</p>
+
+            <p class="mb-2"><strong>Categorias mais lidas:</strong></p>
+            <div class="mb-3">${categoriasHTML}</div>
+
+            <div class="p-3 border rounded mb-3">
+                <h6 class="fw-bold mb-1">📌 Livro melhor avaliado</h6>
+                <p class="mb-0">
+                    <strong>${livroMelhorNota.nome}</strong>
+                    (${livroMelhorNota.categoria_nome || "Sem categoria"})
+                    — ${livroMelhorNota.nota ?? 3} ⭐
+                </p>
             </div>
 
-            <div class="mt-3 p-3 border rounded perfil-box">
-                <h5>Perfil sugerido:</h5>
-                <p><strong>${perfil.tipo}</strong> - ${perfil.descricao}</p>
+            <div class="p-3 border rounded">
+                <h6 class="fw-bold mb-1">🧠 Perfil sugerido</h6>
+                <p class="mb-1">
+                    <strong>${perfil.tipo}</strong>
+                </p>
+                <p class="mb-2">${perfil.descricao}</p>
+                <small class="text-muted">
+                    ${perfil.resumo}
+                </small>
             </div>
         `;
 
     } catch (err) {
         console.error("Erro ao carregar perfil de leitor:", err);
-        area.innerHTML = "<p>Erro ao carregar perfil de leitor.</p>";
+        area.innerHTML = "<p class='text-danger'>Erro ao carregar perfil de leitor.</p>";
     }
 }
 
-// --- FUNÇÃO AUXILIAR PARA PERFIL DE LEITOR ---
-function gerarPerfilLeitor(categoriasOrdenadas, mediaNotas) {
+// -------- FUNÇÃO DE PERFIL --------
+function gerarPerfilLeitor(categoriasOrdenadas, mediaNotas, diversidade, estiloNota, foco) {
     const topCat = categoriasOrdenadas[0]?.[0] || "Geral";
 
-    // Definição simples de perfil baseado na categoria principal e média
-    let tipo = "Leitor Casual";
-    let descricao = "Gosta de explorar livros variados sem foco específico.";
+    let tipo = "Leitor Versátil";
+    let descricao = "Explora diferentes gêneros, mantendo uma leitura equilibrada.";
 
-    if (mediaNotas >= 4.5 && topCat === "Ficção") {
-        tipo = "Analista Criativo";
-        descricao = "Adora histórias imaginativas, desenvolve pensamento crítico e criativo.";
-    } else if (mediaNotas >= 4 && topCat === "História") {
-        tipo = "Estudioso";
-        descricao = "Gosta de aprender com fatos históricos e aprofundar conhecimento.";
-    } else if (mediaNotas >= 4 && topCat === "Tecnologia") {
-        tipo = "Estratégico";
-        descricao = "Interessado em inovação, análise de dados e soluções inteligentes.";
-    } else if (mediaNotas < 3.5) {
-        tipo = "Explorador Casual";
-        descricao = "Lê de forma leve, testando várias categorias sem aprofundamento.";
+    if (topCat === "História" && foco === "Alto") {
+        tipo = "Pesquisador Dedicado";
+        descricao = "Demonstra forte interesse por temas históricos, com leitura focada e consistente.";
+    } 
+    else if (topCat === "Ficção" && estiloNota === "Entusiasta") {
+        tipo = "Imaginativo Exigente";
+        descricao = "Valoriza narrativas criativas e avalia positivamente obras bem construídas.";
+    }
+    else if (topCat === "Tecnologia") {
+        tipo = "Leitor Estratégico";
+        descricao = "Busca aprendizado prático, inovação e desenvolvimento intelectual.";
+    }
+    else if (diversidade === "Alta" && estiloNota === "Crítico") {
+        tipo = "Explorador Analítico";
+        descricao = "Experimenta diversos gêneros com senso crítico e seletivo.";
+    }
+    else if (diversidade === "Baixa" && estiloNota === "Entusiasta") {
+        tipo = "Especialista Entusiasmado";
+        descricao = "Prefere aprofundar-se em poucos temas, mantendo avaliações positivas.";
     }
 
-    return { tipo, descricao };
+    return {
+        tipo,
+        descricao,
+        resumo: `${estiloNota} • Diversidade ${diversidade} • Foco ${foco}`
+    };
 }

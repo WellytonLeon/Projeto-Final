@@ -123,3 +123,23 @@ body.dark #mainFooter {
 .book-card:hover .card-img-top {
     transform: scale(1.05);
 }
+
+/* ==============================
+   FIX DARK MODE - HOME CARDS
+============================== */
+
+body.dark .card-title {
+    color: #ffffff;
+}
+
+body.dark .card-text {
+    color: #d0d0d0;
+}
+
+body.dark .text-muted {
+    color: #b5b5b5 !important;
+}
+
+body.dark .card-img-top {
+    background-color: #1d1d1d; /* ou #111 / #1a1a1a */
+}

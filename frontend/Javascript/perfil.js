@@ -260,12 +260,12 @@ async function carregarPerfilLeitor() {
             <p><strong>Média de notas:</strong> ${mediaGeral} ⭐</p>
             <p><strong>Categorias mais lidas:</strong> ${categoriasHTML}</p>
 
-            <div class="mt-3 p-3 border rounded bg-light">
+           <div class="mt-3 p-3 border rounded perfil-box">
                 <h5>Livro com melhor nota:</h5>
                 <p><strong>${livroMelhorNota.nome}</strong> (${livroMelhorNota.categoria_nome || "Sem categoria"}) - Nota: ${livroMelhorNota.nota || 3} ⭐</p>
             </div>
 
-            <div class="mt-3 p-3 border rounded bg-light">
+            <div class="mt-3 p-3 border rounded perfil-box">
                 <h5>Perfil sugerido:</h5>
                 <p><strong>${perfil.tipo}</strong> - ${perfil.descricao}</p>
             </div>

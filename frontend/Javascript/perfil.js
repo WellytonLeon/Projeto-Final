@@ -1,6 +1,6 @@
 window.API_KEY = 'http://localhost:3001';
 let user = JSON.parse(localStorage.getItem("user"));
-if (!user) window.location.href = "/frontend/Login/LoginUsuario.html";
+if (!user) window.location.href = "../Login/LoginUsuario.html";
 
 // Inicialização
 window.onload = async () => {
@@ -13,7 +13,7 @@ window.onload = async () => {
     document.getElementById("config-email").value = user.email || "";
 
     // Foto de perfil
-    document.getElementById("profilePic").src = user.profilePic || "/frontend/images/default_cover.jpg";
+    document.getElementById("profilePic").src = user.profilePic || "../images/default_cover.jpg";
 
     // Personalização
     document.body.classList.toggle("dark", user.darkmode === "on");
@@ -86,7 +86,7 @@ document.getElementById("profilePicInput").addEventListener("change", async func
 });
 
 document.getElementById("removePicBtn").addEventListener("click", async () => {
-    document.getElementById("profilePic").src = "/frontend/images/avatar.png";
+    document.getElementById("profilePic").src = "../images/avatar.png";
     await updateUserBackend({ profilePic: null });
 });
 
@@ -171,7 +171,7 @@ document.getElementById("deletarconta").addEventListener("click", () => {
 document.getElementById("confirmardelete").addEventListener("click", async () => {
     await fetch(`${window.API_KEY}/users/${user.id_user}`, { method: "DELETE" });
     localStorage.removeItem("user");
-    window.location.href = "/frontend/Login/LoginUsuario.html";
+    window.location.href = "../Login/LoginUsuario.html";
 });
 
 
@@ -179,7 +179,7 @@ document.getElementById("confirmardelete").addEventListener("click", async () =>
 
 document.getElementById("logoutbtn").addEventListener("click", () => {
     localStorage.removeItem("user");
-    window.location.href = "/frontend/Login/LoginUsuario.html";
+    window.location.href = "../Login/LoginUsuario.html";
 });
 
 

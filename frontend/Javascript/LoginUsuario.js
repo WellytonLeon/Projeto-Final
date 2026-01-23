@@ -35,7 +35,7 @@ loginForm.addEventListener("submit", async (e) => {
             // Salva apenas o ID para o restante do sistema usar
             localStorage.setItem("id_user_logado", data.user.id_user);
 
-            window.location.href = "/frontend/Perfil/index.html";
+            window.location.href = "../Perfil/index.html";
         }else {
             // Mostra erro do back-end
             alert(data.error || data.message);

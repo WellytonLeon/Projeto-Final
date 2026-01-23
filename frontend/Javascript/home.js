@@ -5,7 +5,7 @@ window.API_KEY = 'http://localhost:3001';
 
 const usuarioLogado = JSON.parse(localStorage.getItem("user"));
 if (!usuarioLogado || !usuarioLogado.id_user) {
-    window.location.href = "/frontend/Login/LoginUsuario.html";
+    window.location.href = "../Login/LoginUsuario.html";
 }
 const userId = usuarioLogado.id_user;
 
@@ -106,7 +106,7 @@ function renderizarLivros(lista) {
                     </p>
 
 
-                    <a href="/frontend/Biblioteca/livro.html?id=${livro.id_livro}" 
+                    <a href="../Biblioteca/livro.html?id=${livro.id_livro}" 
                     class="btn btn-primary btn-sm mt-auto">Ver mais</a>
                 </div>
             </div>
@@ -159,6 +159,6 @@ let user = JSON.parse(localStorage.getItem("user"));
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
         localStorage.removeItem("user");
-        window.location.href = "/frontend/Login/LoginUsuario.html";
+        window.location.href = "../Login/LoginUsuario.html";
     }
 );

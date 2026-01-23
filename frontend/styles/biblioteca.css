@@ -1,6 +1,6 @@
-/* ================================
+/* 
    GLOBAL STYLE
-================================ */
+*/
 
 body {
     font-family: "Inter", Arial, sans-serif;
@@ -10,9 +10,9 @@ body {
     color: #333;
 }
 
-/* ================================
+/* 
    HEADER
-================================ */
+*/
 
 header {
     background: #ffffff;
@@ -47,9 +47,9 @@ header h1 {
     background: #005fcc;
 }
 
-/* ================================
+/* 
    SEARCH BAR
-================================ */
+*/
 
 .pesquisa-container {
     padding: 20px 40px;
@@ -72,9 +72,9 @@ header h1 {
     box-shadow: 0px 0px 6px rgba(0,123,255,0.35);
 }
 
-/* ================================
+/* 
    BOOK GRID
-================================ */
+*/
 
 .lista-livros {
     padding: 40px;
@@ -83,9 +83,9 @@ header h1 {
     gap: 32px;
 }
 
-/* ================================
+/* 
    CLEAN MINIMALIST CARD REDESIGN
-================================ */
+*/
 
 .livro-card {
     width: 100%;
@@ -142,9 +142,9 @@ header h1 {
     transition: 0.2s;
 
     text-decoration: none;
-    display: flex;                 /* 🔹 */
-    align-items: center;           /* 🔹 centraliza vertical */
-    justify-content: center;       /* 🔹 centraliza horizontal */
+    display: flex;                 
+    align-items: center;           /*  centraliza vertical */
+    justify-content: center;       /*  centraliza horizontal */
     font-weight: 500;
     letter-spacing: 0.3px;
 }
@@ -160,9 +160,9 @@ header h1 {
 }
 
 
-/* ================================
+/*
    DARK MODE
-================================ */
+*/
 body.dark {
     background: #121212;
     color: #e0e0e0;

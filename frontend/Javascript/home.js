@@ -1,30 +1,30 @@
 window.API_KEY = 'http://localhost:3001';
 
-// =========================
-//  USER LOGGED IN CHECK
-// =========================
+
+// VALIDAÇÃO DE LOGIN DO USUÁRIO
+
 const usuarioLogado = JSON.parse(localStorage.getItem("user"));
 if (!usuarioLogado || !usuarioLogado.id_user) {
     window.location.href = "/frontend/Login/LoginUsuario.html";
 }
 const userId = usuarioLogado.id_user;
 
-// =========================
-//  ELEMENTS
-// =========================
+
+// ELEMENTOS
+
 const bookList = document.getElementById("bookList");
 const filtroBusca = document.getElementById("filtroBusca");
 const filtroCategoria = document.getElementById("filtroCategoria");
 
-// =========================
+
 //  CACHE
-// =========================
+
 let livrosCache = [];
 let categoriasCache = [];
 
-// =========================
-//  FETCH BOOKS
-// =========================
+
+// BUSCAR LIVROS
+
 async function carregarLivros() {
     try {
         const resposta = await fetch(`${window.API_KEY}/books/user/${userId}`);
@@ -43,9 +43,9 @@ async function carregarLivros() {
     }
 }
 
-// =========================
-//  EXTRACT UNIQUE CATEGORIES
-// =========================
+
+// OBTER CATEGORIAS ÚNICAS
+
 function extrairCategorias(lista) {
     const setCategorias = new Set();
     lista.forEach(l => {
@@ -54,9 +54,9 @@ function extrairCategorias(lista) {
     categoriasCache = ["todos", ...Array.from(setCategorias)];
 }
 
-// =========================
-//  POPULATE CATEGORY SELECT
-// =========================
+
+// PREENCHER SELECT DE CATEGORIAS
+
 function popularCategoriasSelect() {
     filtroCategoria.innerHTML = "";
     categoriasCache.forEach(cat => {
@@ -67,9 +67,9 @@ function popularCategoriasSelect() {
     });
 }
 
-// =========================
-//  RENDER BOOK CARDS
-// =========================
+
+// RENDERIZAR CARDS DE LIVROS
+
 function renderizarLivros(lista) {
     bookList.innerHTML = "";
 
@@ -117,9 +117,9 @@ function renderizarLivros(lista) {
     });
 }
 
-// =========================
-//  FILTERS
-// =========================
+
+// FILTROS
+
 function aplicarFiltros() {
     const textoBusca = filtroBusca.value.toLowerCase().trim();
     const categoria = filtroCategoria.value;
@@ -135,15 +135,15 @@ function aplicarFiltros() {
     renderizarLivros(filtrados);
 }
 
-// =========================
-//  EVENT LISTENERS
-// =========================
+
+// MANIPULAÇÃO DE EVENTOS
+
 filtroBusca.addEventListener("input", aplicarFiltros);
 filtroCategoria.addEventListener("change", aplicarFiltros);
 
-// =========================
-//  INIT
-// =========================
+
+// INICIALIZAÇÃO
+
 carregarLivros();
 
 let user = JSON.parse(localStorage.getItem("user"));

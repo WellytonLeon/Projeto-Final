@@ -9,7 +9,6 @@ document.getElementById("formLivro").addEventListener("submit", async function (
     formData.append("nome", document.getElementById("titulo").value);
     formData.append("autor", document.getElementById("autor").value);
     formData.append("categoria", document.getElementById("categoria").value);
-    // 🔴 NOVO
     formData.append("editora", document.getElementById("editora").value);
     formData.append("descricao", document.getElementById("descricao").value);
     formData.append("ano_publicacao", document.getElementById("ano").value);

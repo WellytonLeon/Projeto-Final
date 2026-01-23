@@ -1,6 +1,6 @@
-/* ============================================================
+/* 
    BANCO DE DADOS LOCAL - VERSÃO UNIFICADA
-   ============================================================ */
+ */
 
 function initializeDB() {
     if (!localStorage.getItem("usersDB")) {

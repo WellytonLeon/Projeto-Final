@@ -1,6 +1,6 @@
-/* ==============================================
+/* 
    PÁGINA DE DETALHES DO LIVRO - ESTILO PREMIUM
-============================================== */
+ */
 
 body {
     font-family: "Inter", Arial, sans-serif;
@@ -125,9 +125,9 @@ body {
     background: #b92c3a;
 }
 
-/* ==============================================
+/* 
    MODO DARK
-============================================== */
+ */
 
 body.dark {
     background: #0f0f0f;
@@ -157,9 +157,9 @@ body.dark .btn-voltar:hover {
     color: white;
 }
 
-/* ==============================================
+/* 
    RESPONSIVIDADE
-============================================== */
+ */
 
 @media (max-width: 900px) {
     .card-livro {

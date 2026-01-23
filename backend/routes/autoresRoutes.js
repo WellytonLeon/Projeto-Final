@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
-// ======================
+// 
 // Função de Normalização
-// ======================
+// 
 function normalizar(str) {
     return str
         .trim()
@@ -14,9 +14,9 @@ function normalizar(str) {
         .replace(/\s+/g, " ");              // normaliza espaços
 }
 
-/* ============================================================
+/* 
    CRIAR AUTOR (com normalização segura)
-============================================================ */
+ */
 router.post("/", (req, res) => {
     let { nome } = req.body;
 
@@ -73,9 +73,9 @@ router.post("/", (req, res) => {
     });
 });
 
-/* ============================================================
+/* 
    LISTAR AUTORES
-============================================================ */
+ */
 router.get("/", (req, res) => {
     db.query("SELECT * FROM autor ORDER BY nome ASC", (err, results) => {
         if (err) return res.status(500).json({ message: "Erro ao buscar autores." });
@@ -83,9 +83,9 @@ router.get("/", (req, res) => {
     });
 });
 
-/* ============================================================
+/* 
    ATUALIZAR AUTOR (com verificação de conflito)
-============================================================ */
+ */
 router.put("/:id", (req, res) => {
     const { id } = req.params;
     let { nome } = req.body;
@@ -138,9 +138,9 @@ router.put("/:id", (req, res) => {
     });
 });
 
-/* ============================================================
+/* 
    DELETAR AUTOR
-============================================================ */
+ */
 router.delete("/:id", (req, res) => {
     const { id } = req.params;
 

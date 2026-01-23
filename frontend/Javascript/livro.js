@@ -22,11 +22,11 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        // Fetch all user books
+        // Buscar todos os livros do usuário
         const response = await fetch(`${window.API_KEY}/books/user/${idUser}`);
         const livros = await response.json();
 
-        // Find the selected book
+        // Encontrar o livro selecionado
         const livro = livros.find(l => l.id_livro === idSelecionado);
 
         if (!livro) {
@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             ? `${window.API_KEY}${livro.imagem}` 
             : "../images/default_book.png";
 
-        // Render book details
+        // Renderizar detalhes do livro
         area.innerHTML = `
             <div class="card-livro">
                 <img src="${imagemCompleta}" class="imagem-livro">
@@ -75,7 +75,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// Delete book
+// Excluir livro
 async function excluirLivro(id) {
     if (!confirm("Deseja realmente excluir este livro?")) return;
 

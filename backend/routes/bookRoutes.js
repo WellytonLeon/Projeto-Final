@@ -5,9 +5,9 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-// ==========================================================================
+
 // MULTER — Keeps original filename so duplicates can be detected
-// ==========================================================================
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, path.join(__dirname, "../../frontend/images/books"));
@@ -19,9 +19,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// ==========================================================================
+
 // NORMALIZATION FUNCTION
-// ==========================================================================
+
 function normalizar(str) {
     return str
         .trim()
@@ -31,9 +31,9 @@ function normalizar(str) {
         .replace(/\s+/g, " ");
 }
 
-// ==========================================================================
+
 // AUTHOR / CATEGORY HELPERS
-// ==========================================================================
+
 function getOrCreateAutor(nome, callback) {
     if (!nome?.trim()) return callback(null);
     const nomeOriginal = nome.trim();
@@ -78,9 +78,9 @@ function getOrCreateCategoria(nome, callback) {
     });
 }
 
-// ==========================================================================
+
 // POST — CREATE BOOK
-// ==========================================================================
+
 router.post("/", upload.single("imagem"), (req, res) => {
     try {
         // 🔴 ALTERADO: editora adicionada
@@ -174,9 +174,9 @@ router.post("/", upload.single("imagem"), (req, res) => {
     }
 });
 
-// ==========================================================================
+
 // GET — Books by User (já traz editora automaticamente)
-// ==========================================================================
+
 router.get("/user/:id_user", (req, res) => {
     const { id_user } = req.params;
     const sql = `
@@ -193,9 +193,9 @@ router.get("/user/:id_user", (req, res) => {
     });
 });
 
-// ==========================================================================
+
 // GET — Book by ID + user (editora já incluída)
-// ==========================================================================
+
 router.get("/:id_livro/user/:id_user", (req, res) => {
     const { id_livro, id_user } = req.params;
     const sql = `
@@ -212,9 +212,9 @@ router.get("/:id_livro/user/:id_user", (req, res) => {
     });
 });
 
-// ==========================================================================
+
 // PUT — Update book (editora adicionada)
-// ==========================================================================
+
 router.put("/:id_livro/user/:id_user", (req, res) => {
     const { id_livro, id_user } = req.params;
 
@@ -261,9 +261,9 @@ router.put("/:id_livro/user/:id_user", (req, res) => {
     );
 });
 
-// ==========================================================================
+
 // DELETE — Delete book (não muda)
-// ==========================================================================
+
 router.delete("/:id_livro", (req, res) => {
     const { id_livro } = req.params;
     const sql = `DELETE FROM livro WHERE id_livro = ?`;

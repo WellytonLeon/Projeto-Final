@@ -1,6 +1,6 @@
-/* ================================
+/*
    HOME - ESTILO MODERNO CLEAN
-================================ */
+*/
 
 body {
     font-family: "Inter", Arial, sans-serif;
@@ -124,9 +124,9 @@ body.dark #mainFooter {
     transform: scale(1.05);
 }
 
-/* ==============================
+/* 
    FIX DARK MODE - HOME CARDS
-============================== */
+*/
 
 body.dark .card-title {
     color: #ffffff;

@@ -6,9 +6,9 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-// ============================================================
+
 // SETUP MULTER FOR HANDLING FILE UPLOADS
-// ============================================================
+
 
 const sanitizeFileName = (fileName) => {
     // Normalize and remove unsafe characters from the file name
@@ -40,10 +40,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// ============================================================
+
 // LOGIN DO USUÁRIO
 // POST /users/login
-// ============================================================
+
 router.post("/login", (req, res) => {
     const { email, senha } = req.body;
     if (!email || !senha) return res.status(400).json({ error: "Email e senha são obrigatórios." });
@@ -61,10 +61,10 @@ router.post("/login", (req, res) => {
     });
 });
 
-// ============================================================
+
 // REGISTRO
 // POST /users/register
-// ============================================================
+
 router.post("/register", async (req, res) => {
     const { nome, email, senha } = req.body;
     if (!nome || !email || !senha) 
@@ -90,10 +90,10 @@ router.post("/register", async (req, res) => {
     });
 });
 
-// ============================================================
+
 // ATUALIZAR USUÁRIO
 // PUT /users/:id
-// ============================================================
+
 router.put("/:id", async (req, res) => {
     const { nome, email, senha, darkmode, themeColor, profilePic } = req.body;
     const { id } = req.params;
@@ -163,10 +163,10 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-// ============================================================
+
 // DELETAR USUÁRIO
 // DELETE /users/:id
-// ============================================================
+
 router.delete("/:id", (req, res) => {
     const { id } = req.params;
     const sql = "DELETE FROM user WHERE id_user = ?";
@@ -177,10 +177,10 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-// ============================================================
+
 // GET USUÁRIO
 // GET /users/:id
-// ============================================================
+
 router.get("/:id", (req, res) => {
     const { id } = req.params;
     const sql = "SELECT * FROM user WHERE id_user = ?";
@@ -191,10 +191,10 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// ============================================================
+
 // ATUALIZAR FOTO DE PERFIL
 // POST /users/updateProfilePic
-// ============================================================
+
 router.post("/updateProfilePic", upload.single('profilePic'), async (req, res) => {
     const file = req.file;
     if (!file) return res.status(400).json({ message: "Nenhum arquivo enviado." });

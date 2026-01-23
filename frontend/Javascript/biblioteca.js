@@ -1,4 +1,4 @@
-window.API_KEY = 'http://localhost:3001'; // Rota compartilhada -> IP do seu servidor
+window.API_KEY = 'http://localhost:3001'; // Rota local -> servidor local
 
 async function carregarLivros(filtro = "") {
     const lista = document.getElementById("lista-livros");

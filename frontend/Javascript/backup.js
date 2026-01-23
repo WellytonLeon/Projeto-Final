@@ -1,20 +1,20 @@
-/* ============================================================
+/*
    backup.js  
    Sistema de backup local, histórico por usuário, restauração
    e logs — tudo usando LocalStorage.
-   ============================================================ */
+   */
 
-/* -------------------------
+/* 
    CONFIGURAÇÕES PRINCIPAIS
-   ------------------------- */
+    */
 
 const BACKUP_KEY = "backups";     // Onde será salvo o HISTÓRICO de backups.
 const LOGS_KEY = "logs";          // Onde será salvo o HISTÓRICO de logs.
 const MAX_BACKUPS = 10;           // Quantos backups manter por usuário (últimos N).
 
-/* -------------------------
+/* 
    FUNÇÕES UTILITÁRIAS
-   ------------------------- */
+    */
 
 // Retorna a data e hora atual no formato ISO (2025-11-21T12:30:00Z)
 function nowISO() {
@@ -30,9 +30,9 @@ function safeParse(jsonStr) {
     }
 }
 
-/* -------------------------
+/* 
    SISTEMA DE LOGS
-   -------------------------
+   
    Serve para registrar ações importantes (backup criado, restaurado, login...)
    Isso ajuda em auditoria e depuração.
 */
@@ -55,9 +55,9 @@ function registrarLog(acao, detalhes = "") {
     localStorage.setItem(LOGS_KEY, JSON.stringify(logs));
 }
 
-/* ============================================================
+/* 
    FUNÇÃO PRINCIPAL: GERAR BACKUP
-   ============================================================
+   
    - Cria um snapshot completo dos dados do usuário.
    - Guarda dentro de uma lista histórica.
    - Mantém limite de backups por usuário.
@@ -89,10 +89,10 @@ function gerarBackup(tag = "") {
     // Adiciona o novo snapshot
     historico.push(snapshot);
 
-    /* -------------------------------------------------------
+    /* 
        Limitar backups: mantém apenas os últimos MAX_BACKUPS
        para cada usuário.
-    -------------------------------------------------------- */
+    */
     const porUsuario = {};
 
     // Percorremos do MAIS RECENTE para o MAIS ANTIGO
@@ -124,9 +124,9 @@ function gerarBackup(tag = "") {
     return snapshot;
 }
 
-/* ============================================================
+/* 
    LISTAR BACKUPS
-   ============================================================
+   
    - Retorna todos os backups ou apenas os de um usuário.
 */
 function listarBackups(usuario = null) {
@@ -139,9 +139,9 @@ function listarBackups(usuario = null) {
     return historico.filter(b => b.usuario === usuario);
 }
 
-/* ============================================================
+/* 
    RESTAURAR BACKUP
-   ============================================================
+   
    - Restaura dados salvo em um snapshot.
    - Pode restaurar por índice ou por timestamp.
 */
@@ -194,9 +194,9 @@ function restaurarBackup(usuario, indexOrTimestamp) {
     return { success: true, message: "Backup restaurado com sucesso!" };
 }
 
-/* ============================================================
+/* 
    BAIXAR BACKUP COMO ARQUIVO JSON
-   ============================================================
+   
    - Permite ao usuário baixar o backup em formato .json.
 */
 function baixarBackupComoArquivo(usuario, indexOrTimestamp) {
@@ -238,9 +238,9 @@ function baixarBackupComoArquivo(usuario, indexOrTimestamp) {
     return { success: true };
 }
 
-/* ============================================================
+/* 
    LIMPAR BACKUPS
-   ============================================================
+   
    - Apaga todos os backups ou somente os de um usuário.
 */
 function limparBackups(usuario = null) {
@@ -259,9 +259,9 @@ function limparBackups(usuario = null) {
     registrarLog("backups_limpos", `usuario=${usuario}`);
 }
 
-/* ============================================================
+/* 
    EXPORTANDO FUNÇÕES
-   ============================================================
+   
    - Assim você pode chamar no console:
      backup.gerarBackup()
      backup.listarBackups()

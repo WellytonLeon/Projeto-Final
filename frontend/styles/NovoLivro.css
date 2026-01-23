@@ -1,6 +1,6 @@
-/* ================================
+/* 
    PÁGINA NOVO LIVRO - ESTILO LIMPO E MODERNO
-================================ */
+ */
 
 /* GERAL */
 body {
@@ -84,9 +84,9 @@ h2 {
     background: #005fcc;
 }
 
-/* ================================
+/* 
    MODO ESCURO
-================================ */
+ */
 
 body.dark {
     background: #0f0f0f;
@@ -118,9 +118,9 @@ body.dark #formLivro input:focus, body.dark #formLivro textarea:focus {
     box-shadow: 0px 0px 8px rgba(0,123,255,0.3);
 }
 
-/* ================================
+/* 
    RESPONSIVIDADE
-================================ */
+ */
 
 @media (max-width: 760px) {
     #formLivro {

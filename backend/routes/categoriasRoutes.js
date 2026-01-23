@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
-// ======================
+// 
 // Função de Normalização
-// ======================
+// 
 function normalizar(str) {
     return str
         .trim()
@@ -14,10 +14,10 @@ function normalizar(str) {
         .replace(/\s+/g, " "); // normalizar espaços
 }
 
-/* ============================================================
+/* 
    CRIAR CATEGORIA
    POST /categorias
-============================================================ */
+ */
 router.post("/", (req, res) => {
     const { nome } = req.body;
     if (!nome) return res.status(400).json({ message: "O nome da categoria é obrigatório." });
@@ -54,10 +54,10 @@ router.post("/", (req, res) => {
     });
 });
 
-/* ============================================================
+/* 
    LISTAR CATEGORIAS
    GET /categorias
-============================================================ */
+ */
 router.get("/", (req, res) => {
     db.query("SELECT * FROM categoria", (err, results) => {
         if (err) return res.status(500).json({ message: "Erro ao buscar categorias." });
@@ -65,10 +65,10 @@ router.get("/", (req, res) => {
     });
 });
 
-/* ============================================================
+/* 
    ATUALIZAR CATEGORIA
    PUT /categorias/:id
-============================================================ */
+ */
 router.put("/:id", (req, res) => {
     const { id } = req.params;
     const { nome } = req.body;
@@ -107,10 +107,10 @@ router.put("/:id", (req, res) => {
     });
 });
 
-/* ============================================================
+/* 
    DELETAR CATEGORIA
    DELETE /categorias/:id
-============================================================ */
+ */
 router.delete("/:id", (req, res) => {
     const { id } = req.params;
     db.query("DELETE FROM categoria WHERE id_categoria = ?", [id], (err, result) => {

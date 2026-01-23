@@ -1,8 +1,4 @@
-create user 'root'@'%' IDENTIFIED by '';
-grant ALL PRIVILEGES on projeto_final.* to 'root'@'%';
-FLUSH PRIVILEGES;
-
-
+create database projeto_final;
 use projeto_final;
 create table user(
     id_user int primary key not null auto_increment,
@@ -40,7 +36,7 @@ create table livro (
 );
 alter table livro ADD COLUMN ano_publicacao int;
 ALTER TABLE livro ADD COLUMN imagem VARCHAR(255);
-
+alter table livro add column nota int default 3;
 alter table livro
 add column editora varchar(100) default 'desconhecida';
 
@@ -132,7 +128,7 @@ begin
         CONCAT('título: ', NEW.nome, ', autor: ', nomeautor, ', categoria: ', nomecategoria, ', descrição: ', NEW.descricao),
         null
     );
-end $$
+
 
 create triggerlogupdatelivros
 after update on livro
@@ -161,7 +157,7 @@ begin
         CONCAT('título: ', NEW.nome, ', autor: ', newautor, ', categoria: ', newcategoria, ', descrição: ', NEW.descricao),
         null
     );
-end $$
+
 
 create trigger logdelete livros
 after delete  on livro
@@ -182,7 +178,7 @@ begin
         CONCAT('título: ', OLD.nome, ', autor: ', nomeautor, ', categoria: ', nomecategoria, ', descrição: ', OLD.descricao),
         null,null
     );
-end $$
+
 
 delimiter ; 
 
@@ -193,7 +189,7 @@ for each row
 begin
     insert into logalteracoes (tabela_afetada, operacao, registro_id, dados_novos, id_user)
     values('user', 'insert', NEW.id_user, CONCAT('nome: ', NEW.nome, ', email: ', NEW.email), null);
-end $$
+
 
 create trigger logupdateusuarios
 after update on user
@@ -210,7 +206,7 @@ begin
             CONCAT('nome: ', NEW.nome, ', email: ', NEW.email),
             null
         );
-end $$
+
 
 create trigger logdeleteusuarios
 after delete  on user
@@ -227,7 +223,7 @@ begin
             null,
             null
         );
-end $$
+
 
 delimiter ;
 
@@ -267,7 +263,7 @@ for each row
 begin
     insert into logalteracoes (tabela_afetada, operacao, registro_id, dados_novos)
     values('autor', 'insert', NEW.id_autor, CONCAT('nome: ', NEW.nome));
-end $$
+
 
 create trigger logupdateautor
 after update on autor
@@ -275,7 +271,7 @@ for each row
 begin
     insert into logalteracoes (tabela_afetada, operacao, registro_id, dados_antigos, dados_novos)
     values('autor', 'update', OLD.id_autor, CONCAT('nome: ', OLD.nome), CONCAT('nome: ', NEW.nome));
-end $$
+
 
 create trigger logdeleteautor
 after delete  on autor
@@ -283,7 +279,7 @@ for each row
 begin
     insert into logalteracoes (tabela_afetada, operacao, registro_id, dados_antigos)
     values('autor', 'delete ', OLD.id_autor, CONCAT('nome: ', OLD.nome));
-end $$
+
 
 delimiter ;
 
@@ -367,9 +363,6 @@ create table sessao (
 
     foreign key (id_user) references user(id_user)
 );
-
-insert into sessao (id_user, token)
-values(1, 'token_exemplo_123');
 
 update sessao
 set ativo = false,

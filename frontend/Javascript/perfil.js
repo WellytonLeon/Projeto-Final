@@ -36,9 +36,9 @@ function openTabFromURL() {
 }
 openTabFromURL();
 
-// -------------------------
+
 //       PERSONALIZAÇÃO
-// -------------------------
+
 document.getElementById("darkmodeSwitch").addEventListener("change", async (e) => {
     const dark = e.target.checked ? "on" : "off";
     document.body.classList.toggle("dark", e.target.checked);
@@ -56,9 +56,9 @@ function applyTheme(color) {
     document.getElementById("sidebar").style.background = colors[color] || colors.default;
 }
 
-// -------------------------
+
 //     FOTO DE PERFIL
-// -------------------------
+
 document.getElementById("changePicBtn").addEventListener("click", () => {
     document.getElementById("profilePicInput").click();
 });
@@ -90,9 +90,9 @@ document.getElementById("removePicBtn").addEventListener("click", async () => {
     await updateUserBackend({ profilePic: null });
 });
 
-// -------------------------
+
 //      PERFIL (NOME/EMAIL)
-// -------------------------
+
 document.getElementById("profileForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const updated = {
@@ -104,9 +104,9 @@ document.getElementById("profileForm").addEventListener("submit", async (e) => {
     location.reload();
 });
 
-// -------------------------
+ 
 //    ALTERAR LOGIN / SENHA
-// -------------------------
+ 
 document.getElementById("loginFormConfig").addEventListener("submit", async (e) => {
     e.preventDefault();
     const updated = {
@@ -120,9 +120,9 @@ document.getElementById("loginFormConfig").addEventListener("submit", async (e) 
     location.reload();
 });
 /*
-// -------------------------
+ 
 //           BACKUP
-// -------------------------
+ 
 document.getElementById("exportBackup").addEventListener("click", () => {
     const data = JSON.stringify(user, null, 2);
     const blob = new Blob([data], { type: "application/json" });
@@ -149,9 +149,8 @@ document.getElementById("backupFileInput").addEventListener("change", async func
     reader.readAsText(file);
 });
 
-// -------------------------
 //        RESET TOTAL
-// -------------------------
+
 document.getElementById("resetSystem").addEventListener("click", async () => {
     await updateUserBackend({
         darkmode: "off",
@@ -162,9 +161,9 @@ document.getElementById("resetSystem").addEventListener("click", async () => {
     location.reload();
 });
 */
-// -------------------------
+
+
 //      EXCLUIR CONTA
-// -------------------------
 document.getElementById("deletarconta").addEventListener("click", () => {
     new bootstrap.Modal(document.getElementById("confirmardeletemodal")).show();
 });
@@ -175,17 +174,17 @@ document.getElementById("confirmardelete").addEventListener("click", async () =>
     window.location.href = "/frontend/Login/LoginUsuario.html";
 });
 
-// -------------------------
+
 //           LOGOUT
-// -------------------------
+
 document.getElementById("logoutbtn").addEventListener("click", () => {
     localStorage.removeItem("user");
     window.location.href = "/frontend/Login/LoginUsuario.html";
 });
 
-// -------------------------
+
 //    ATUALIZAR BACKEND
-// -------------------------
+
 async function updateUserBackend(frontData) {
     const backendData = {
         nome: frontData.nome || frontData.username,
@@ -213,9 +212,9 @@ async function updateUserBackend(frontData) {
         alert("Erro ao atualizar dados.");
     }
 }
-// ==============================
+
 // PERFIL DE LEITOR EM TEMPO REAL
-// ==============================
+
 async function carregarPerfilLeitor() {
     const area = document.getElementById("perfil-leitor");
     area.innerHTML = "<p class='text-muted'>Carregando perfil de leitor...</p>";
@@ -229,7 +228,7 @@ async function carregarPerfilLeitor() {
             return;
         }
 
-        // -------- MÉTRICAS --------
+        //  MÉTRICAS 
 
         // Notas
         const notas = livros.map(l => l.nota ?? 3);
@@ -274,7 +273,7 @@ async function carregarPerfilLeitor() {
             foco
         );
 
-        // -------- HTML --------
+        //  HTML 
 
         const categoriasHTML = categoriasOrdenadas
             .map(([cat, qtd]) =>
@@ -321,7 +320,7 @@ async function carregarPerfilLeitor() {
     }
 }
 
-// -------- FUNÇÃO DE PERFIL --------
+//  FUNÇÃO DE PERFIL 
 function gerarPerfilLeitor(categoriasOrdenadas, mediaNotas, diversidade, estiloNota, foco) {
     const topCat = categoriasOrdenadas[0]?.[0] || "Geral";
 

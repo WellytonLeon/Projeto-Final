@@ -1,4 +1,4 @@
-/* ===== SIDEBAR ===== */
+/*  SIDEBAR  */
 .sidebar {
     width: 230px;
     height: 100vh;
@@ -20,13 +20,13 @@
     color: white;
 }
 
-/* ===== CONTEÚDO ===== */
+/*  CONTEÚDO  */
 .content {
     margin-left: 260px;
     padding: 30px;
 }
 
-/* ===== MODO ESCURO ===== */
+/*  MODO ESCURO  */
 body.dark {
     background: #111 !important;
     color: white !important;
@@ -50,7 +50,7 @@ body.dark #logoutbtn{
 #logoutbtn:hover{
     background-color: crimson;
 }
-/* ===== BOTÕES ===== */
+/*  BOTÕES  */
 .btn-outline-primary {
     border-color: #0d6efd;
     color: #0d6efd;
@@ -60,17 +60,17 @@ body.dark #logoutbtn{
     color: white;
 }
 
-/* ===== IMAGEM DE PERFIL ===== */
+/*  IMAGEM DE PERFIL  */
 #profilePic {
     object-fit: cover;
     border: 3px solid #ddd;
 }
 
-/* ===== MODAIS ===== */
+/*  MODAIS  */
 .modal-content {
     padding: 20px;
 }
-/* ===== MODAL EM MODO ESCURO ===== */
+/*  MODAL EM MODO ESCURO  */
 body.dark .modal-content {
     background: #2a2a2a !important;
     color: #fff !important;
@@ -104,7 +104,7 @@ body.dark .btn-danger:hover {
     background-color: #cc3a3a;
 }
 
-/* ===== PERFIL DE LEITOR ===== */
+/*  PERFIL DE LEITOR  */
 #perfil-leitor {
     margin-top: 2rem;
     display: flex;
@@ -164,7 +164,7 @@ body.dark .btn-danger:hover {
     background: #cfd8dc;
 }
 
-/* ===== PERFIL DE LEITOR DARK MODE ===== */
+/*  PERFIL DE LEITOR DARK MODE  */
 body.dark #perfil-leitor .perfil-box {
     background: #1d1d1d;
     border: 1px solid #333;
@@ -192,7 +192,7 @@ body.dark #perfil-leitor .MediaNota {
 body.dark #perfil-leitor .PerfilResumo {
     color: white;
 }
-/* ===== ANIMAÇÕES ===== */
+/*  ANIMAÇÕES  */
 @keyframes fadeInPerfil {
     from {
         opacity: 0;
@@ -204,7 +204,7 @@ body.dark #perfil-leitor .PerfilResumo {
     }
 }
 
-/* ===== RESPONSIVO ===== */
+/*  RESPONSIVO  */
 @media (max-width: 768px) {
     #perfil-leitor {
         gap: 1rem;

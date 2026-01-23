@@ -186,7 +186,12 @@ body.dark #perfil-leitor .badge {
 body.dark #perfil-leitor .badge:hover {
     background: #444;
 }
-
+body.dark #perfil-leitor .MediaNota {
+    color: white;
+}
+body.dark #perfil-leitor .PerfilResumo {
+    color: white;
+}
 /* ===== ANIMAÇÕES ===== */
 @keyframes fadeInPerfil {
     from {

@@ -294,7 +294,7 @@ async function carregarPerfilLeitor() {
             <p class="mb-2"><strong>Categorias mais lidas:</strong></p>
             <div class="mb-3">${categoriasHTML}</div>
 
-            <div class="p-3 border rounded mb-3">
+            <div class="p-3 border rounded mb-3" id="MediaNota">
                 <h6 class="fw-bold mb-1">📌 Livro melhor avaliado</h6>
                 <p class="mb-0">
                     <strong>${livroMelhorNota.nome}</strong>
@@ -303,13 +303,13 @@ async function carregarPerfilLeitor() {
                 </p>
             </div>
 
-            <div class="p-3 border rounded">
+            <div class="p-3 border rounded" id="PerfilResumo">
                 <h6 class="fw-bold mb-1">🧠 Perfil sugerido</h6>
                 <p class="mb-1">
                     <strong>${perfil.tipo}</strong>
                 </p>
                 <p class="mb-2">${perfil.descricao}</p>
-                <small class="text-muted">
+                <small class="fw-bold mb-1">
                     ${perfil.resumo}
                 </small>
             </div>
